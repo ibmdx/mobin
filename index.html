@@ -211,6 +211,45 @@
   <script src="assets/parallax/jarallax.min.js"></script>
   <script src="assets/theme/js/script.js"></script>
   
+
+
+
+
+<script>
+let isDown = false;
+let startY;
+let scrollTop;
+
+document.addEventListener("mousedown", (e) => {
+  isDown = true;
+  startY = e.pageY - window.scrollY;
+  scrollTop = window.scrollY;
+  document.body.style.cursor = "grabbing";
+});
+
+document.addEventListener("mouseleave", () => {
+  isDown = false;
+  document.body.style.cursor = "default";
+});
+
+document.addEventListener("mouseup", () => {
+  isDown = false;
+  document.body.style.cursor = "default";
+});
+
+document.addEventListener("mousemove", (e) => {
+  if (!isDown) return;
+  e.preventDefault();
+  const y = e.pageY - window.scrollY;
+  const walk = (y - startY) * 1.5;
+  window.scrollTo(0, scrollTop - walk);
+});
+</script>
+
+
+
+
+
   
 <!-- Google Tag Manager (noscript) -->
 <noscript><iframe src="https://www.googletagmanager.com/ns.html?id=GTM-T7TR7GC"
