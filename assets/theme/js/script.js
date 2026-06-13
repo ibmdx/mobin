@@ -1105,6 +1105,10 @@
             });
         }
 
+
+document.addEventListener('mousemove', ...)
+
+
         $(document).on('change', 'input[type="range"]', function(e){
             $(e.target).parents('.form-group').find('.value')[0].innerHTML = e.target.value;
         });
