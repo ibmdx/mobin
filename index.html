@@ -68,53 +68,91 @@
 <section class="menu cid-qU5VAq9DfQ" once="menu" id="menu1-4f">
 
 <style>
-/* menu link base */
+/* ---------- BASE LINK STYLE ---------- */
 #menu1-4f .nav-link{
     position: relative;
     overflow: hidden;
-    transition: transform 0.35s ease, color 0.35s ease;
+    transition: transform .25s ease, color .25s ease;
+    padding: 8px 0;
+    margin: 0 12px;
 }
 
-/* zoom effect */
+/* ---------- ZOOM / GLOW ---------- */
 #menu1-4f .nav-link:hover{
-    transform: scale(1.15);
-    color:#ffffff;
+    transform: scale(1.18);
+    color: #fff;
+    text-shadow: 0 0 12px rgba(255,255,255,0.85);
 }
 
-/* shine layer */
+/* ---------- SHINE EFFECT ---------- */
 #menu1-4f .nav-link::after{
     content:"";
     position:absolute;
     top:0;
-    left:-120%;
+    left:-150%;
     width:80%;
     height:100%;
     background:linear-gradient(
-        120deg,
+        115deg,
         rgba(255,255,255,0) 0%,
-        rgba(255,255,255,0.6) 50%,
+        rgba(255,255,255,0.55) 50%,
         rgba(255,255,255,0) 100%
     );
     transform:skewX(-25deg);
+    pointer-events:none;
 }
 
-/* shine animation */
 #menu1-4f .nav-link:hover::after{
-    animation:shineMove 0.9s ease;
+    animation:shine 0.9s ease forwards;
 }
 
-@keyframes shineMove{
-    0%{ left:-120%; }
-    100%{ left:140%; }
+@keyframes shine {
+    0% { left:-150%; }
+    100% { left:160%; }
+}
+
+/* ---------- UNDERLINE WAVE ---------- */
+#menu1-4f .nav-link::before{
+    content:"";
+    position:absolute;
+    left:0;
+    bottom:-4px;
+    width:100%;
+    height:2px;
+    background:linear-gradient(90deg, #ffffff 0%, #bbbbbb 50%, #ffffff 100%);
+    transform:scaleX(0);
+    transform-origin:right;
+    transition:transform .35s cubic-bezier(.75,-0.5,0,1.75);
+    border-radius:2px;
+}
+
+#menu1-4f .nav-link:hover::before{
+    transform:scaleX(1);
+    transform-origin:left;
+}
+
+/* ---------- MAGNETIC HOVER ---------- */
+#menu1-4f .nav-item{
+    display:inline-block;
+    transition: transform .25s ease;
+}
+
+#menu1-4f .nav-item:hover{
+    transform: translateY(-2px);
+}
+
+/* Extra smoothness */
+#menu1-4f .navbar-nav{
+    align-items: center;
 }
 </style>
+
+
 
 <nav class="navbar navbar-expand beta-menu navbar-dropdown align-items-center navbar-fixed-top collapsed bg-color transparent">
 
 <button class="navbar-toggler navbar-toggler-right" type="button" data-toggle="collapse" data-target="#navbarSupportedContent">
-<div class="hamburger">
-<span></span>
-</div>
+<div class="hamburger"><span></span></div>
 </button>
 
 <div class="menu-logo">
@@ -128,30 +166,35 @@
 </div>
 
 <div class="collapse navbar-collapse" id="navbarSupportedContent">
-
 <ul class="navbar-nav nav-dropdown nav-right" data-app-modern-menu="true">
 
 <li class="nav-item">
-<a class="nav-link link text-white display-4" href="index.html">HOME</a>
+    <a class="nav-link link text-white display-4" href="index.html">HOME</a>
 </li>
 
 <li class="nav-item">
-<a class="nav-link link text-white display-4" href="works.html">WORKS</a>
+    <a class="nav-link link text-white display-4" href="works.html">WORKS</a>
 </li>
 
 <li class="nav-item">
-<a class="nav-link link text-white display-4" href="about.html">ABOUT</a>
+    <a class="nav-link link text-white display-4" href="about.html">ABOUT</a>
 </li>
 
 <li class="nav-item">
-<a class="nav-link link text-white display-4" href="contact.html">CONTACT</a>
+    <a class="nav-link link text-white display-4" href="contact.html">CONTACT</a>
 </li>
 
 </ul>
-
 </div>
+
 </nav>
 </section>
+
+
+
+
+
+
 
 
 
