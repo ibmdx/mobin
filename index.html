@@ -31,9 +31,8 @@
   body{
   cursor: grab;
   user-select: none;
-  scroll-behavior: smooth;
 }
-body:active{
+body.dragging{
   cursor: grabbing;
 }
 
@@ -235,25 +234,33 @@ body:active{
 let isDown = false;
 let startY = 0;
 let scrollStart = 0;
-let target = 0;
+let target = window.scrollY;
 let current = window.scrollY;
 
 document.addEventListener("mousedown", (e) => {
   isDown = true;
   startY = e.clientY;
   scrollStart = window.scrollY;
+  document.body.classList.add("dragging");
 });
 
 document.addEventListener("mouseup", () => {
   isDown = false;
+  document.body.classList.remove("dragging");
 });
 
 document.addEventListener("mousemove", (e) => {
   if (!isDown) return;
 
+  e.preventDefault();
   const dy = e.clientY - startY;
   target = scrollStart - dy;
 });
+
+// جلوگیری از تداخل اسکرول معمولی هنگام درگ
+document.addEventListener("wheel", (e) => {
+  if (isDown) e.preventDefault();
+}, { passive:false });
 
 function smoothScroll(){
   current += (target - current) * 0.12;
@@ -263,6 +270,7 @@ function smoothScroll(){
 
 smoothScroll();
 </script>
+
 
 
 
