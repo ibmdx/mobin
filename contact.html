@@ -240,110 +240,128 @@ height="0" width="0" style="display:none;visibility:hidden"></iframe></noscript>
 <script>
 (function(){
 
-let dragging=false;
-let lastY=0;
-let velocity=0;
-let raf=null;
+/* اگر دستگاه تاچ داشت کلاً اجرا نشود */
+if(("ontouchstart" in window) || navigator.maxTouchPoints>0){
+  return
+}
 
-const friction=0.94;
-const minVelocity=0.1;
+let isDown=false
+let moved=false
+
+let startY=0
+let lastY=0
+let velocity=0
+
+let raf=null
+
+const friction=0.94
+const minVelocity=0.08
+const threshold=6
 
 function maxScroll(){
-  return document.documentElement.scrollHeight - window.innerHeight;
+  return document.documentElement.scrollHeight - window.innerHeight
 }
 
 function clamp(v,min,max){
-  return Math.max(min,Math.min(max,v));
-}
-
-function blocked(el){
-  return el.closest('input,textarea,select,iframe,video,audio');
+  return Math.max(min,Math.min(max,v))
 }
 
 function stopMomentum(){
   if(raf){
-    cancelAnimationFrame(raf);
-    raf=null;
+    cancelAnimationFrame(raf)
+    raf=null
   }
 }
 
 function momentum(){
 
-  stopMomentum();
+  stopMomentum()
 
   function frame(){
 
-    if(dragging) return;
+    if(isDown) return
 
-    velocity*=friction;
+    velocity*=friction
 
     if(Math.abs(velocity)<minVelocity){
-      velocity=0;
-      return;
+      velocity=0
+      return
     }
 
     const next=clamp(
       window.scrollY-velocity,
       0,
       maxScroll()
-    );
+    )
 
-    window.scrollTo(0,next);
+    window.scrollTo(0,next)
 
-    raf=requestAnimationFrame(frame);
+    raf=requestAnimationFrame(frame)
   }
 
-  raf=requestAnimationFrame(frame);
+  raf=requestAnimationFrame(frame)
 }
 
 document.addEventListener("mousedown",e=>{
 
-  if(e.button!==0) return;
-  if(blocked(e.target)) return;
+  if(e.button!==0) return
+  if(e.target.closest("input,textarea,select,iframe,video")) return
 
-  dragging=true;
-  velocity=0;
-  lastY=e.clientY;
+  isDown=true
+  moved=false
 
-  stopMomentum();
+  startY=e.clientY
+  lastY=e.clientY
+  velocity=0
 
-  document.body.classList.add("dragging");
+  stopMomentum()
 
-},{passive:true});
+  document.body.classList.add("dragging")
+
+},{passive:true})
 
 document.addEventListener("mousemove",e=>{
 
-  if(!dragging) return;
+  if(!isDown) return
 
-  e.preventDefault();
+  const dy=e.clientY-lastY
 
-  const dy=e.clientY-lastY;
-  lastY=e.clientY;
+  if(Math.abs(e.clientY-startY)>threshold){
+    moved=true
+  }
 
-  velocity=dy;
+  lastY=e.clientY
+  velocity=dy
 
   const next=clamp(
     window.scrollY-dy,
     0,
     maxScroll()
-  );
+  )
 
-  window.scrollTo(0,next);
+  window.scrollTo(0,next)
 
-},{passive:false});
+},{passive:true})
 
-function end(){
+document.addEventListener("mouseup",release,{passive:true})
+document.addEventListener("mouseleave",release,{passive:true})
 
-  if(!dragging) return;
+function release(){
 
-  dragging=false;
-  document.body.classList.remove("dragging");
+  if(!isDown) return
 
-  momentum();
+  isDown=false
+  document.body.classList.remove("dragging")
+
+  momentum()
 }
 
-document.addEventListener("mouseup",end,{passive:true});
-document.addEventListener("mouseleave",end,{passive:true});
+document.addEventListener("click",function(e){
+  if(moved){
+    e.preventDefault()
+    e.stopPropagation()
+  }
+},true)
 
 })();
 </script>
