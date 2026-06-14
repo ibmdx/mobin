@@ -27,9 +27,9 @@
   
   
 <style>
+
 html,body{
   cursor: grab;
-  overscroll-behavior: none;
 }
 
 body.dragging,
@@ -93,7 +93,7 @@ body.dragging{
             <div class="navbar-brand">
                 <span class="navbar-logo">
                     <a href="index.html">
-                         <img src="assets/images/final2.gif" alt="" title="" style="height: 6rem;">
+                         <img src="assets/images/final2.gif" alt="" title="" style="height: 5rem;">
                     </a>
                 </span>
                 
@@ -640,161 +640,136 @@ height="0" width="0" style="display:none;visibility:hidden"></iframe></noscript>
 <!-- End Google Tag Manager (noscript) -->
 
 
+
+
 <script>
 (function(){
+
+/* اگر دستگاه تاچ داشت کلاً اجرا نشود */
+if(("ontouchstart" in window) || navigator.maxTouchPoints>0){
+  return
+}
 
 let isDown=false
 let moved=false
 
-let startX=0
 let startY=0
-
-let lastX=0
 let lastY=0
+let velocity=0
 
-let velocityX=0
-let velocityY=0
+let raf=null
 
-let targetX=window.scrollX
-let targetY=window.scrollY
-
-let currentX=window.scrollX
-let currentY=window.scrollY
-
-const lerp=0.12
-const friction=0.92
+const friction=0.94
+const minVelocity=0.08
 const threshold=6
 
+function maxScroll(){
+  return document.documentElement.scrollHeight - window.innerHeight
+}
+
 function clamp(v,min,max){
- return Math.max(min,Math.min(max,v))
+  return Math.max(min,Math.min(max,v))
 }
 
-function maxX(){
- return document.documentElement.scrollWidth-window.innerWidth
+function stopMomentum(){
+  if(raf){
+    cancelAnimationFrame(raf)
+    raf=null
+  }
 }
 
-function maxY(){
- return document.documentElement.scrollHeight-window.innerHeight
+function momentum(){
+
+  stopMomentum()
+
+  function frame(){
+
+    if(isDown) return
+
+    velocity*=friction
+
+    if(Math.abs(velocity)<minVelocity){
+      velocity=0
+      return
+    }
+
+    const next=clamp(
+      window.scrollY-velocity,
+      0,
+      maxScroll()
+    )
+
+    window.scrollTo(0,next)
+
+    raf=requestAnimationFrame(frame)
+  }
+
+  raf=requestAnimationFrame(frame)
 }
-
-function frame(){
-
- currentX += (targetX-currentX)*lerp
- currentY += (targetY-currentY)*lerp
-
- window.scrollTo(currentX,currentY)
-
- requestAnimationFrame(frame)
-}
-
-requestAnimationFrame(frame)
 
 document.addEventListener("mousedown",e=>{
 
- if(e.button!==0) return
- if(e.target.closest("input,textarea,select,iframe,video")) return
+  if(e.button!==0) return
+  if(e.target.closest("input,textarea,select,iframe,video")) return
 
- isDown=true
- moved=false
+  isDown=true
+  moved=false
 
- startX=e.clientX
- startY=e.clientY
+  startY=e.clientY
+  lastY=e.clientY
+  velocity=0
 
- lastX=e.clientX
- lastY=e.clientY
+  stopMomentum()
 
- velocityX=0
- velocityY=0
-
- document.body.classList.add("dragging")
+  document.body.classList.add("dragging")
 
 },{passive:true})
 
 document.addEventListener("mousemove",e=>{
 
- if(!isDown) return
+  if(!isDown) return
 
- const dx=e.clientX-lastX
- const dy=e.clientY-lastY
+  const dy=e.clientY-lastY
 
- if(Math.abs(e.clientX-startX)>threshold ||
-    Math.abs(e.clientY-startY)>threshold){
-  moved=true
- }
+  if(Math.abs(e.clientY-startY)>threshold){
+    moved=true
+  }
 
- lastX=e.clientX
- lastY=e.clientY
+  lastY=e.clientY
+  velocity=dy
 
- velocityX=dx
- velocityY=dy
-
- targetX=clamp(
-  targetX-dx,
-  0,
-  maxX()
- )
-
- targetY=clamp(
-  targetY-dy,
-  0,
-  maxY()
- )
-
- e.preventDefault()
-
-},{passive:false})
-
-function release(){
-
- if(!isDown) return
-
- isDown=false
-
- document.body.classList.remove("dragging")
-
- function inertia(){
-
-  velocityX*=friction
-  velocityY*=friction
-
-  if(Math.abs(velocityX)<0.1 &&
-     Math.abs(velocityY)<0.1) return
-
-  targetX=clamp(
-   targetX-velocityX,
-   0,
-   maxX()
+  const next=clamp(
+    window.scrollY-dy,
+    0,
+    maxScroll()
   )
 
-  targetY=clamp(
-   targetY-velocityY,
-   0,
-   maxY()
-  )
+  window.scrollTo(0,next)
 
-  requestAnimationFrame(inertia)
- }
-
- inertia()
-
-}
+},{passive:true})
 
 document.addEventListener("mouseup",release,{passive:true})
 document.addEventListener("mouseleave",release,{passive:true})
 
+function release(){
+
+  if(!isDown) return
+
+  isDown=false
+  document.body.classList.remove("dragging")
+
+  momentum()
+}
+
 document.addEventListener("click",function(e){
-
- if(moved){
-  e.preventDefault()
-  e.stopPropagation()
- }
-
+  if(moved){
+    e.preventDefault()
+    e.stopPropagation()
+  }
 },true)
 
 })();
 </script>
-
-
 
 
 
