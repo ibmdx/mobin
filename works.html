@@ -31,6 +31,9 @@
 <link rel="stylesheet" href="assets/mobirise/css/mbr-additional.css" type="text/css">
 
 
+
+
+
 <style>
 html, body {
   cursor: grab;
@@ -45,6 +48,58 @@ body.dragging {
   user-select: none;
   -webkit-user-select: none;
 }
+
+
+/* مخفی کردن ماوس پیش‌فرض مرورگر */
+body {
+  cursor: none !important;
+}
+
+/* نقطه اصلی مرکز ماوس */
+#cursor {
+  position: fixed;
+  width: 8px;
+  height: 8px;
+  background-color: var(--fg, #ffffff);
+  border-radius: 50%;
+  pointer-events: none;
+  z-index: 99999;
+  transform: translate(-50%, -50%);
+  transition: width 0.2s cubic-bezier(0.25, 1, 0.5, 1), 
+              height 0.2s cubic-bezier(0.25, 1, 0.5, 1), 
+              background-color 0.2s ease;
+}
+
+/* حلقه بیرونی ماوس */
+#cursor-ring {
+  position: fixed;
+  width: 32px;
+  height: 32px;
+  border: 1.5px solid rgba(240, 237, 232, 0.4);
+  border-radius: 50%;
+  pointer-events: none;
+  z-index: 99998;
+  transform: translate(-50%, -50%);
+  transition: width 0.3s cubic-bezier(0.25, 1, 0.5, 1), 
+              height 0.3s cubic-bezier(0.25, 1, 0.5, 1), 
+              border-color 0.3s ease, 
+              background-color 0.3s ease;
+}
+
+/* افکت جذاب هنگام رفتن روی لینک‌ها و دکمه‌ها (Hover) */
+#cursor.hover {
+  width: 4px;
+  height: 4px;
+  background-color: #ffffff;
+}
+
+#cursor-ring.hover {
+  width: 50px;
+  height: 50px;
+  border-color: rgba(255, 255, 255, 0.8);
+  background-color: rgba(255, 255, 255, 0.08); /* افکت شیشه ای داخل حلقه */
+}
+
 
 </style>
 
@@ -781,6 +836,50 @@ document.addEventListener("click",function(e){
 },true)
 
 })();
+
+
+
+
+const cursor = document.getElementById('cursor');
+const ring = document.getElementById('cursor-ring');
+
+let mouseX = 0, mouseY = 0; // مختصات واقعی ماوس
+let ringX = 0, ringY = 0;   // مختصات نرم حرکت کننده حلقه
+
+// ۱. بروزرسانی سریع موقعیت نقطه مرکزی و ثبت مختصات ماوس
+document.addEventListener('mousemove', (e) => {
+  mouseX = e.clientX;
+  mouseY = e.clientY;
+  cursor.style.left = mouseX + 'px';
+  cursor.style.top = mouseY + 'px';
+});
+
+// ۲. انیمیشن نرم تعقیب ماوس توسط حلقه بیرونی (با فرمول بازگشتی نرم)
+function animateRing() {
+  ringX += (mouseX - ringX) * 0.15; // سرعت تعقیب (هرچه کمتر باشد نرم‌تر و کندتر می‌شود)
+  ringY += (mouseY - ringY) * 0.15;
+  
+  ring.style.left = ringX + 'px';
+  ring.style.top = ringY + 'px';
+  
+  requestAnimationFrame(animateRing);
+}
+requestAnimationFrame(animateRing);
+
+// ۳. اضافه کردن خودکار رویداد Hover به تمامی لینک‌ها و عناصر تعاملی
+const interactiveElements = document.querySelectorAll('a, button, .project-card, .work-card, .service-item, [role="button"]');
+
+interactiveElements.forEach(el => {
+  el.addEventListener('mouseenter', () => {
+    cursor.classList.add('hover');
+    ring.classList.add('hover');
+  });
+  el.addEventListener('mouseleave', () => {
+    cursor.classList.remove('hover');
+    ring.classList.remove('hover');
+  });
+});
+
 </script>
 
 
