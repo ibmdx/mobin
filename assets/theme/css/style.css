@@ -1283,3 +1283,58 @@ body {
 	top: 0;
 	left: -2400px;
 }
+
+
+
+
+
+
+
+/* clickable full card */
+
+#info4-7h{
+position:relative;
+cursor:pointer;
+overflow:hidden;
+}
+
+/* full clickable layer */
+
+#info4-7h::after{
+content:"";
+position:absolute;
+inset:0;
+z-index:5;
+}
+
+/* zoom background (parallax image) */
+
+#info4-7h{
+transition:transform .7s cubic-bezier(.19,1,.22,1);
+}
+
+#info4-7h:hover{
+transform:scale(1.03);
+}
+
+/* text animation */
+
+#info4-7h .mbr-text strong{
+display:inline-block;
+transition:transform .35s ease;
+}
+
+#info4-7h:hover .mbr-text strong{
+transform:scale(1.15);
+}
+
+/* small return text */
+
+#info4-7h .display-7{
+transition:transform .35s ease, opacity .35s ease;
+}
+
+#info4-7h:hover .display-7{
+transform:translateY(-4px);
+opacity:1;
+}
