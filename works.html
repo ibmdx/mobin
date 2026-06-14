@@ -52,6 +52,49 @@ img {
 }
 
 
+img {
+  opacity: 0;
+  transform: translateY(14px) scale(0.985);
+  filter: blur(10px);
+  transition:
+    opacity .8s ease,
+    transform .8s cubic-bezier(.22,1,.36,1),
+    filter .8s ease;
+}
+
+img.img-loaded {
+  opacity: 1;
+  transform: translateY(0) scale(1);
+  filter: blur(0);
+}
+
+
+.reveal-img {
+  opacity: 0;
+  transform: translateY(14px) scale(0.985);
+  filter: blur(10px);
+  transition:
+    opacity .8s ease,
+    transform .8s cubic-bezier(.22,1,.36,1),
+    filter .8s ease;
+}
+
+.reveal-img.img-loaded {
+  opacity: 1;
+  transform: translateY(0) scale(1);
+  filter: blur(0);
+}
+
+
+
+
+
+
+
+
+
+
+
 
 
 </style>
@@ -804,6 +847,20 @@ document.addEventListener('dragstart', function(e) {
 });
 </script>
 
+<script>
+document.querySelectorAll('.reveal-img').forEach(img => {
+  function showImage() {
+    img.classList.add('img-loaded');
+  }
+
+  if (img.complete) {
+    showImage();
+  } else {
+    img.addEventListener('load', showImage);
+    img.addEventListener('error', showImage);
+  }
+});
+</script>
 
 
 
