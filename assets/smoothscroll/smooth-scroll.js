@@ -795,7 +795,6 @@
 
 
 
-<script>
 (function () {
   let dragging = false;
   let startY = 0;
@@ -882,7 +881,6 @@
     init();
   }
 })();
-</script>
 
 
 
