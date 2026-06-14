@@ -719,5 +719,121 @@
 <noscript><iframe src="https://www.googletagmanager.com/ns.html?id=GTM-T7TR7GC"
 height="0" width="0" style="display:none;visibility:hidden"></iframe></noscript>
 <!-- End Google Tag Manager (noscript) -->
+
+
+<script>
+(function(){
+
+let dragging=false;
+let lastY=0;
+let velocity=0;
+let raf=null;
+
+const friction=0.94;
+const minVelocity=0.1;
+
+function maxScroll(){
+  return document.documentElement.scrollHeight - window.innerHeight;
+}
+
+function clamp(v,min,max){
+  return Math.max(min,Math.min(max,v));
+}
+
+function blocked(el){
+  return el.closest('input,textarea,select,iframe,video,audio');
+}
+
+function stopMomentum(){
+  if(raf){
+    cancelAnimationFrame(raf);
+    raf=null;
+  }
+}
+
+function momentum(){
+
+  stopMomentum();
+
+  function frame(){
+
+    if(dragging) return;
+
+    velocity*=friction;
+
+    if(Math.abs(velocity)<minVelocity){
+      velocity=0;
+      return;
+    }
+
+    const next=clamp(
+      window.scrollY-velocity,
+      0,
+      maxScroll()
+    );
+
+    window.scrollTo(0,next);
+
+    raf=requestAnimationFrame(frame);
+  }
+
+  raf=requestAnimationFrame(frame);
+}
+
+document.addEventListener("mousedown",e=>{
+
+  if(e.button!==0) return;
+  if(blocked(e.target)) return;
+
+  dragging=true;
+  velocity=0;
+  lastY=e.clientY;
+
+  stopMomentum();
+
+  document.body.classList.add("dragging");
+
+},{passive:true});
+
+document.addEventListener("mousemove",e=>{
+
+  if(!dragging) return;
+
+  e.preventDefault();
+
+  const dy=e.clientY-lastY;
+  lastY=e.clientY;
+
+  velocity=dy;
+
+  const next=clamp(
+    window.scrollY-dy,
+    0,
+    maxScroll()
+  );
+
+  window.scrollTo(0,next);
+
+},{passive:false});
+
+function end(){
+
+  if(!dragging) return;
+
+  dragging=false;
+  document.body.classList.remove("dragging");
+
+  momentum();
+}
+
+document.addEventListener("mouseup",end,{passive:true});
+document.addEventListener("mouseleave",end,{passive:true});
+
+})();
+</script>
+
+
+
+
 </body>
 </html>
