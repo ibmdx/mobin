@@ -32,7 +32,6 @@
 
 
 
-
 <style>
 html, body {
   cursor: grab;
@@ -48,260 +47,128 @@ body.dragging {
   -webkit-user-select: none;
 }
 
-/* ===== NAVBAR FIX ===== */
+/* ===== PROFESSIONAL GLASS NAVBAR ===== */
+
+#menu1-4f {
+  position: fixed !important;
+  top: 18px;
+  left: 50%;
+  transform: translateX(-50%);
+  width: min(1180px, calc(100% - 28px));
+  z-index: 9999;
+  background: transparent !important;
+}
+
 #menu1-4f .navbar,
 #menu1-4f .navbar.navbar-dropdown,
 #menu1-4f .navbar.navbar-fixed-top,
 #menu1-4f .navbar.bg-color,
 #menu1-4f .navbar.transparent,
 #menu1-4f .navbar.collapsed {
-  background: rgba(255,255,255,0.08) !important;
-  background-color: rgba(255,255,255,0.08) !important;
-  backdrop-filter: blur(28px) saturate(180%) !important;
-  -webkit-backdrop-filter: blur(28px) saturate(180%) !important;
+  position: relative;
+  overflow: hidden;
+  border-radius: 24px;
+  padding: 0.9rem 1.25rem;
+  background: rgba(255,255,255,0.10) !important;
+  background-color: rgba(255,255,255,0.10) !important;
+  backdrop-filter: blur(24px) saturate(180%) !important;
+  -webkit-backdrop-filter: blur(24px) saturate(180%) !important;
   border: 1px solid rgba(255,255,255,0.18) !important;
-  box-shadow: 0 18px 70px rgba(0,0,0,0.35) !important;
+  box-shadow:
+    0 10px 40px rgba(0,0,0,0.22),
+    inset 0 1px 0 rgba(255,255,255,0.22);
 }
 
+/* glossy light */
+#menu1-4f .navbar::before {
+  content: "";
+  position: absolute;
+  inset: 0;
+  border-radius: inherit;
+  pointer-events: none;
+  background:
+    linear-gradient(
+      180deg,
+      rgba(255,255,255,0.28) 0%,
+      rgba(255,255,255,0.10) 22%,
+      rgba(255,255,255,0.03) 45%,
+      rgba(255,255,255,0.06) 100%
+    );
+}
+
+/* soft highlight line */
+#menu1-4f .navbar::after {
+  content: "";
+  position: absolute;
+  left: 12px;
+  right: 12px;
+  top: 0;
+  height: 1px;
+  background: linear-gradient(
+    90deg,
+    rgba(255,255,255,0.0),
+    rgba(255,255,255,0.6),
+    rgba(255,255,255,0.0)
+  );
+  pointer-events: none;
+}
+
+/* prevent black mobile dropdown */
 #menu1-4f .navbar-collapse,
 #menu1-4f .navbar-nav,
 #menu1-4f .dropdown-menu {
   background: transparent !important;
   background-color: transparent !important;
+  box-shadow: none !important;
 }
 
+/* links */
 #menu1-4f .nav-link {
+  color: rgba(255,255,255,0.92) !important;
+  font-weight: 600;
+  letter-spacing: 0.08em;
+  text-transform: uppercase;
+  transition: all .3s ease;
+}
+
+#menu1-4f .nav-link:hover {
   color: #fff !important;
+  text-shadow: 0 0 18px rgba(255,255,255,0.25);
 }
 
-
-
-
-/* ===== LIQUID GLASS NAVBAR ===== */
-
-#menu1-4f{
-position:fixed;
-top:18px;
-left:50%;
-transform:translateX(-50%);
-width:min(1180px, calc(100% - 28px));
-z-index:9999;
-pointer-events:none;
+/* logo */
+#menu1-4f .navbar-brand img {
+  height: 4.8rem !important;
+  filter: drop-shadow(0 8px 18px rgba(0,0,0,0.25));
 }
 
-/* main glass */
-
-#menu1-4f .navbar{
-
-pointer-events:auto;
-
-position:relative;
-
-padding:.9rem 1.25rem;
-
-border-radius:24px;
-
-background:rgba(255,255,255,.06)!important;
-
-backdrop-filter:blur(28px) saturate(190%);
--webkit-backdrop-filter:blur(28px) saturate(190%);
-
-border:1px solid rgba(255,255,255,.22);
-
-box-shadow:
-0 18px 70px rgba(0,0,0,.45),
-inset 0 1px 0 rgba(255,255,255,.35);
-
-overflow:hidden;
-
-transition:all .35s ease;
+/* shrink on scroll */
+#menu1-4f.scrolled .navbar {
+  padding: 0.55rem 1rem;
+  background: rgba(255,255,255,0.14) !important;
 }
 
-/* liquid light layer */
+/* mobile */
+@media (max-width: 992px) {
+  #menu1-4f {
+    top: 12px;
+    width: calc(100% - 18px);
+  }
 
-#menu1-4f .navbar::before{
+  #menu1-4f .navbar {
+    border-radius: 18px;
+  }
 
-content:"";
-
-position:absolute;
-
-inset:-2px;
-
-border-radius:inherit;
-
-background:
-radial-gradient(
-circle at var(--x,50%) var(--y,50%),
-rgba(255,255,255,.35),
-transparent 40%
-);
-
-opacity:.35;
-
-pointer-events:none;
-
-transition:opacity .3s ease;
+  #menu1-4f .navbar-collapse {
+    margin-top: .7rem;
+    border-radius: 14px;
+    padding: .7rem .8rem;
+    background: rgba(255,255,255,0.06) !important;
+    backdrop-filter: blur(20px) !important;
+    -webkit-backdrop-filter: blur(20px) !important;
+    border: 1px solid rgba(255,255,255,0.10) !important;
+  }
 }
-
-/* floating effect */
-
-#menu1-4f .navbar:hover{
-
-transform:translateY(-3px);
-
-box-shadow:
-0 26px 90px rgba(0,0,0,.55),
-inset 0 1px 0 rgba(255,255,255,.40);
-}
-
-/* shrink */
-
-#menu1-4f.scrolled .navbar{
-
-padding:.55rem 1rem;
-
-background:rgba(255,255,255,.10)!important;
-
-}
-
-/* ===== LOGO ===== */
-
-#menu1-4f .navbar-brand img{
-
-height:4.6rem!important;
-
-filter:drop-shadow(0 8px 22px rgba(0,0,0,.4));
-
-transition:transform .35s ease;
-}
-
-#menu1-4f .navbar-brand img:hover{
-
-transform:scale(1.07);
-}
-
-/* ===== MENU LINKS ===== */
-
-#menu1-4f .nav-link{
-
-position:relative;
-
-font-weight:600;
-
-letter-spacing:.08em;
-
-text-transform:uppercase;
-
-padding:.65rem 1rem!important;
-
-color:rgba(255,255,255,.9)!important;
-
-transition:all .3s ease;
-}
-
-/* liquid hover */
-
-#menu1-4f .nav-link:hover{
-
-transform:translateY(-2px) scale(1.07);
-
-color:#fff!important;
-
-text-shadow:0 0 20px rgba(255,255,255,.35);
-}
-
-/* animated underline */
-
-#menu1-4f .nav-link::after{
-
-content:"";
-
-position:absolute;
-
-left:50%;
-
-bottom:.35rem;
-
-width:0;
-
-height:2px;
-
-border-radius:10px;
-
-background:linear-gradient(90deg,#fff,rgba(255,255,255,.4));
-
-transform:translateX(-50%);
-
-transition:width .35s ease;
-}
-
-#menu1-4f .nav-link:hover::after{
-
-width:65%;
-}
-
-/* active link */
-
-#menu1-4f .nav-item.active .nav-link::after{
-
-width:70%;
-}
-
-/* ===== SCROLL PROGRESS ===== */
-
-#nav-progress{
-
-position:absolute;
-
-left:0;
-
-bottom:0;
-
-height:2px;
-
-width:0%;
-
-background:linear-gradient(90deg,#fff,rgba(255,255,255,.4));
-
-border-radius:0 0 24px 24px;
-
-pointer-events:none;
-}
-
-/* ===== MOBILE ===== */
-
-@media (max-width:992px){
-
-#menu1-4f{
-top:12px;
-width:calc(100% - 18px);
-}
-
-#menu1-4f .navbar{
-border-radius:18px;
-}
-
-#menu1-4f .navbar-collapse{
-
-margin-top:.7rem;
-
-background:rgba(0,0,0,.35);
-
-backdrop-filter:blur(20px);
-
-border-radius:16px;
-
-border:1px solid rgba(255,255,255,.15);
-
-padding:.7rem .8rem;
-}
-
-}
-
-
-
-
-
 </style>
 
 
@@ -1039,40 +906,20 @@ document.addEventListener("click",function(e){
 </script>
 
 
+
 <script>
+window.addEventListener("scroll", function () {
+  const header = document.getElementById("menu1-4f");
+  if (!header) return;
 
-const header = document.getElementById("menu1-4f")
-const progress = document.getElementById("nav-progress")
-
-window.addEventListener("scroll",()=>{
-
-const scrollTop = window.scrollY
-const docHeight = document.documentElement.scrollHeight - window.innerHeight
-const percent = (scrollTop/docHeight)*100
-
-progress.style.width = percent + "%"
-
-/* shrink */
-
-if(scrollTop>60){
-header.classList.add("scrolled")
-}else{
-header.classList.remove("scrolled")
-}
-
-})
-
-/* active link */
-
-document.querySelectorAll("#menu1-4f .nav-link").forEach(link=>{
-
-if(link.href===window.location.href){
-link.parentElement.classList.add("active")
-}
-
-})
-
+  if (window.scrollY > 60) {
+    header.classList.add("scrolled");
+  } else {
+    header.classList.remove("scrolled");
+  }
+});
 </script>
+
 
 
 
