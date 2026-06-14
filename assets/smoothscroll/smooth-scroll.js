@@ -45,7 +45,6 @@
     var options = defaultOptions;
 
 
-
 // Other Variables
     var isExcluded = false;
     var isFrame = false;
@@ -786,16 +785,5 @@
         module.exports = SmoothScroll;
     else
         window.SmoothScroll = SmoothScroll;
-
-
-
-
-
-
-
-
-
-
-
 
 })();
