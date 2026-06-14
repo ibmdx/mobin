@@ -642,9 +642,13 @@ height="0" width="0" style="display:none;visibility:hidden"></iframe></noscript>
 
 
 
-
 <script>
 (function(){
+
+/* اگر دستگاه تاچ داشت کلاً اجرا نشود */
+if(("ontouchstart" in window) || navigator.maxTouchPoints>0){
+  return
+}
 
 let isDown=false
 let moved=false
@@ -703,10 +707,6 @@ function momentum(){
   raf=requestAnimationFrame(frame)
 }
 
-/* --------------------------
-   MOUSE DRAG
----------------------------*/
-
 document.addEventListener("mousedown",e=>{
 
   if(e.button!==0) return
@@ -751,52 +751,6 @@ document.addEventListener("mousemove",e=>{
 document.addEventListener("mouseup",release,{passive:true})
 document.addEventListener("mouseleave",release,{passive:true})
 
-/* --------------------------
-   TOUCH DRAG (موبایل)
----------------------------*/
-
-document.addEventListener("touchstart",e=>{
-
-  if(e.touches.length!==1) return
-
-  isDown=true
-  moved=false
-
-  startY=e.touches[0].clientY
-  lastY=e.touches[0].clientY
-  velocity=0
-
-  stopMomentum()
-
-},{passive:true})
-
-document.addEventListener("touchmove",e=>{
-
-  if(!isDown) return
-
-  const dy=e.touches[0].clientY-lastY
-
-  if(Math.abs(e.touches[0].clientY-startY)>threshold){
-    moved=true
-  }
-
-  lastY=e.touches[0].clientY
-  velocity=dy
-
-  const next=clamp(
-    window.scrollY-dy,
-    0,
-    maxScroll()
-  )
-
-  window.scrollTo(0,next)
-
-},{passive:true})
-
-document.addEventListener("touchend",release,{passive:true})
-
-/* -------------------------- */
-
 function release(){
 
   if(!isDown) return
@@ -807,8 +761,6 @@ function release(){
   momentum()
 }
 
-/* جلوگیری از کلیک بعد از drag */
-
 document.addEventListener("click",function(e){
   if(moved){
     e.preventDefault()
@@ -818,6 +770,7 @@ document.addEventListener("click",function(e){
 
 })();
 </script>
+
 
 
 
