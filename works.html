@@ -819,69 +819,25 @@ document.addEventListener('dragstart', function(e) {
 </script>
 
 <script>
-document.addEventListener("DOMContentLoaded", function () {
-  const images = document.querySelectorAll('img');
-
-  images.forEach(img => {
-    // غیرفعال کردن درگ عکس‌ها برای تداخل نداشتن با درگ اسکرول صفحه
-    img.setAttribute('draggable', 'false');
-    img.style.userDrag = 'none';
-    img.style.webkitUserDrag = 'none';
-
-    // اضافه کردن کلاس افکت به عکس
-    img.classList.add('reveal-img');
-
-    // ایجاد پوشش نگهدارنده Shimmer برای عکس‌ها به جز آیکون‌های خیلی کوچک
-    if (img.offsetWidth > 40 || img.offsetHeight > 40 || !img.offsetWidth) {
-      const wrapper = document.createElement('div');
-      wrapper.className = 'img-reveal-wrapper';
-      img.parentNode.insertBefore(wrapper, img);
-      wrapper.appendChild(img);
-    }
-
-    // بررسی وضعیت لود تصویر
-    function onImageLoad() {
-      const parent = img.parentElement;
-      if (parent && parent.classList.contains('img-reveal-wrapper')) {
-        parent.classList.add('shimmer-off');
-      }
-      setupIntersectionObserver(img);
-    }
-
-    if (img.complete) {
-      onImageLoad();
-    } else {
-      img.addEventListener('load', onImageLoad);
-      img.addEventListener('error', onImageLoad); // مدیریت ارور لود برای عدم ماندن در حالت غیب
-    }
-  });
-
-  // استفاده از IntersectionObserver جهت لود و افکت انیمیشن در هنگام رسیدن اسکرول
-  function setupIntersectionObserver(imageElement) {
-    const observer = new IntersectionObserver((entries) => {
-      entries.forEach(entry => {
-        if (entry.isIntersecting) {
-          // کمی تاخیر برای نرم‌تر شدن و جلوه دیداری زیباتر
-          setTimeout(() => {
-            imageElement.classList.add('img-visible');
-          }, 80);
-          observer.unobserve(imageElement); // خروج از نظارت پس از نمایان شدن
-        }
-      });
-    }, {
-      rootMargin: '0px 0px -80px 0px', // انیمیشن کمی قبل از رسیدن کامل به وسط صفحه شروع شود
-      threshold: 0.05
-    });
-
-    observer.observe(imageElement);
+document.querySelectorAll('.reveal-img').forEach(img => {
+  function showImage() {
+    img.classList.add('img-loaded');
   }
 
-  // جلوگیری از به هم خوردن حرکت درگ با مسدود کردن رفتار Dragstart روی عکس‌ها
-  document.addEventListener('dragstart', function(e) {
-    if (e.target.tagName === 'IMG' || e.target.closest('img')) {
-      e.preventDefault();
-    }
-  });
+  if (img.complete) {
+    showImage();
+  } else {
+    img.addEventListener('load', showImage);
+    img.addEventListener('error', showImage);
+  }
+
+  img.setAttribute('draggable', 'false');
+});
+
+document.addEventListener('dragstart', function(e) {
+  if (e.target.tagName === 'IMG') {
+    e.preventDefault();
+  }
 });
 </script>
 
