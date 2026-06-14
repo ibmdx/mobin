@@ -597,6 +597,251 @@ document.addEventListener("click",function(e){
 </script>
 
 
+<!-- ═══════════════════════════════════════════
+     FLOATING SECTION NAVIGATOR — BMDX ABOUT
+     (self-contained, touches nothing else)
+═══════════════════════════════════════════ -->
+<style>
+#bmdx-nav {
+  position: fixed;
+  right: 28px;
+  top: 50%;
+  transform: translateY(-50%);
+  z-index: 9999;
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+  gap: 0;
+  pointer-events: none;
+}
+
+#bmdx-nav-inner {
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+  gap: 6px;
+  background: rgba(255,255,255,0.04);
+  border: 1px solid rgba(255,255,255,0.10);
+  border-radius: 40px;
+  padding: 14px 10px;
+  backdrop-filter: blur(12px);
+  -webkit-backdrop-filter: blur(12px);
+  box-shadow: 0 4px 32px rgba(0,0,0,0.45);
+  pointer-events: all;
+  transition: opacity 0.4s ease;
+}
+
+.bmdx-dot-wrap {
+  position: relative;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  width: 28px;
+  height: 28px;
+  cursor: pointer;
+}
+
+.bmdx-dot {
+  width: 6px;
+  height: 6px;
+  border-radius: 50%;
+  background: rgba(255,255,255,0.30);
+  transition: background 0.3s ease, transform 0.3s ease;
+  flex-shrink: 0;
+}
+
+.bmdx-dot-wrap:hover .bmdx-dot,
+.bmdx-dot-wrap.active .bmdx-dot {
+  background: #fff;
+  transform: scale(1.5);
+}
+
+/* Tooltip label */
+.bmdx-dot-wrap::before {
+  content: attr(data-label);
+  position: absolute;
+  right: 38px;
+  white-space: nowrap;
+  background: rgba(20,20,20,0.88);
+  color: #fff;
+  font-family: 'Helvetica Neue', Helvetica, Arial, sans-serif;
+  font-size: 10px;
+  font-weight: 600;
+  letter-spacing: 0.12em;
+  text-transform: uppercase;
+  padding: 5px 10px;
+  border-radius: 4px;
+  opacity: 0;
+  pointer-events: none;
+  transform: translateX(6px);
+  transition: opacity 0.22s ease, transform 0.22s ease;
+}
+
+.bmdx-dot-wrap:hover::before {
+  opacity: 1;
+  transform: translateX(0);
+}
+
+/* Progress bar between dots */
+.bmdx-seg {
+  width: 1px;
+  height: 16px;
+  background: rgba(255,255,255,0.10);
+  border-radius: 1px;
+  overflow: hidden;
+  position: relative;
+  margin: 0 auto;
+}
+
+.bmdx-seg-fill {
+  position: absolute;
+  top: 0;
+  left: 0;
+  width: 100%;
+  height: 0%;
+  background: rgba(255,255,255,0.55);
+  transition: height 0.15s linear;
+  border-radius: 1px;
+}
+
+/* Scroll-to-top button */
+#bmdx-top-btn {
+  margin-top: 10px;
+  width: 28px;
+  height: 28px;
+  border-radius: 50%;
+  border: 1px solid rgba(255,255,255,0.18);
+  background: transparent;
+  cursor: pointer;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  transition: background 0.25s ease, opacity 0.35s ease;
+  pointer-events: all;
+  opacity: 0;
+}
+#bmdx-top-btn.visible { opacity: 1; }
+#bmdx-top-btn:hover { background: rgba(255,255,255,0.12); }
+#bmdx-top-btn svg { pointer-events: none; }
+
+@media (max-width: 768px) {
+  #bmdx-nav { display: none; }
+}
+</style>
+
+<div id="bmdx-nav">
+  <div id="bmdx-nav-inner">
+    <!-- dots injected by JS -->
+  </div>
+  <button id="bmdx-top-btn" title="Back to top" aria-label="Scroll to top">
+    <svg width="10" height="10" viewBox="0 0 10 10" fill="none" xmlns="http://www.w3.org/2000/svg">
+      <path d="M5 8V2M5 2L2 5M5 2L8 5" stroke="rgba(255,255,255,0.7)" stroke-width="1.4" stroke-linecap="round" stroke-linejoin="round"/>
+    </svg>
+  </button>
+</div>
+
+<script>
+(function () {
+
+  /* ── Sections to track ── */
+  var sections = [
+    { id: 'header2-41',            label: 'Top'          },
+    { id: 'header9-er',            label: 'About'        },
+    { id: 'testimonials-slider1-8d', label: 'Testimonials' },
+    { id: 'clients-7i',            label: 'Clients'      },
+    { id: 'info4-7g',              label: 'Contact'      },
+    { id: 'footer7-7f',            label: 'Footer'       },
+  ];
+
+  var inner   = document.getElementById('bmdx-nav-inner');
+  var topBtn  = document.getElementById('bmdx-top-btn');
+  var dots    = [];
+  var segs    = [];
+
+  /* ── Build dots + segment bars ── */
+  sections.forEach(function (sec, i) {
+    var wrap = document.createElement('div');
+    wrap.className = 'bmdx-dot-wrap';
+    wrap.setAttribute('data-label', sec.label);
+    wrap.setAttribute('data-target', sec.id);
+
+    var dot = document.createElement('div');
+    dot.className = 'bmdx-dot';
+    wrap.appendChild(dot);
+    inner.appendChild(wrap);
+    dots.push(wrap);
+
+    wrap.addEventListener('click', function () {
+      var el = document.getElementById(sec.id);
+      if (!el) return;
+      var y = el.getBoundingClientRect().top + window.scrollY - 60;
+      window.scrollTo({ top: y, behavior: 'smooth' });
+    });
+
+    /* segment bar between dots (not after last) */
+    if (i < sections.length - 1) {
+      var seg = document.createElement('div');
+      seg.className = 'bmdx-seg';
+      var fill = document.createElement('div');
+      fill.className = 'bmdx-seg-fill';
+      seg.appendChild(fill);
+      inner.appendChild(seg);
+      segs.push({ el: seg, fill: fill });
+    }
+  });
+
+  /* ── Update on scroll ── */
+  function update () {
+    var scrollY  = window.scrollY;
+    var winH     = window.innerHeight;
+    var totalH   = document.documentElement.scrollHeight - winH;
+    var progress = Math.min(scrollY / Math.max(totalH, 1), 1);
+
+    /* top button visibility */
+    if (scrollY > winH * 0.4) {
+      topBtn.classList.add('visible');
+    } else {
+      topBtn.classList.remove('visible');
+    }
+
+    /* find active section */
+    var active = 0;
+    sections.forEach(function (sec, i) {
+      var el = document.getElementById(sec.id);
+      if (!el) return;
+      var rect = el.getBoundingClientRect();
+      if (rect.top <= winH * 0.45) active = i;
+    });
+
+    dots.forEach(function (d, i) {
+      d.classList.toggle('active', i === active);
+    });
+
+    /* fill segment bars proportionally */
+    /* map global progress to each inter-section gap */
+    var n = sections.length;
+    segs.forEach(function (seg, i) {
+      /* each segment covers 1/(n-1) of total scroll */
+      var segStart = i / (n - 1);
+      var segEnd   = (i + 1) / (n - 1);
+      var raw = (progress - segStart) / (segEnd - segStart);
+      var pct = Math.min(Math.max(raw, 0), 1) * 100;
+      seg.fill.style.height = pct + '%';
+    });
+  }
+
+  window.addEventListener('scroll', update, { passive: true });
+  update();
+
+  /* ── Scroll to top ── */
+  topBtn.addEventListener('click', function () {
+    window.scrollTo({ top: 0, behavior: 'smooth' });
+  });
+
+})();
+</script>
+<!-- ══════════════ END FLOATING NAVIGATOR ══════════════ -->
+
 <script>
 document.querySelectorAll('img').forEach(img => {
   img.setAttribute('draggable', 'false');
