@@ -46,27 +46,6 @@ body.dragging {
   -webkit-user-select: none;
 }
 
-img {
-  -webkit-user-drag: none;
-  -webkit-user-select: none;
-  user-select: none;
-}
-
-.reveal-img {
-  opacity: 0;
-  transform: translateY(14px) scale(0.985);
-  filter: blur(10px);
-  transition:
-    opacity .8s ease,
-    transform .8s cubic-bezier(.22,1,.36,1),
-    filter .8s ease;
-}
-
-.reveal-img.img-loaded {
-  opacity: 1;
-  transform: translateY(0) scale(1);
-  filter: blur(0);
-}
 </style>
 
 
@@ -818,31 +797,6 @@ document.addEventListener('dragstart', function(e) {
 });
 </script>
 
-<script>
-document.addEventListener('DOMContentLoaded', function () {
-  const items = document.querySelectorAll('.card-img');
-
-  items.forEach(el => {
-    el.classList.add('reveal-bg');
-
-    const io = new IntersectionObserver((entries) => {
-      entries.forEach(entry => {
-        if (entry.isIntersecting) {
-          setTimeout(() => {
-            el.classList.add('is-visible');
-          }, 80);
-          io.unobserve(el);
-        }
-      });
-    }, {
-      threshold: 0.08,
-      rootMargin: '0px 0px -80px 0px'
-    });
-
-    io.observe(el);
-  });
-});
-</script>
 
 
 </body>
