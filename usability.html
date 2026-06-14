@@ -26,6 +26,22 @@
   <link rel="preload" as="style" href="assets/mobirise/css/mbr-additional.css"><link rel="stylesheet" href="assets/mobirise/css/mbr-additional.css" type="text/css">
   
   
+<style>
+html, body {
+  cursor: grab;
+}
+
+body.dragging,
+body.dragging * {
+  cursor: grabbing !important;
+}
+
+body.dragging {
+  user-select: none;
+  -webkit-user-select: none;
+}
+</style>
+
   
 </head>
 <body>
@@ -242,5 +258,160 @@
 <noscript><iframe src="https://www.googletagmanager.com/ns.html?id=GTM-T7TR7GC"
 height="0" width="0" style="display:none;visibility:hidden"></iframe></noscript>
 <!-- End Google Tag Manager (noscript) -->
+
+
+
+
+<script>
+(function () {
+  let dragging = false;
+  let lastY = 0;
+  let velocity = 0;
+  let raf = null;
+  let moved = false;
+
+  const friction = 0.94;
+  const minVelocity = 0.12;
+  const power = 1.0;
+  const dragThreshold = 4;
+
+  const blockedSelector = [
+    'a',
+    'button',
+    'input',
+    'textarea',
+    'select',
+    'option',
+    'label',
+    'iframe',
+    'video',
+    'audio',
+    '[contenteditable="true"]',
+    '.navbar',
+    '.dropdown',
+    '.menu',
+    '.mbr-navbar',
+    '.mbr-section-btn',
+    '.btn',
+    '.no-drag-scroll'
+  ].join(',');
+
+  function getMaxScroll() {
+    return Math.max(
+      0,
+      document.documentElement.scrollHeight - window.innerHeight
+    );
+  }
+
+  function clamp(v, min, max) {
+    return Math.max(min, Math.min(max, v));
+  }
+
+  function isBlockedTarget(el) {
+    return !!(el && el.closest(blockedSelector));
+  }
+
+  function stopMomentum() {
+    if (raf) {
+      cancelAnimationFrame(raf);
+      raf = null;
+    }
+  }
+
+  function runMomentum() {
+    stopMomentum();
+
+    function frame() {
+      if (dragging) return;
+
+      velocity *= friction;
+
+      if (Math.abs(velocity) < minVelocity) {
+        velocity = 0;
+        raf = null;
+        return;
+      }
+
+      const next = clamp(window.scrollY - velocity, 0, getMaxScroll());
+      window.scrollTo(0, next);
+
+      raf = requestAnimationFrame(frame);
+    }
+
+    raf = requestAnimationFrame(frame);
+  }
+
+  let startX = 0;
+  let startY = 0;
+
+  document.addEventListener('mousedown', function (e) {
+    if (e.button !== 0) return;
+    if (isBlockedTarget(e.target)) return;
+
+    dragging = true;
+    moved = false;
+    velocity = 0;
+    lastY = e.clientY;
+    startX = e.clientX;
+    startY = e.clientY;
+
+    stopMomentum();
+    document.body.classList.add('dragging');
+  }, { passive: true });
+
+  document.addEventListener('mousemove', function (e) {
+    if (!dragging) return;
+
+    const dx = e.clientX - startX;
+    const dyTotal = e.clientY - startY;
+
+    if (!moved && Math.abs(dyTotal) < dragThreshold && Math.abs(dx) < dragThreshold) {
+      return;
+    }
+
+    moved = true;
+    e.preventDefault();
+
+    const dy = e.clientY - lastY;
+    lastY = e.clientY;
+    velocity = dy * power;
+
+    const next = clamp(window.scrollY - dy, 0, getMaxScroll());
+    window.scrollTo(0, next);
+  }, { passive: false });
+
+  function endDrag() {
+    if (!dragging) return;
+
+    dragging = false;
+    document.body.classList.remove('dragging');
+
+    if (moved) {
+      runMomentum();
+    }
+  }
+
+  document.addEventListener('mouseup', endDrag, { passive: true });
+  document.addEventListener('mouseleave', endDrag, { passive: true });
+
+  // جلوگیری از کلیک ناخواسته بعد از drag
+  document.addEventListener('click', function (e) {
+    if (moved) {
+      e.preventDefault();
+      e.stopPropagation();
+      moved = false;
+    }
+  }, true);
+})();
+</script>
+
+
+
+
+
+
+
+
+
 </body>
 </html>
