@@ -819,28 +819,30 @@ document.addEventListener('dragstart', function(e) {
 </script>
 
 <script>
-document.querySelectorAll('.reveal-img').forEach(img => {
-  function showImage() {
-    img.classList.add('img-loaded');
-  }
+document.addEventListener('DOMContentLoaded', function () {
+  const items = document.querySelectorAll('.card-img');
 
-  if (img.complete) {
-    showImage();
-  } else {
-    img.addEventListener('load', showImage);
-    img.addEventListener('error', showImage);
-  }
+  items.forEach(el => {
+    el.classList.add('reveal-bg');
 
-  img.setAttribute('draggable', 'false');
-});
+    const io = new IntersectionObserver((entries) => {
+      entries.forEach(entry => {
+        if (entry.isIntersecting) {
+          setTimeout(() => {
+            el.classList.add('is-visible');
+          }, 80);
+          io.unobserve(el);
+        }
+      });
+    }, {
+      threshold: 0.08,
+      rootMargin: '0px 0px -80px 0px'
+    });
 
-document.addEventListener('dragstart', function(e) {
-  if (e.target.tagName === 'IMG') {
-    e.preventDefault();
-  }
+    io.observe(el);
+  });
 });
 </script>
-
 
 
 </body>
