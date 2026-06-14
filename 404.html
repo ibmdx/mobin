@@ -40,8 +40,17 @@ body.dragging{
   user-select:none;
   -webkit-user-select:none;
 }
+img {
+  -webkit-user-drag: none;
+  -webkit-user-select: none;
+  user-select: none;
+}
+
+
+
 
 </style>
+
 
   
 </head>
@@ -248,6 +257,18 @@ document.addEventListener("click",function(e){
 })();
 </script>
 
+
+<script>
+document.querySelectorAll('img').forEach(img => {
+  img.setAttribute('draggable', 'false');
+});
+
+document.addEventListener('dragstart', function(e) {
+  if (e.target.closest('img')) {
+    e.preventDefault();
+  }
+});
+</script>
 
 
 
