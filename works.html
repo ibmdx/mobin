@@ -44,6 +44,233 @@ body.dragging{
 </style>
 
   
+
+<style>
+
+/* ===== FLOATING GLASS NAVBAR ===== */
+
+#menu1-4f{
+position:fixed;
+top:18px;
+left:50%;
+transform:translateX(-50%);
+width:min(1180px, calc(100% - 28px));
+z-index:9999;
+pointer-events:none;
+}
+
+/* glass body */
+
+#menu1-4f .navbar{
+
+pointer-events:auto;
+
+position:relative;
+
+padding:.9rem 1.25rem;
+
+border-radius:22px;
+
+background:rgba(255,255,255,.07)!important;
+
+backdrop-filter:blur(24px) saturate(180%);
+-webkit-backdrop-filter:blur(24px) saturate(180%);
+
+border:1px solid rgba(255,255,255,.20);
+
+box-shadow:
+0 14px 60px rgba(0,0,0,.35),
+inset 0 1px 0 rgba(255,255,255,.30);
+
+transition:all .35s ease;
+}
+
+/* gradient border glow */
+
+#menu1-4f .navbar::before{
+
+content:"";
+
+position:absolute;
+
+inset:-1px;
+
+border-radius:22px;
+
+background:linear-gradient(
+120deg,
+rgba(255,255,255,.6),
+rgba(255,255,255,0),
+rgba(255,255,255,.4)
+);
+
+opacity:.25;
+
+pointer-events:none;
+}
+
+/* floating hover */
+
+#menu1-4f .navbar:hover{
+
+transform:translateY(-2px);
+
+box-shadow:
+0 20px 80px rgba(0,0,0,.45),
+inset 0 1px 0 rgba(255,255,255,.35);
+}
+
+/* shrink on scroll */
+
+#menu1-4f.scrolled .navbar{
+
+padding:.55rem 1rem;
+
+background:rgba(255,255,255,.12)!important;
+
+border-color:rgba(255,255,255,.28);
+}
+
+/* ===== LOGO ===== */
+
+#menu1-4f .navbar-brand img{
+
+height:4.6rem!important;
+
+filter:drop-shadow(0 6px 18px rgba(0,0,0,.35));
+
+transition:all .35s ease;
+}
+
+#menu1-4f .navbar-brand img:hover{
+
+transform:scale(1.06);
+}
+
+/* ===== MENU LINKS ===== */
+
+#menu1-4f .nav-link{
+
+position:relative;
+
+font-weight:600;
+
+letter-spacing:.08em;
+
+text-transform:uppercase;
+
+padding:.65rem 1rem!important;
+
+color:rgba(255,255,255,.92)!important;
+
+transition:all .3s ease;
+}
+
+/* magnetic hover */
+
+#menu1-4f .nav-link:hover{
+
+transform:translateY(-2px) scale(1.06);
+
+color:#fff!important;
+
+text-shadow:0 0 18px rgba(255,255,255,.35);
+}
+
+/* animated underline */
+
+#menu1-4f .nav-link::after{
+
+content:"";
+
+position:absolute;
+
+left:50%;
+
+bottom:.35rem;
+
+width:0;
+
+height:2px;
+
+border-radius:10px;
+
+background:linear-gradient(90deg,#fff,rgba(255,255,255,.4));
+
+transform:translateX(-50%);
+
+transition:width .35s ease;
+}
+
+#menu1-4f .nav-link:hover::after{
+
+width:60%;
+}
+
+/* active link */
+
+#menu1-4f .nav-item.active .nav-link::after{
+
+width:70%;
+}
+
+/* ===== SCROLL PROGRESS BAR ===== */
+
+#nav-progress{
+
+position:absolute;
+
+left:0;
+
+bottom:0;
+
+height:2px;
+
+width:0%;
+
+background:linear-gradient(90deg,#fff,rgba(255,255,255,.3));
+
+border-radius:0 0 22px 22px;
+
+opacity:.9;
+
+pointer-events:none;
+}
+
+/* ===== MOBILE ===== */
+
+@media (max-width:992px){
+
+#menu1-4f{
+top:12px;
+width:calc(100% - 18px);
+}
+
+#menu1-4f .navbar{
+border-radius:18px;
+}
+
+#menu1-4f .navbar-collapse{
+
+margin-top:.7rem;
+
+background:rgba(0,0,0,.35);
+
+backdrop-filter:blur(18px);
+
+border-radius:16px;
+
+border:1px solid rgba(255,255,255,.15);
+
+padding:.7rem .8rem;
+}
+
+}
+</style>
+
+
+
+
 </head>
 <body>
 
@@ -104,6 +331,11 @@ body.dragging{
                 </li><li class="nav-item"><a class="nav-link link text-white display-4" href="about.html"></a></li><li class="nav-item"><a class="nav-link link text-white display-4" href="contact.html">CONTACT</a></li><li class="nav-item"><a class="nav-link link text-white display-4" href="contact.html"></a></li></ul>
             
         </div>
+
+
+<div id="nav-progress"></div>
+
+
     </nav>
 </section>
 
@@ -770,6 +1002,41 @@ document.addEventListener("click",function(e){
 })();
 </script>
 
+
+<script>
+
+const header = document.getElementById("menu1-4f")
+const progress = document.getElementById("nav-progress")
+
+window.addEventListener("scroll",()=>{
+
+const scrollTop = window.scrollY
+const docHeight = document.documentElement.scrollHeight - window.innerHeight
+const percent = (scrollTop/docHeight)*100
+
+progress.style.width = percent + "%"
+
+/* shrink */
+
+if(scrollTop>60){
+header.classList.add("scrolled")
+}else{
+header.classList.remove("scrolled")
+}
+
+})
+
+/* active link */
+
+document.querySelectorAll("#menu1-4f .nav-link").forEach(link=>{
+
+if(link.href===window.location.href){
+link.parentElement.classList.add("active")
+}
+
+})
+
+</script>
 
 
 
