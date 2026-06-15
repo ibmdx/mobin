@@ -604,13 +604,13 @@ document.addEventListener("click",function(e){
 <style>
 #bmdx-nav {
   position: fixed;
-  right: 28px;
+  right: 0;
   top: 50%;
   transform: translateY(-50%);
   z-index: 9999;
   display: flex;
   flex-direction: column;
-  align-items: center;
+  align-items: flex-end;
   gap: 0;
   pointer-events: none;
 }
@@ -622,13 +622,21 @@ document.addEventListener("click",function(e){
   gap: 6px;
   background: rgba(255,255,255,0.04);
   border: 1px solid rgba(255,255,255,0.10);
-  border-radius: 40px;
-  padding: 14px 10px;
+  border-right: none;
+  border-radius: 40px 0 0 40px;
+  padding: 14px 12px 14px 10px;
   backdrop-filter: blur(12px);
   -webkit-backdrop-filter: blur(12px);
-  box-shadow: 0 4px 32px rgba(0,0,0,0.45);
+  box-shadow: -4px 0 32px rgba(0,0,0,0.35);
   pointer-events: all;
-  transition: opacity 0.4s ease;
+  opacity: 0;
+  transform: translateX(8px);
+  transition: opacity 0.45s ease, transform 0.45s ease;
+}
+
+#bmdx-nav.bmdx-visible #bmdx-nav-inner {
+  opacity: 1;
+  transform: translateX(0);
 }
 
 .bmdx-dot-wrap {
@@ -660,20 +668,23 @@ document.addEventListener("click",function(e){
 .bmdx-dot-wrap::before {
   content: attr(data-label);
   position: absolute;
-  right: 38px;
+  right: 34px;
   white-space: nowrap;
-  background: rgba(20,20,20,0.88);
-  color: #fff;
+  background: rgba(255,255,255,0.05);
+  border: 1px solid rgba(255,255,255,0.10);
+  backdrop-filter: blur(12px);
+  -webkit-backdrop-filter: blur(12px);
+  color: rgba(255,255,255,0.75);
   font-family: 'Helvetica Neue', Helvetica, Arial, sans-serif;
-  font-size: 10px;
-  font-weight: 600;
-  letter-spacing: 0.12em;
+  font-size: 9px;
+  font-weight: 500;
+  letter-spacing: 0.14em;
   text-transform: uppercase;
   padding: 5px 10px;
-  border-radius: 4px;
+  border-radius: 20px;
   opacity: 0;
   pointer-events: none;
-  transform: translateX(6px);
+  transform: translateX(4px);
   transition: opacity 0.22s ease, transform 0.22s ease;
 }
 
@@ -706,22 +717,28 @@ document.addEventListener("click",function(e){
 
 /* Scroll-to-top button */
 #bmdx-top-btn {
-  margin-top: 10px;
+  margin-top: 8px;
   width: 28px;
   height: 28px;
   border-radius: 50%;
-  border: 1px solid rgba(255,255,255,0.18);
-  background: transparent;
+  border: 1px solid rgba(255,255,255,0.25);
+  background: rgba(255,255,255,0.06);
+  backdrop-filter: blur(12px);
+  -webkit-backdrop-filter: blur(12px);
   cursor: pointer;
   display: flex;
   align-items: center;
   justify-content: center;
-  transition: background 0.25s ease, opacity 0.35s ease;
+  transition: background 0.25s ease, opacity 0.45s ease, transform 0.45s ease;
   pointer-events: all;
   opacity: 0;
+  transform: translateX(8px);
 }
-#bmdx-top-btn.visible { opacity: 1; }
-#bmdx-top-btn:hover { background: rgba(255,255,255,0.12); }
+#bmdx-top-btn.bmdx-btn-visible {
+  opacity: 1;
+  transform: translateX(0);
+}
+#bmdx-top-btn:hover { background: rgba(255,255,255,0.15); }
 #bmdx-top-btn svg { pointer-events: none; }
 
 @media (max-width: 768px) {
@@ -734,8 +751,8 @@ document.addEventListener("click",function(e){
     <!-- dots injected by JS -->
   </div>
   <button id="bmdx-top-btn" title="Back to top" aria-label="Scroll to top">
-    <svg width="10" height="10" viewBox="0 0 10 10" fill="none" xmlns="http://www.w3.org/2000/svg">
-      <path d="M5 8V2M5 2L2 5M5 2L8 5" stroke="rgba(255,255,255,0.7)" stroke-width="1.4" stroke-linecap="round" stroke-linejoin="round"/>
+    <svg width="14" height="14" viewBox="0 0 10 10" fill="none" xmlns="http://www.w3.org/2000/svg">
+      <path d="M5 8V2M5 2L2 5M5 2L8 5" stroke="rgba(255,255,255,0.85)" stroke-width="1.6" stroke-linecap="round" stroke-linejoin="round"/>
     </svg>
   </button>
 </div>
@@ -745,12 +762,11 @@ document.addEventListener("click",function(e){
 
   /* ── Sections to track ── */
   var sections = [
-    { id: 'header2-41',            label: 'Top'          },
-    { id: 'header9-er',            label: 'About'        },
+    { id: 'header2-41',              label: 'Top'          },
+    { id: 'header9-er',              label: 'About'        },
     { id: 'testimonials-slider1-8d', label: 'Testimonials' },
-    { id: 'clients-7i',            label: 'Clients'      },
-    { id: 'info4-7g',              label: 'Contact'      },
-    { id: 'footer7-7f',            label: 'Footer'       },
+    { id: 'clients-7i',              label: 'Clients'      },
+    { id: 'info4-7g',                label: 'Contact'      },
   ];
 
   var inner   = document.getElementById('bmdx-nav-inner');
@@ -790,6 +806,21 @@ document.addEventListener("click",function(e){
     }
   });
 
+  var nav     = document.getElementById('bmdx-nav');
+  var scrollTimer = null;
+
+  /* ── footer/contact sections that hide the nav ── */
+  var hideInIds = ['info4-7g', 'footer7-7f'];
+
+  /* ── show/hide nav on scroll activity ── */
+  function showNav () {
+    nav.classList.add('bmdx-visible');
+    clearTimeout(scrollTimer);
+    scrollTimer = setTimeout(function () {
+      nav.classList.remove('bmdx-visible');
+    }, 1400);
+  }
+
   /* ── Update on scroll ── */
   function update () {
     var scrollY  = window.scrollY;
@@ -797,11 +828,26 @@ document.addEventListener("click",function(e){
     var totalH   = document.documentElement.scrollHeight - winH;
     var progress = Math.min(scrollY / Math.max(totalH, 1), 1);
 
-    /* top button visibility */
-    if (scrollY > winH * 0.4) {
-      topBtn.classList.add('visible');
+    /* hide nav when inside footer/contact sections */
+    var inFooter = hideInIds.some(function (id) {
+      var el = document.getElementById(id);
+      if (!el) return false;
+      var rect = el.getBoundingClientRect();
+      return rect.top < winH * 0.6 && rect.bottom > 0;
+    });
+
+    if (inFooter) {
+      nav.classList.remove('bmdx-visible');
+      clearTimeout(scrollTimer);
     } else {
-      topBtn.classList.remove('visible');
+      showNav();
+    }
+
+    /* top button visibility — also follows inFooter logic */
+    if (scrollY > winH * 0.4 && !inFooter) {
+      topBtn.classList.add('bmdx-btn-visible');
+    } else {
+      topBtn.classList.remove('bmdx-btn-visible');
     }
 
     /* find active section */
@@ -818,10 +864,8 @@ document.addEventListener("click",function(e){
     });
 
     /* fill segment bars proportionally */
-    /* map global progress to each inter-section gap */
     var n = sections.length;
     segs.forEach(function (seg, i) {
-      /* each segment covers 1/(n-1) of total scroll */
       var segStart = i / (n - 1);
       var segEnd   = (i + 1) / (n - 1);
       var raw = (progress - segStart) / (segEnd - segStart);
@@ -831,11 +875,22 @@ document.addEventListener("click",function(e){
   }
 
   window.addEventListener('scroll', update, { passive: true });
-  update();
+  /* don't call update() on load — start hidden until first scroll */
 
   /* ── Scroll to top ── */
   topBtn.addEventListener('click', function () {
     window.scrollTo({ top: 0, behavior: 'smooth' });
+  });
+
+  /* ── Keep nav visible on hover even when idle ── */
+  nav.addEventListener('mouseenter', function () {
+    clearTimeout(scrollTimer);
+    nav.classList.add('bmdx-visible');
+  });
+  nav.addEventListener('mouseleave', function () {
+    scrollTimer = setTimeout(function () {
+      nav.classList.remove('bmdx-visible');
+    }, 800);
   });
 
 })();
