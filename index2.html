@@ -443,21 +443,28 @@ document.addEventListener('dragstart', function(e) {
 ═══════════════════════════════════════════════════════════ -->
 <style>
 
-/* ── 1. GLASS NAVBAR ────────────────────────────────────── */
-#menu1-4f .navbar {
-  background: rgba(0,0,0,0.35) !important;
-  backdrop-filter: blur(18px) !important;
-  -webkit-backdrop-filter: blur(18px) !important;
-  border-bottom: 1px solid rgba(255,255,255,0.06) !important;
-  margin: 0 !important;
-  border-radius: 0 !important;
-  transition: background 0.4s ease, box-shadow 0.4s ease;
+
+/* cursor-following glow blob */
+#bmdx-contact-glow {
+  position: absolute;
+  width: 600px;
+  height: 600px;
+  border-radius: 50%;
+  background: radial-gradient(circle, rgba(255,255,255,0.05) 0%, transparent 65%);
+  pointer-events: none;
+  transform: translate(-50%, -50%);
+  transition: opacity 0.4s ease;
+  opacity: 0;
+  z-index: 0;
+  mix-blend-mode: screen;
 }
 
-#menu1-4f .navbar.scrolled-glass {
-  background: rgba(0,0,0,0.55) !important;
-  box-shadow: 0 2px 40px rgba(0,0,0,0.5) !important;
+#info4-7g {
+  position: relative;
+  overflow: hidden;
 }
+
+
 
 /* nav links — letter-spacing hover */
 #menu1-4f .nav-link {
@@ -471,28 +478,7 @@ document.addEventListener('dragstart', function(e) {
   letter-spacing: 0.14em;
   opacity: 1 !important;
 }
-/* underline sweep from left */
-#menu1-4f .nav-link::after {
-  content: '';
-  position: absolute;
-  bottom: 0;
-  left: 0;
-  width: 0;
-  height: 1px;
-  background: rgba(255,255,255,0.5);
-  transition: width 0.4s cubic-bezier(0.16,1,0.3,1);
-}
-#menu1-4f .nav-link:hover::after { width: 100%; }
 
-/* logo subtle pulse on hover */
-#menu1-4f .navbar-logo a {
-  display: inline-block;
-  transition: opacity 0.3s ease, transform 0.4s cubic-bezier(0.16,1,0.3,1);
-}
-#menu1-4f .navbar-logo a:hover {
-  opacity: 0.8;
-  transform: scale(1.04);
-}
 
 /* ── 2. FLOATING SECTION NAVIGATOR ─────────────────────── */
 #bmdx-idx-nav {
@@ -661,35 +647,6 @@ document.addEventListener('dragstart', function(e) {
 }
 .bmdx-card-link:hover strong { letter-spacing: 0.08em; }
 
-/* glow blob for each card section */
-.bmdx-card-glow {
-  position: absolute;
-  width: 700px;
-  height: 700px;
-  border-radius: 50%;
-  background: radial-gradient(circle, rgba(255,255,255,0.06) 0%, rgba(255,255,255,0.02) 40%, transparent 70%);
-  pointer-events: none;
-  transform: translate(-50%, -50%);
-  transition: opacity 0.5s ease;
-  opacity: 0;
-  z-index: 2;
-  mix-blend-mode: overlay;
-}
-.mbr-section.info4 {
-  position: relative;
-  overflow: hidden;
-}
-.mbr-section.info4 .container {
-  position: relative;
-  z-index: 3;
-}
-.mbr-section.info4 .mbr-overlay {
-  z-index: 1;
-}
-
-/* ── 4. SCROLL FLASH FIX ────────────────────────────────── */
-/* prevent white flash between parallax sections */
-html { background: #000 !important; }
 
 </style>
 
@@ -709,9 +666,7 @@ html { background: #000 !important; }
 /* ── Sections ── */
 var sections = [
   { id: 'header2-1',  label: 'Home'    },
-  { id: 'info4-6v',   label: 'Works'   },
-  { id: 'info4-6x',   label: 'About'   },
-  { id: 'info4-6w',   label: 'Contact' },
+  { id: 'info4-6v',   label: 'Cards'   },
 ];
 
 var nav      = document.getElementById('bmdx-idx-nav');
