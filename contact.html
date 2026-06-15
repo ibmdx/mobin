@@ -226,6 +226,112 @@ I'll be in touch soon.</div>
     </div>
 </section>
 
+
+
+
+
+<style>
+
+
+
+.bmdx-contact-link {
+  position: relative;
+  display: inline-block;
+  text-decoration: none;
+  transition: opacity 0.3s ease;
+}
+
+/* magnetic underline that grows from center */
+.bmdx-contact-link::after {
+  content: '';
+  position: absolute;
+  bottom: -4px;
+  left: 50%;
+  width: 0;
+  height: 1px;
+  background: rgba(255,255,255,0.5);
+  transform: translateX(-50%);
+  transition: width 0.5s cubic-bezier(0.16,1,0.3,1);
+}
+
+.bmdx-contact-link:hover::after {
+  width: 100%;
+}
+
+/* cursor-following glow blob */
+#bmdx-contact-glow {
+  position: absolute;
+  width: 600px;
+  height: 600px;
+  border-radius: 50%;
+  background: radial-gradient(circle, rgba(255,255,255,0.05) 0%, transparent 65%);
+  pointer-events: none;
+  transform: translate(-50%, -50%);
+  transition: opacity 0.4s ease;
+  opacity: 0;
+  z-index: 0;
+  mix-blend-mode: screen;
+}
+
+#info4-7g {
+  position: relative;
+  overflow: hidden;
+}
+
+/* arrow character animates on hover */
+.bmdx-contact-link .bmdx-arr {
+  display: inline-block;
+  transition: transform 0.45s cubic-bezier(0.16,1,0.3,1), opacity 0.3s ease;
+}
+
+.bmdx-contact-link:hover .bmdx-arr {
+  transform: translateX(8px);
+}
+
+/* subtle letter-spacing breathe */
+.bmdx-contact-link strong {
+  display: inline-block;
+  letter-spacing: 0.02em;
+  transition: letter-spacing 0.5s cubic-bezier(0.16,1,0.3,1);
+}
+.bmdx-contact-link:hover strong {
+  letter-spacing: 0.08em;
+}
+</style>
+
+<script>
+(function(){
+  var section = document.getElementById('info4-7g');
+  if (!section) return;
+
+  /* inject glow blob */
+  var glow = document.createElement('div');
+  glow.id = 'bmdx-contact-glow';
+  section.appendChild(glow);
+
+  /* wrap arrow so it can animate independently */
+  var link = section.querySelector('.bmdx-contact-link strong');
+  if (link) {
+    link.innerHTML = link.innerHTML.replace('→', '<span class="bmdx-arr">→</span>');
+  }
+
+  section.addEventListener('mousemove', function(e){
+    var rect = section.getBoundingClientRect();
+    glow.style.left = (e.clientX - rect.left) + 'px';
+    glow.style.top  = (e.clientY - rect.top)  + 'px';
+    glow.style.opacity = '1';
+  });
+
+  section.addEventListener('mouseleave', function(){
+    glow.style.opacity = '0';
+  });
+})();
+</script>
+
+
+
+
+
 <section once="" class="cid-r5l2Lqwb6y mbr-reveal" id="footer7-79">
 
     
