@@ -471,28 +471,7 @@ document.addEventListener('dragstart', function(e) {
   letter-spacing: 0.14em;
   opacity: 1 !important;
 }
-/* underline sweep from left */
-#menu1-4f .nav-link::after {
-  content: '';
-  position: absolute;
-  bottom: 0;
-  left: 0;
-  width: 0;
-  height: 1px;
-  background: rgba(255,255,255,0.5);
-  transition: width 0.4s cubic-bezier(0.16,1,0.3,1);
-}
-#menu1-4f .nav-link:hover::after { width: 100%; }
 
-/* logo subtle pulse on hover */
-#menu1-4f .navbar-logo a {
-  display: inline-block;
-  transition: opacity 0.3s ease, transform 0.4s cubic-bezier(0.16,1,0.3,1);
-}
-#menu1-4f .navbar-logo a:hover {
-  opacity: 0.8;
-  transform: scale(1.04);
-}
 
 /* ── 2. FLOATING SECTION NAVIGATOR ─────────────────────── */
 #bmdx-idx-nav {
