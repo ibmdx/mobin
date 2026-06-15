@@ -899,8 +899,6 @@ document.addEventListener("click",function(e){
 
 
 
-
-
 <script>
 document.querySelectorAll('img').forEach(img => {
   img.setAttribute('draggable', 'false');
@@ -912,6 +910,65 @@ document.addEventListener('dragstart', function(e) {
   }
 });
 </script>
+
+
+<style>
+:root{
+  --field-bg: 0, 0, 0; /* RGB base color (مثال: مشکی). مقدار را به دلخواه تغییر دهید */
+  --field-bg-alpha-idle: 0.3; /* 30% */
+  --field-bg-alpha-focus: 1;  /* 100% */
+  --field-text: #fff; /* رنگ متن داخل فیلد */
+  --focus-ring: rgba(0, 123, 255, 0.18);
+}
+
+/* هدف‌گیری انواع فیلدها؛ در صورت نیاز کلاس دلخواه اضافه کنید */
+input[type="text"],
+input[type="email"],
+input[type="tel"],
+input[type="search"],
+textarea,
+select,
+.input-field {
+  background-color: rgba(var(--field-bg), var(--field-bg-alpha-idle));
+  color: var(--field-text);
+  border: 1px solid rgba(0,0,0,0.12);
+  padding: 0.6rem 0.8rem;
+  border-radius: 6px;
+  transition: background-color 180ms ease, box-shadow 180ms ease, border-color 180ms ease;
+  outline: none;
+}
+
+/* حالت فوکوس (کیبورد و ماوس) */
+input[type="text"]:focus,
+input[type="email"]:focus,
+input[type="tel"]:focus,
+input[type="search"]:focus,
+textarea:focus,
+select:focus,
+.input-field:focus {
+  background-color: rgba(var(--field-bg), var(--field-bg-alpha-focus));
+  border-color: rgba(0,0,0,0.18);
+  box-shadow: 0 0 0 4px var(--focus-ring);
+}
+
+/* برای دسترسی بهتر: فقط وقتی فوکوس از طریق کیبورد است حلقه نمایش داده شود */
+input[type="text"]:focus:not(:focus-visible),
+input[type="email"]:focus:not(:focus-visible),
+textarea:focus:not(:focus-visible),
+select:focus:not(:focus-visible),
+.input-field:focus:not(:focus-visible) {
+  box-shadow: none;
+}
+
+/* placeholder کمی کم‌رنگ‌تر */
+::placeholder {
+  color: rgba(255,255,255,0.7);
+}
+
+/* مثال: اگر زمینه روشن می‌خواهید، متغیرها را تغییر دهید */
+/* :root{ --field-bg: 255,255,255; --field-text: #111; --focus-ring: rgba(0,123,255,0.12); } */
+</style>
+
 
 
 
