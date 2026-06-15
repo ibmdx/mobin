@@ -414,12 +414,109 @@ color:#000;
             <div class="media-container-column title col-12 col-md-10">
                 <h2 class="align-right mbr-bold mbr-white pb-3 mbr-fonts-style display-7"><span style="font-weight: normal;">m a k e &nbsp; a</span></h2>
                 
-                <p class="mbr-text align-right mbr-white mbr-fonts-style display-2"><a href="contact.html" class="text-white"><strong>CONTACT →</strong></a><br></p>
+                <p class="mbr-text align-right mbr-white mbr-fonts-style display-2">
+                  <a href="contact.html" class="text-white bmdx-contact-link"><strong>CONTACT →</strong></a><br>
+                </p>
                 
             </div>
         </div>
     </div>
 </section>
+
+<style>
+.bmdx-contact-link {
+  position: relative;
+  display: inline-block;
+  text-decoration: none;
+  transition: opacity 0.3s ease;
+}
+
+/* magnetic underline that grows from center */
+.bmdx-contact-link::after {
+  content: '';
+  position: absolute;
+  bottom: -4px;
+  left: 50%;
+  width: 0;
+  height: 1px;
+  background: rgba(255,255,255,0.5);
+  transform: translateX(-50%);
+  transition: width 0.5s cubic-bezier(0.16,1,0.3,1);
+}
+
+.bmdx-contact-link:hover::after {
+  width: 100%;
+}
+
+/* cursor-following glow blob */
+#bmdx-contact-glow {
+  position: absolute;
+  width: 600px;
+  height: 600px;
+  border-radius: 50%;
+  background: radial-gradient(circle, rgba(255,255,255,0.05) 0%, transparent 65%);
+  pointer-events: none;
+  transform: translate(-50%, -50%);
+  transition: opacity 0.4s ease;
+  opacity: 0;
+  z-index: 0;
+  mix-blend-mode: screen;
+}
+
+#info4-7g {
+  position: relative;
+  overflow: hidden;
+}
+
+/* arrow character animates on hover */
+.bmdx-contact-link .bmdx-arr {
+  display: inline-block;
+  transition: transform 0.45s cubic-bezier(0.16,1,0.3,1), opacity 0.3s ease;
+}
+
+.bmdx-contact-link:hover .bmdx-arr {
+  transform: translateX(8px);
+}
+
+/* subtle letter-spacing breathe */
+.bmdx-contact-link strong {
+  display: inline-block;
+  letter-spacing: 0.02em;
+  transition: letter-spacing 0.5s cubic-bezier(0.16,1,0.3,1);
+}
+.bmdx-contact-link:hover strong {
+  letter-spacing: 0.08em;
+}
+</style>
+
+<script>
+(function(){
+  var section = document.getElementById('info4-7g');
+  if (!section) return;
+
+  /* inject glow blob */
+  var glow = document.createElement('div');
+  glow.id = 'bmdx-contact-glow';
+  section.appendChild(glow);
+
+  /* wrap arrow so it can animate independently */
+  var link = section.querySelector('.bmdx-contact-link strong');
+  if (link) {
+    link.innerHTML = link.innerHTML.replace('→', '<span class="bmdx-arr">→</span>');
+  }
+
+  section.addEventListener('mousemove', function(e){
+    var rect = section.getBoundingClientRect();
+    glow.style.left = (e.clientX - rect.left) + 'px';
+    glow.style.top  = (e.clientY - rect.top)  + 'px';
+    glow.style.opacity = '1';
+  });
+
+  section.addEventListener('mouseleave', function(){
+    glow.style.opacity = '0';
+  });
+})();
+</script>
 
 <section once="" class="cid-r5l7fWxeAg mbr-reveal" id="footer7-7f">
 
@@ -604,13 +701,13 @@ document.addEventListener("click",function(e){
 <style>
 #bmdx-nav {
   position: fixed;
-  right: 0;
+  right: 28px;
   top: 50%;
   transform: translateY(-50%);
   z-index: 9999;
   display: flex;
   flex-direction: column;
-  align-items: flex-end;
+  align-items: center;
   gap: 0;
   pointer-events: none;
 }
@@ -622,21 +719,20 @@ document.addEventListener("click",function(e){
   gap: 6px;
   background: rgba(255,255,255,0.04);
   border: 1px solid rgba(255,255,255,0.10);
-  border-right: none;
-  border-radius: 40px 0 0 40px;
-  padding: 14px 12px 14px 10px;
+  border-radius: 40px;
+  padding: 14px 10px;
   backdrop-filter: blur(12px);
   -webkit-backdrop-filter: blur(12px);
-  box-shadow: -4px 0 32px rgba(0,0,0,0.35);
+  box-shadow: 0 4px 32px rgba(0,0,0,0.45);
   pointer-events: all;
   opacity: 0;
-  transform: translateX(8px);
+  transform: translateY(6px);
   transition: opacity 0.45s ease, transform 0.45s ease;
 }
 
 #bmdx-nav.bmdx-visible #bmdx-nav-inner {
   opacity: 1;
-  transform: translateX(0);
+  transform: translateY(0);
 }
 
 .bmdx-dot-wrap {
@@ -668,20 +764,23 @@ document.addEventListener("click",function(e){
 .bmdx-dot-wrap::before {
   content: attr(data-label);
   position: absolute;
-  right: 38px;
+  right: 34px;
   white-space: nowrap;
-  background: rgba(20,20,20,0.88);
-  color: #fff;
+  background: rgba(255,255,255,0.05);
+  border: 1px solid rgba(255,255,255,0.10);
+  backdrop-filter: blur(12px);
+  -webkit-backdrop-filter: blur(12px);
+  color: rgba(255,255,255,0.75);
   font-family: 'Helvetica Neue', Helvetica, Arial, sans-serif;
-  font-size: 10px;
-  font-weight: 600;
-  letter-spacing: 0.12em;
+  font-size: 9px;
+  font-weight: 500;
+  letter-spacing: 0.14em;
   text-transform: uppercase;
   padding: 5px 10px;
-  border-radius: 4px;
+  border-radius: 20px;
   opacity: 0;
   pointer-events: none;
-  transform: translateX(6px);
+  transform: translateX(4px);
   transition: opacity 0.22s ease, transform 0.22s ease;
 }
 
@@ -714,15 +813,12 @@ document.addEventListener("click",function(e){
 
 /* Scroll-to-top button */
 #bmdx-top-btn {
-  margin-top: 8px;
-  width: 32px;
+  margin-top: 10px;
+  width: 28px;
   height: 28px;
-  border-radius: 14px 0 0 14px;
+  border-radius: 50%;
   border: 1px solid rgba(255,255,255,0.18);
-  border-right: none;
-  background: rgba(255,255,255,0.04);
-  backdrop-filter: blur(12px);
-  -webkit-backdrop-filter: blur(12px);
+  background: transparent;
   cursor: pointer;
   display: flex;
   align-items: center;
@@ -730,11 +826,11 @@ document.addEventListener("click",function(e){
   transition: background 0.25s ease, opacity 0.45s ease, transform 0.45s ease;
   pointer-events: all;
   opacity: 0;
-  transform: translateX(8px);
+  transform: translateY(6px);
 }
 #bmdx-top-btn.bmdx-btn-visible {
   opacity: 1;
-  transform: translateX(0);
+  transform: translateY(0);
 }
 #bmdx-top-btn:hover { background: rgba(255,255,255,0.12); }
 #bmdx-top-btn svg { pointer-events: none; }
@@ -749,8 +845,8 @@ document.addEventListener("click",function(e){
     <!-- dots injected by JS -->
   </div>
   <button id="bmdx-top-btn" title="Back to top" aria-label="Scroll to top">
-    <svg width="10" height="10" viewBox="0 0 10 10" fill="none" xmlns="http://www.w3.org/2000/svg">
-      <path d="M5 8V2M5 2L2 5M5 2L8 5" stroke="rgba(255,255,255,0.7)" stroke-width="1.4" stroke-linecap="round" stroke-linejoin="round"/>
+    <svg width="14" height="14" viewBox="0 0 10 10" fill="none" xmlns="http://www.w3.org/2000/svg">
+      <path d="M5 8V2M5 2L2 5M5 2L8 5" stroke="rgba(255,255,255,0.85)" stroke-width="1.6" stroke-linecap="round" stroke-linejoin="round"/>
     </svg>
   </button>
 </div>
@@ -760,12 +856,11 @@ document.addEventListener("click",function(e){
 
   /* ── Sections to track ── */
   var sections = [
-    { id: 'header2-41',            label: 'Top'          },
-    { id: 'header9-er',            label: 'About'        },
+    { id: 'header2-41',              label: 'Top'          },
+    { id: 'header9-er',              label: 'About'        },
     { id: 'testimonials-slider1-8d', label: 'Testimonials' },
-    { id: 'clients-7i',            label: 'Clients'      },
-    { id: 'info4-7g',              label: 'Contact'      },
-    { id: 'footer7-7f',            label: 'Footer'       },
+    { id: 'clients-7i',              label: 'Clients'      },
+    { id: 'info4-7g',                label: 'Contact'      },
   ];
 
   var inner   = document.getElementById('bmdx-nav-inner');
@@ -809,7 +904,7 @@ document.addEventListener("click",function(e){
   var scrollTimer = null;
 
   /* ── footer/contact sections that hide the nav ── */
-  var hideInIds = ['info4-7g', 'footer7-7f'];
+  var hideInIds = ['info4-7g'];
 
   /* ── show/hide nav on scroll activity ── */
   function showNav () {
