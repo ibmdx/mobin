@@ -1257,15 +1257,191 @@ bar.classList.toggle('nav-scrolled',window.scrollY>40);
 });
 </script>
 
-<style id="bmdx-footer-fix">
-#footer7-7f{
-display:block !important;
-position:relative !important;
-visibility:visible !important;
-opacity:1 !important;
-z-index:20 !important;
-margin-top:80px;
+<style id="bmdx-glass-nav-upgrade">
+.navbar{
+background:transparent !important;
+box-shadow:none !important;
+border:none !important;
+transition:opacity .35s ease !important;
 }
+
+.navbar.nav-scrolled{
+background:transparent !important;
+box-shadow:none !important;
+border:none !important;
+backdrop-filter:none !important;
+-webkit-backdrop-filter:none !important;
+}
+
+/* Main nav background */
+.navbar-collapse{
+position:relative;
+margin:0 !important;
+padding:12px 20px !important;
+border-radius:999px !important;
+background:rgba(255,255,255,.05) !important;
+border:1px solid rgba(255,255,255,.08) !important;
+box-shadow:none !important;
+backdrop-filter:blur(18px);
+-webkit-backdrop-filter:blur(18px);
+overflow:hidden;
+}
+
+/* Remove extra stretched frame under menu items */
+.navbar-collapse:before,
+.navbar-collapse:after,
+.navbar-nav:before,
+.navbar-nav:after,
+.nav-item:before,
+.nav-item:after,
+.nav-link:before,
+.nav-link:after{
+display:none !important;
+content:none !important;
+background:none !important;
+border:none !important;
+box-shadow:none !important;
+}
+
+.bmdx-nav-glow{
+display:none !important;
+}
+
+.navbar-nav{
+position:relative;
+z-index:2;
+display:flex;
+align-items:center;
+gap:18px;
+margin:0 !important;
+padding:0 !important;
+background:transparent !important;
+border:none !important;
+box-shadow:none !important;
+}
+
+.nav-item{
+margin:0 !important;
+padding:0 !important;
+background:transparent !important;
+border:none !important;
+box-shadow:none !important;
+}
+
+.nav-link{
+position:relative;
+z-index:2;
+display:inline-flex;
+align-items:center;
+justify-content:center;
+padding:8px 0 !important;
+margin:0 !important;
+background:transparent !important;
+border:none !important;
+border-radius:0 !important;
+box-shadow:none !important;
+font-weight:400 !important;
+font-size:12px !important;
+line-height:1 !important;
+letter-spacing:.22em !important;
+text-transform:uppercase;
+color:rgba(255,255,255,.42) !important;
+opacity:1 !important;
+transition:color .3s ease,opacity .3s ease,transform .3s ease !important;
+}
+
+.nav-link:hover,
+.nav-link:focus,
+.nav-link:active{
+background:transparent !important;
+border:none !important;
+box-shadow:none !important;
+color:rgba(255,255,255,.88) !important;
+opacity:1 !important;
+transform:none !important;
+filter:none !important;
+}
+
+/* Empty repeated items must stay hidden */
+.nav-link:empty{
+display:none !important;
+pointer-events:none !important;
+padding:0 !important;
+margin:0 !important;
+width:0 !important;
+height:0 !important;
+min-width:0 !important;
+min-height:0 !important;
+opacity:0 !important;
+}
+
+.nav-item:has(.nav-link:empty){
+display:none !important;
+pointer-events:none !important;
+}
+
+@media (max-width: 991px){
+.navbar-collapse{
+position:relative !important;
+top:auto !important;
+right:auto !important;
+left:auto !important;
+bottom:auto !important;
+width:auto !important;
+min-width:0 !important;
+max-width:none !important;
+height:auto !important;
+margin-top:12px !important;
+padding:18px 20px !important;
+border-radius:28px !important;
+background:rgba(255,255,255,.06) !important;
+border:1px solid rgba(255,255,255,.08) !important;
+box-shadow:none !important;
+backdrop-filter:blur(18px);
+-webkit-backdrop-filter:blur(18px);
+overflow:hidden !important;
+transform:none !important;
+opacity:1 !important;
+visibility:visible !important;
+pointer-events:auto !important;
+}
+
+.navbar-nav{
+align-items:flex-start;
+gap:10px;
+min-height:0 !important;
+}
+
+.nav-item{
+width:auto !important;
+}
+
+.nav-link{
+display:inline-flex !important;
+width:auto !important;
+padding:10px 0 !important;
+font-size:14px !important;
+line-height:1 !important;
+letter-spacing:.16em !important;
+text-align:left !important;
+color:rgba(255,255,255,.46) !important;
+}
+
+.nav-link:hover,
+.nav-link:focus,
+.nav-link:active{
+color:rgba(255,255,255,.9) !important;
+letter-spacing:.16em !important;
+transform:none !important;
+}
+}
+</style>
+
+<script>
+document.addEventListener('DOMContentLoaded',function(){
+window.addEventListener('scroll',function(){
+const bar=document.querySelector
+</script>
 </style>
 
 </body>
