@@ -444,41 +444,6 @@ document.addEventListener('dragstart', function(e) {
 <style>
 
 
-/* cursor-following glow blob */
-#bmdx-contact-glow {
-  position: absolute;
-  width: 600px;
-  height: 600px;
-  border-radius: 50%;
-  background: radial-gradient(circle, rgba(255,255,255,0.05) 0%, transparent 65%);
-  pointer-events: none;
-  transform: translate(-50%, -50%);
-  transition: opacity 0.4s ease;
-  opacity: 0;
-  z-index: 0;
-  mix-blend-mode: screen;
-}
-
-#info4-7g {
-  position: relative;
-  overflow: hidden;
-}
-
-
-
-/* nav links — letter-spacing hover */
-#menu1-4f .nav-link {
-  position: relative;
-  letter-spacing: 0.06em;
-  transition: letter-spacing 0.4s cubic-bezier(0.16,1,0.3,1),
-              opacity 0.3s ease !important;
-  opacity: 0.7;
-}
-#menu1-4f .nav-link:hover {
-  letter-spacing: 0.14em;
-  opacity: 1 !important;
-}
-
 
 /* ── 2. FLOATING SECTION NAVIGATOR ─────────────────────── */
 #bmdx-idx-nav {
@@ -646,6 +611,7 @@ document.addEventListener('dragstart', function(e) {
   transition: letter-spacing 0.5s cubic-bezier(0.16,1,0.3,1);
 }
 .bmdx-card-link:hover strong { letter-spacing: 0.08em; }
+
 
 
 </style>
