@@ -1005,7 +1005,6 @@ document.addEventListener('dragstart', function(e) {
   }
 });
 </script>
-
 <style id="bmdx-glass-nav-upgrade">
 .navbar{
 background:transparent !important;
@@ -1022,12 +1021,12 @@ backdrop-filter:none !important;
 -webkit-backdrop-filter:none !important;
 }
 
-/* Main menu background */
+/* Desktop default closed state */
 .navbar-collapse{
 position:relative;
 margin:0 !important;
 padding:12px 22px !important;
-border-radius:999px !important;
+border-radius:22px !important;
 background:rgba(255,255,255,.055) !important;
 border:1px solid rgba(255,255,255,.08) !important;
 box-shadow:0 18px 45px rgba(0,0,0,.16) !important;
@@ -1036,7 +1035,7 @@ backdrop-filter:blur(20px);
 overflow:hidden;
 }
 
-/* Remove stretched secondary frame under nav items */
+/* Remove extra frames/shapes */
 .navbar-collapse:before,
 .navbar-collapse:after,
 .navbar-nav:before,
@@ -1120,7 +1119,7 @@ color:rgba(255,255,255,.24) !important;
 color:rgba(255,255,255,.96) !important;
 }
 
-/* Empty repeated items must stay hidden */
+/* Hide empty repeated items */
 .nav-link:empty{
 display:none !important;
 pointer-events:none !important;
@@ -1138,42 +1137,111 @@ display:none !important;
 pointer-events:none !important;
 }
 
+/* Opened menu as a right-side full-height panel */
 @media (max-width: 991px){
 .navbar-collapse{
-margin-top:12px !important;
-padding:18px 20px !important;
-border-radius:28px !important;
-background:rgba(255,255,255,.06) !important;
-border:1px solid rgba(255,255,255,.08) !important;
-box-shadow:0 18px 45px rgba(0,0,0,.18) !important;
+position:fixed !important;
+top:0 !important;
+right:0 !important;
+left:auto !important;
+bottom:0 !important;
+width:42vw !important;
+min-width:320px !important;
+max-width:560px !important;
+height:100vh !important;
+margin:0 !important;
+padding:110px 40px 36px 40px !important;
+border-radius:26px 0 0 26px !important;
+background:rgba(10,10,10,.82) !important;
+border-left:1px solid rgba(255,255,255,.10) !important;
+border-top:none !important;
+border-right:none !important;
+border-bottom:none !important;
+box-shadow:-24px 0 80px rgba(0,0,0,.35) !important;
+backdrop-filter:blur(24px);
+-webkit-backdrop-filter:blur(24px);
+overflow-y:auto !important;
+transform:translateX(104%) !important;
+opacity:0 !important;
+visibility:hidden !important;
+pointer-events:none !important;
+display:block !important;
+transition:transform .55s cubic-bezier(.16,1,.3,1),opacity .35s ease,visibility .35s ease !important;
+}
+
+.navbar.opened .navbar-collapse,
+.navbar.navbar-short.opened .navbar-collapse,
+.navbar .navbar-collapse.show,
+.navbar.opened .navbar-collapse.show{
+transform:translateX(0) !important;
+opacity:1 !important;
+visibility:visible !important;
+pointer-events:auto !important;
+}
+
+.navbar-collapse.collapsing{
+height:100vh !important;
+transition:transform .55s cubic-bezier(.16,1,.3,1),opacity .35s ease !important;
 }
 
 .navbar-nav{
-align-items:flex-start;
-gap:12px;
+align-items:flex-start !important;
+justify-content:center !important;
+min-height:100% !important;
+gap:18px !important;
+}
+
+.nav-item{
+width:100% !important;
 }
 
 .nav-link{
+display:block !important;
+width:100% !important;
 padding:10px 0 !important;
-font-size:14px !important;
-letter-spacing:.16em !important;
-color:rgba(255,255,255,.38) !important;
+font-size:clamp(28px,3.6vw,52px) !important;
+line-height:1.05 !important;
+letter-spacing:.04em !important;
+text-transform:uppercase !important;
+text-align:left !important;
+color:rgba(255,255,255,.34) !important;
 }
 
 .nav-link:hover,
 .nav-link:focus,
 .nav-link:active{
-color:rgba(255,255,255,.92) !important;
-letter-spacing:.19em !important;
-transform:translateX(4px) !important;
+color:rgba(255,255,255,.94) !important;
+letter-spacing:.055em !important;
+transform:translateX(8px) !important;
 }
 
 .navbar-nav:hover .nav-link{
-color:rgba(255,255,255,.28) !important;
+color:rgba(255,255,255,.22) !important;
 }
 
 .navbar-nav:hover .nav-link:hover{
-color:rgba(255,255,255,.95) !important;
+color:rgba(255,255,255,.96) !important;
+}
+}
+
+@media (max-width: 767px){
+.navbar-collapse{
+width:100vw !important;
+min-width:0 !important;
+max-width:none !important;
+padding:96px 28px 28px 28px !important;
+border-radius:22px 0 0 22px !important;
+background:rgba(10,10,10,.88) !important;
+}
+
+.navbar-nav{
+gap:14px !important;
+}
+
+.nav-link{
+font-size:clamp(24px,8vw,40px) !important;
+line-height:1.08 !important;
+letter-spacing:.04em !important;
 }
 }
 </style>
@@ -1199,10 +1267,6 @@ z-index:20 !important;
 margin-top:80px;
 }
 </style>
-
-</body>
-</html>
-
 
 </body>
 </html>
