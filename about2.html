@@ -1005,12 +1005,13 @@ document.addEventListener('dragstart', function(e) {
   }
 });
 </script>
+
 <style id="bmdx-glass-nav-upgrade">
 .navbar{
 background:transparent !important;
 box-shadow:none !important;
 border:none !important;
-transition:none !important;
+transition:opacity .35s ease !important;
 }
 
 .navbar.nav-scrolled{
@@ -1021,69 +1022,51 @@ backdrop-filter:none !important;
 -webkit-backdrop-filter:none !important;
 }
 
-/* بکگراند اصلی و بزرگ منو */
+/* Main menu background */
 .navbar-collapse{
 position:relative;
-padding:10px 16px !important;
 margin:0 !important;
+padding:12px 22px !important;
 border-radius:999px !important;
-background:rgba(255,255,255,.04) !important;
+background:rgba(255,255,255,.055) !important;
 border:1px solid rgba(255,255,255,.08) !important;
-box-shadow:none !important;
+box-shadow:0 18px 45px rgba(0,0,0,.16) !important;
 backdrop-filter:blur(20px);
 -webkit-backdrop-filter:blur(20px);
 overflow:hidden;
 }
 
-/* حذف هر قاب/دایره اضافه‌ای که زیر کل آیتم‌ها ساخته می‌شود */
+/* Remove stretched secondary frame under nav items */
+.navbar-collapse:before,
+.navbar-collapse:after,
+.navbar-nav:before,
+.navbar-nav:after,
+.nav-item:before,
+.nav-item:after,
+.nav-link:before,
+.nav-link:after{
+display:none !important;
+content:none !important;
+background:none !important;
+border:none !important;
+box-shadow:none !important;
+}
+
+.bmdx-nav-glow{
+display:none !important;
+}
+
 .navbar-nav{
 position:relative;
 z-index:2;
+display:flex;
 align-items:center;
-gap:6px;
+gap:22px;
 margin:0 !important;
 padding:0 !important;
 background:transparent !important;
 border:none !important;
 box-shadow:none !important;
-border-radius:0 !important;
-}
-
-.navbar-nav:before,
-.navbar-nav:after,
-.navbar-collapse:before,
-.navbar-collapse:after{
-display:none !important;
-content:none !important;
-width:0 !important;
-height:0 !important;
-opacity:0 !important;
-background:transparent !important;
-border:none !important;
-box-shadow:none !important;
-}
-
-/* نور داخل خود بکگراند منو */
-.bmdx-nav-glow{
-position:absolute;
-left:50%;
-top:50%;
-width:340px;
-height:340px;
-border-radius:50%;
-pointer-events:none;
-background:radial-gradient(circle,rgba(255,255,255,.10) 0%,rgba(255,255,255,.035) 34%,transparent 70%);
-transform:translate(-50%,-50%);
-opacity:0;
-transition:opacity .45s ease;
-z-index:0;
-mix-blend-mode:screen;
-}
-
-.nav-item,
-.nav-link{
-position:relative;
-z-index:2;
 }
 
 .nav-item{
@@ -1094,64 +1077,50 @@ border:none !important;
 box-shadow:none !important;
 }
 
-.nav-item:before,
-.nav-item:after{
-display:none !important;
-content:none !important;
-}
-
-/* آیتم‌ها مثل بولت خاموش */
 .nav-link{
 position:relative;
+z-index:2;
 display:inline-flex;
 align-items:center;
 justify-content:center;
-padding:12px 16px !important;
+padding:8px 0 !important;
 margin:0 !important;
-border-radius:0 !important;
 background:transparent !important;
 border:none !important;
+border-radius:0 !important;
 box-shadow:none !important;
-overflow:visible;
-font-weight:500 !important;
-letter-spacing:.14em;
-opacity:1;
+font-weight:400 !important;
+font-size:12px !important;
+line-height:1 !important;
+letter-spacing:.22em !important;
+text-transform:uppercase;
 color:rgba(255,255,255,.34) !important;
-transition:color .35s ease,opacity .35s ease !important;
+opacity:1 !important;
+transition:color .35s ease,transform .45s cubic-bezier(.16,1,.3,1),letter-spacing .45s cubic-bezier(.16,1,.3,1) !important;
 }
 
-/* هاور مثل بولت اکتیو */
 .nav-link:hover,
 .nav-link:focus,
 .nav-link:active{
 background:transparent !important;
 border:none !important;
 box-shadow:none !important;
-color:rgba(255,255,255,.82) !important;
-opacity:1;
-letter-spacing:.14em;
-transform:none !important;
+color:rgba(255,255,255,.92) !important;
+opacity:1 !important;
+letter-spacing:.26em !important;
+transform:translateY(-2px) !important;
 filter:none !important;
 }
 
-/* حذف خط، قاب، دایره و بکگراند هاور آیتم‌ها */
-.nav-link:before,
-.nav-link:after,
-.nav-link:hover:before,
-.nav-link:focus:before,
-.nav-link:hover:after,
-.nav-link:focus:after{
-display:none !important;
-content:none !important;
-width:0 !important;
-height:0 !important;
-opacity:0 !important;
-background:transparent !important;
-border:none !important;
-box-shadow:none !important;
+.navbar-nav:hover .nav-link{
+color:rgba(255,255,255,.24) !important;
 }
 
-/* آیتم‌های خالی منو کامل حذف شوند و هاور نگیرند */
+.navbar-nav:hover .nav-link:hover{
+color:rgba(255,255,255,.96) !important;
+}
+
+/* Empty repeated items must stay hidden */
 .nav-link:empty{
 display:none !important;
 pointer-events:none !important;
@@ -1172,68 +1141,47 @@ pointer-events:none !important;
 @media (max-width: 991px){
 .navbar-collapse{
 margin-top:12px !important;
-padding:16px 18px !important;
-border-radius:24px !important;
-background:rgba(255,255,255,.04) !important;
+padding:18px 20px !important;
+border-radius:28px !important;
+background:rgba(255,255,255,.06) !important;
 border:1px solid rgba(255,255,255,.08) !important;
-box-shadow:none !important;
-backdrop-filter:blur(20px);
--webkit-backdrop-filter:blur(20px);
+box-shadow:0 18px 45px rgba(0,0,0,.18) !important;
 }
 
 .navbar-nav{
-gap:6px;
 align-items:flex-start;
-background:transparent !important;
-border:none !important;
-box-shadow:none !important;
+gap:12px;
 }
 
 .nav-link{
-padding:12px 0 !important;
-font-size:17px !important;
-letter-spacing:.12em;
-color:rgba(255,255,255,.34) !important;
+padding:10px 0 !important;
+font-size:14px !important;
+letter-spacing:.16em !important;
+color:rgba(255,255,255,.38) !important;
 }
 
 .nav-link:hover,
 .nav-link:focus,
 .nav-link:active{
-color:rgba(255,255,255,.82) !important;
-letter-spacing:.12em;
-transform:none !important;
+color:rgba(255,255,255,.92) !important;
+letter-spacing:.19em !important;
+transform:translateX(4px) !important;
+}
+
+.navbar-nav:hover .nav-link{
+color:rgba(255,255,255,.28) !important;
+}
+
+.navbar-nav:hover .nav-link:hover{
+color:rgba(255,255,255,.95) !important;
 }
 }
 </style>
 
 <script>
 document.addEventListener('DOMContentLoaded',function(){
-const nav=document.querySelector('.navbar-collapse');
-
-if(nav){
-let glow=nav.querySelector('.bmdx-nav-glow');
-
-if(!glow){
-glow=document.createElement('div');
-glow.className='bmdx-nav-glow';
-nav.prepend(glow);
-}
-
-nav.addEventListener('mousemove',function(e){
-const r=nav.getBoundingClientRect();
-glow.style.left=(e.clientX-r.left)+'px';
-glow.style.top=(e.clientY-r.top)+'px';
-glow.style.opacity='1';
-});
-
-nav.addEventListener('mouseleave',function(){
-glow.style.opacity='0';
-});
-}
-
 window.addEventListener('scroll',function(){
 const bar=document.querySelector('.navbar');
-
 if(bar){
 bar.classList.toggle('nav-scrolled',window.scrollY>40);
 }
@@ -1251,6 +1199,10 @@ z-index:20 !important;
 margin-top:80px;
 }
 </style>
+
+</body>
+</html>
+
 
 </body>
 </html>
