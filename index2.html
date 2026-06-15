@@ -445,7 +445,7 @@ document.addEventListener('dragstart', function(e) {
 
 /* ── 1. GLASS NAVBAR ────────────────────────────────────── */
 #menu1-4f .navbar {
-  background: rgba(0,0,0,0.35) !important;
+  background: rgba(0, 0, 0, 0) !important;
   backdrop-filter: blur(18px) !important;
   -webkit-backdrop-filter: blur(18px) !important;
   border-bottom: 1px solid rgba(255,255,255,0.06) !important;
@@ -661,35 +661,6 @@ document.addEventListener('dragstart', function(e) {
 }
 .bmdx-card-link:hover strong { letter-spacing: 0.08em; }
 
-/* glow blob for each card section */
-.bmdx-card-glow {
-  position: absolute;
-  width: 700px;
-  height: 700px;
-  border-radius: 50%;
-  background: radial-gradient(circle, rgba(255,255,255,0.06) 0%, rgba(255,255,255,0.02) 40%, transparent 70%);
-  pointer-events: none;
-  transform: translate(-50%, -50%);
-  transition: opacity 0.5s ease;
-  opacity: 0;
-  z-index: 2;
-  mix-blend-mode: overlay;
-}
-.mbr-section.info4 {
-  position: relative;
-  overflow: hidden;
-}
-.mbr-section.info4 .container {
-  position: relative;
-  z-index: 3;
-}
-.mbr-section.info4 .mbr-overlay {
-  z-index: 1;
-}
-
-/* ── 4. SCROLL FLASH FIX ────────────────────────────────── */
-/* prevent white flash between parallax sections */
-html { background: #000 !important; }
 
 </style>
 
