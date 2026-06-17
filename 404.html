@@ -26,6 +26,37 @@
   <link rel="preload" as="style" href="assets/mobirise/css/mbr-additional.css"><link rel="stylesheet" href="assets/mobirise/css/mbr-additional.css" type="text/css">
   
   
+<style>
+html,body{
+  cursor: grab;
+}
+
+body.dragging,
+body.dragging *{
+  cursor: grabbing !important;
+}
+
+body.dragging{
+  user-select:none;
+  -webkit-user-select:none;
+}
+img {
+  -webkit-user-drag: none;
+  -webkit-user-select: none;
+  user-select: none;
+}
+
+
+body{
+background:#000;
+color:#000;
+}
+
+
+
+</style>
+
+
   
 </head>
 <body>
@@ -99,5 +130,156 @@
 <noscript><iframe src="https://www.googletagmanager.com/ns.html?id=GTM-T7TR7GC"
 height="0" width="0" style="display:none;visibility:hidden"></iframe></noscript>
 <!-- End Google Tag Manager (noscript) -->
+
+
+
+<script>
+(function(){
+
+/* اگر دستگاه تاچ داشت کلاً اجرا نشود */
+if(("ontouchstart" in window) || navigator.maxTouchPoints>0){
+  return
+}
+
+let isDown=false
+let moved=false
+
+let startY=0
+let lastY=0
+let velocity=0
+
+let raf=null
+
+const friction=0.94
+const minVelocity=0.08
+const threshold=6
+
+function maxScroll(){
+  return document.documentElement.scrollHeight - window.innerHeight
+}
+
+function clamp(v,min,max){
+  return Math.max(min,Math.min(max,v))
+}
+
+function stopMomentum(){
+  if(raf){
+    cancelAnimationFrame(raf)
+    raf=null
+  }
+}
+
+function momentum(){
+
+  stopMomentum()
+
+  function frame(){
+
+    if(isDown) return
+
+    velocity*=friction
+
+    if(Math.abs(velocity)<minVelocity){
+      velocity=0
+      return
+    }
+
+    const next=clamp(
+      window.scrollY-velocity,
+      0,
+      maxScroll()
+    )
+
+    window.scrollTo(0,next)
+
+    raf=requestAnimationFrame(frame)
+  }
+
+  raf=requestAnimationFrame(frame)
+}
+
+document.addEventListener("mousedown",e=>{
+
+  if(e.button!==0) return
+  if(e.target.closest("input,textarea,select,iframe,video")) return
+
+  isDown=true
+  moved=false
+
+  startY=e.clientY
+  lastY=e.clientY
+  velocity=0
+
+  stopMomentum()
+
+  document.body.classList.add("dragging")
+
+},{passive:true})
+
+document.addEventListener("mousemove",e=>{
+
+  if(!isDown) return
+
+  const dy=e.clientY-lastY
+
+  if(Math.abs(e.clientY-startY)>threshold){
+    moved=true
+  }
+
+  lastY=e.clientY
+  velocity=dy
+
+  const next=clamp(
+    window.scrollY-dy,
+    0,
+    maxScroll()
+  )
+
+  window.scrollTo(0,next)
+
+},{passive:true})
+
+document.addEventListener("mouseup",release,{passive:true})
+document.addEventListener("mouseleave",release,{passive:true})
+
+function release(){
+
+  if(!isDown) return
+
+  isDown=false
+  document.body.classList.remove("dragging")
+
+  momentum()
+}
+
+document.addEventListener("click",function(e){
+  if(moved){
+    e.preventDefault()
+    e.stopPropagation()
+  }
+},true)
+
+})();
+</script>
+
+
+<script>
+document.querySelectorAll('img').forEach(img => {
+  img.setAttribute('draggable', 'false');
+});
+
+document.addEventListener('dragstart', function(e) {
+  if (e.target.closest('img')) {
+    e.preventDefault();
+  }
+});
+</script>
+
+
+
+
+
+
+
 </body>
 </html>
