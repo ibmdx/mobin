@@ -1,0 +1,975 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1, minimum-scale=1">
+<title>Tosan Design System — Case Study — BMDX</title>
+<meta name="description" content="Case Study: Building a unified Atomic Design System architecture for 15+ enterprise banking products at Tosan.">
+
+<style>
+
+/* ════════════════════════════════════════════════════
+   ROOT / RESET
+═══════════════════════════════════════════════════════ */
+:root{
+  --navy:#0B1F3A;
+  --blue:#2563EB;
+  --cyan:#06B6D4;
+  --gray-light:#F3F6FA;
+  --text-dark:#111827;
+  --bg:#000;
+  --card-bg: rgba(255,255,255,0.035);
+  --card-border: rgba(255,255,255,0.10);
+}
+
+*{ box-sizing:border-box; }
+html,body{
+  margin:0; padding:0;
+  background:#000;
+  color:#fff;
+  font-family:'Helvetica Neue', Helvetica, Arial, sans-serif;
+  -webkit-font-smoothing:antialiased;
+  scroll-behavior:smooth;
+  cursor:grab;
+}
+body.dragging, body.dragging *{ cursor:grabbing !important; user-select:none; -webkit-user-select:none; }
+img{ -webkit-user-drag:none; user-select:none; max-width:100%; display:block; }
+a{ color:#fff; text-decoration:none; }
+strong{ font-weight:600; }
+::selection{ background: rgba(37,99,235,0.4); }
+
+.container{
+  max-width:1140px;
+  margin:0 auto;
+  padding:0 24px;
+}
+
+/* ════════════════════════════════════════════════════
+   NAVBAR — glass, transparent at top
+═══════════════════════════════════════════════════════ */
+.navbar{
+  position:fixed; top:0; left:0; right:0;
+  z-index:1000;
+  display:flex; align-items:center; justify-content:space-between;
+  padding:22px 36px;
+  background:transparent;
+  transition: background 0.5s ease, backdrop-filter 0.5s ease, border-color 0.5s ease;
+  border-bottom:1px solid transparent;
+}
+.navbar.bmdx-scrolled{
+  background: rgba(0,0,0,0.5);
+  backdrop-filter: blur(26px) saturate(180%);
+  -webkit-backdrop-filter: blur(26px) saturate(180%);
+  border-bottom:1px solid rgba(255,255,255,0.08);
+}
+.navbar .logo{
+  font-size:0.95rem;
+  font-weight:700;
+  letter-spacing:0.12em;
+  opacity:0.92;
+  transition: opacity 0.3s ease, transform 0.4s cubic-bezier(0.16,1,0.3,1);
+}
+.navbar .logo:hover{ opacity:0.65; transform: scale(1.03); }
+.navbar .back-link{
+  position:relative;
+  font-size:0.72rem;
+  font-weight:600;
+  letter-spacing:0.14em;
+  text-transform:uppercase;
+  opacity:0.7;
+  transition: letter-spacing 0.4s cubic-bezier(0.16,1,0.3,1), opacity 0.3s ease;
+}
+.navbar .back-link::before{ content:'← '; }
+.navbar .back-link::after{
+  content:''; position:absolute; bottom:-4px; left:50%;
+  width:0; height:1px; background:rgba(255,255,255,0.5);
+  transform:translateX(-50%);
+  transition:width 0.4s cubic-bezier(0.16,1,0.3,1);
+}
+.navbar .back-link:hover{ opacity:1; letter-spacing:0.2em; }
+.navbar .back-link:hover::after{ width:100%; }
+
+/* ════════════════════════════════════════════════════
+   HERO
+═══════════════════════════════════════════════════════ */
+.hero{
+  min-height:92vh;
+  display:flex; flex-direction:column; justify-content:center;
+  position:relative;
+  padding:140px 0 80px;
+  background:
+    radial-gradient(ellipse 80% 60% at 30% 20%, rgba(37,99,235,0.18), transparent 60%),
+    radial-gradient(ellipse 70% 50% at 80% 70%, rgba(6,182,212,0.12), transparent 60%),
+    #000;
+}
+.hero .eyebrow{
+  font-size:0.78rem;
+  letter-spacing:0.22em;
+  text-transform:uppercase;
+  color: var(--cyan);
+  opacity:0;
+  transform: translateY(14px);
+  animation: bmdx-rise 0.9s 0.05s cubic-bezier(0.22,1,0.36,1) forwards;
+  margin-bottom:22px;
+}
+.hero h1{
+  font-size:clamp(2.4rem, 6vw, 4.6rem);
+  font-weight:700;
+  line-height:1.08;
+  letter-spacing:-0.01em;
+  margin:0 0 26px;
+  max-width:880px;
+  opacity:0;
+  transform: translateY(20px);
+  animation: bmdx-rise 1s 0.15s cubic-bezier(0.22,1,0.36,1) forwards;
+}
+.hero h1 em{
+  font-style:normal;
+  color: rgba(255,255,255,0.45);
+  font-weight:400;
+}
+.hero .sub{
+  font-size:1.05rem;
+  line-height:1.7;
+  color: rgba(255,255,255,0.62);
+  max-width:620px;
+  opacity:0;
+  transform: translateY(18px);
+  animation: bmdx-rise 1s 0.28s cubic-bezier(0.22,1,0.36,1) forwards;
+}
+.hero .meta-row{
+  display:flex; flex-wrap:wrap; gap:34px;
+  margin-top:48px;
+  opacity:0;
+  transform: translateY(16px);
+  animation: bmdx-rise 1s 0.4s cubic-bezier(0.22,1,0.36,1) forwards;
+}
+.hero .meta-item{ }
+.hero .meta-item .label{
+  font-size:0.66rem;
+  letter-spacing:0.14em;
+  text-transform:uppercase;
+  color: rgba(255,255,255,0.4);
+  margin-bottom:6px;
+}
+.hero .meta-item .value{
+  font-size:0.92rem;
+  font-weight:500;
+  color:#fff;
+}
+
+@keyframes bmdx-rise{ to{ opacity:1; transform:translateY(0); } }
+
+/* ════════════════════════════════════════════════════
+   SECTION SCAFFOLDING
+═══════════════════════════════════════════════════════ */
+section.block{
+  padding:100px 0;
+  position:relative;
+  border-top:1px solid rgba(255,255,255,0.06);
+}
+section.block.no-border{ border-top:none; }
+.block .kicker{
+  font-size:0.7rem;
+  letter-spacing:0.2em;
+  text-transform:uppercase;
+  color: var(--cyan);
+  margin-bottom:18px;
+  opacity:0;
+  transform: translateY(10px);
+  transition: opacity 0.7s ease, transform 0.7s cubic-bezier(0.22,1,0.36,1);
+}
+.block h2{
+  font-size:clamp(1.7rem, 3.4vw, 2.5rem);
+  font-weight:700;
+  line-height:1.25;
+  max-width:760px;
+  margin:0 0 28px;
+  opacity:0;
+  transform: translateY(14px);
+  transition: opacity 0.8s 0.05s ease, transform 0.8s 0.05s cubic-bezier(0.22,1,0.36,1);
+}
+.block .lead{
+  font-size:1.02rem;
+  line-height:1.8;
+  color: rgba(255,255,255,0.68);
+  max-width:700px;
+  opacity:0;
+  transform: translateY(14px);
+  transition: opacity 0.8s 0.1s ease, transform 0.8s 0.1s cubic-bezier(0.22,1,0.36,1);
+}
+.block.bmdx-visible .kicker,
+.block.bmdx-visible h2,
+.block.bmdx-visible .lead{
+  opacity:1; transform:translateY(0);
+}
+
+/* generic fade-up for any element with this class */
+.fade-up{
+  opacity:0; transform: translateY(22px);
+  transition: opacity 0.8s ease, transform 0.8s cubic-bezier(0.22,1,0.36,1);
+}
+.fade-up.bmdx-visible{ opacity:1; transform:translateY(0); }
+.fade-up.d1{ transition-delay:0.08s; }
+.fade-up.d2{ transition-delay:0.16s; }
+.fade-up.d3{ transition-delay:0.24s; }
+.fade-up.d4{ transition-delay:0.32s; }
+
+/* ════════════════════════════════════════════════════
+   PULL QUOTE
+═══════════════════════════════════════════════════════ */
+.pull-quote{
+  max-width:780px;
+  margin:46px auto 0;
+  padding:38px 0 38px 32px;
+  border-left:2px solid rgba(37,99,235,0.55);
+  position:relative;
+}
+.pull-quote p{
+  font-size:1.35rem;
+  line-height:1.55;
+  font-weight:500;
+  color:#fff;
+  margin:0;
+}
+.pull-quote .attribution{
+  margin-top:14px;
+  font-size:0.78rem;
+  letter-spacing:0.08em;
+  text-transform:uppercase;
+  color: rgba(255,255,255,0.42);
+}
+
+/* ════════════════════════════════════════════════════
+   KPI STRIP
+═══════════════════════════════════════════════════════ */
+.kpi-strip{
+  display:grid;
+  grid-template-columns:repeat(auto-fit, minmax(150px,1fr));
+  gap:1px;
+  background: rgba(255,255,255,0.08);
+  border:1px solid rgba(255,255,255,0.08);
+  border-radius:14px;
+  overflow:hidden;
+  margin-top:50px;
+}
+.kpi-cell{
+  background:#000;
+  padding:34px 26px;
+  text-align:left;
+  position:relative;
+  overflow:hidden;
+}
+.kpi-cell .num{
+  font-size:clamp(1.8rem,3vw,2.4rem);
+  font-weight:700;
+  background: linear-gradient(120deg, #ffffff, var(--cyan));
+  -webkit-background-clip:text;
+  background-clip:text;
+  color:transparent;
+  display:inline-block;
+}
+.kpi-cell .desc{
+  margin-top:8px;
+  font-size:0.78rem;
+  color: rgba(255,255,255,0.55);
+  letter-spacing:0.02em;
+  line-height:1.4;
+}
+.kpi-cell::after{
+  content:'';
+  position:absolute; inset:0;
+  background: radial-gradient(circle at 30% 20%, rgba(37,99,235,0.12), transparent 60%);
+  opacity:0; transition:opacity 0.4s ease;
+}
+.kpi-cell:hover::after{ opacity:1; }
+
+/* ════════════════════════════════════════════════════
+   DIAGRAM CARD WRAPPER
+═══════════════════════════════════════════════════════ */
+.diagram-card{
+  background: var(--card-bg);
+  border:1px solid var(--card-border);
+  border-radius:18px;
+  padding:42px;
+  margin-top:46px;
+  backdrop-filter: blur(8px);
+  -webkit-backdrop-filter: blur(8px);
+  position:relative;
+  overflow:hidden;
+  transition: border-color 0.4s ease, transform 0.5s cubic-bezier(0.22,1,0.36,1);
+}
+.diagram-card:hover{
+  border-color: rgba(255,255,255,0.18);
+}
+.diagram-card svg{ width:100%; height:auto; display:block; }
+.diagram-caption{
+  margin-top:24px;
+  font-size:0.86rem;
+  color: rgba(255,255,255,0.5);
+  line-height:1.6;
+  font-style:normal;
+  padding-top:18px;
+  border-top:1px solid rgba(255,255,255,0.07);
+}
+.diagram-caption b{ color: rgba(255,255,255,0.78); font-weight:600; }
+
+/* ════════════════════════════════════════════════════
+   TWO COLUMN LAYOUT
+═══════════════════════════════════════════════════════ */
+.two-col{
+  display:grid;
+  grid-template-columns:1fr 1fr;
+  gap:60px;
+  align-items:start;
+}
+@media (max-width:860px){ .two-col{ grid-template-columns:1fr; gap:40px; } }
+
+.numbered-list{ list-style:none; margin:0; padding:0; counter-reset: bmdx-counter; }
+.numbered-list li{
+  counter-increment: bmdx-counter;
+  position:relative;
+  padding:0 0 26px 46px;
+  font-size:0.95rem;
+  line-height:1.65;
+  color: rgba(255,255,255,0.72);
+  border-left:1px solid rgba(255,255,255,0.1);
+  margin-left:13px;
+}
+.numbered-list li:last-child{ border-left:1px solid transparent; }
+.numbered-list li::before{
+  counter-reset: bmdx-counter;
+  content: counter(bmdx-counter, decimal-leading-zero);
+  position:absolute; left:-13px; top:-2px;
+  width:26px; height:26px;
+  background:#000;
+  border:1px solid rgba(255,255,255,0.18);
+  border-radius:50%;
+  display:flex; align-items:center; justify-content:center;
+  font-size:0.62rem; font-weight:600;
+  color: var(--cyan);
+  transform:translateX(-50%);
+}
+.numbered-list li strong{ color:#fff; display:block; margin-bottom:4px; font-size:1rem; }
+
+/* challenge / solution pairs */
+.cs-pair{
+  background: rgba(255,255,255,0.03);
+  border:1px solid rgba(255,255,255,0.08);
+  border-radius:14px;
+  padding:28px 30px;
+  margin-bottom:18px;
+  transition: border-color 0.35s ease, background 0.35s ease;
+}
+.cs-pair:hover{ border-color: rgba(255,255,255,0.16); background: rgba(255,255,255,0.045); }
+.cs-pair .tag{
+  display:inline-block;
+  font-size:0.62rem;
+  letter-spacing:0.12em;
+  text-transform:uppercase;
+  padding:4px 10px;
+  border-radius:20px;
+  margin-bottom:12px;
+}
+.cs-pair .tag.challenge{ background: rgba(239,68,68,0.12); color:#f87171; }
+.cs-pair .tag.solution{ background: rgba(6,182,212,0.12); color: var(--cyan); }
+.cs-pair p{ margin:0; font-size:0.92rem; line-height:1.6; color: rgba(255,255,255,0.72); }
+.cs-pair p + .tag{ margin-top:18px; }
+
+/* ════════════════════════════════════════════════════
+   TIMELINE / ROADMAP
+═══════════════════════════════════════════════════════ */
+.roadmap{
+  position:relative;
+  margin-top:50px;
+  padding-left:32px;
+  border-left:1px solid rgba(255,255,255,0.12);
+}
+.roadmap-item{
+  position:relative;
+  padding-bottom:42px;
+}
+.roadmap-item:last-child{ padding-bottom:0; }
+.roadmap-item::before{
+  content:'';
+  position:absolute; left:-37px; top:2px;
+  width:11px; height:11px;
+  border-radius:50%;
+  background:#000;
+  border:2px solid var(--cyan);
+  transition: transform 0.4s cubic-bezier(0.34,1.5,0.64,1), background 0.3s ease;
+}
+.roadmap-item.bmdx-visible::before{ background: var(--cyan); transform:scale(1.25); }
+.roadmap-item .phase-label{
+  font-size:0.66rem;
+  letter-spacing:0.14em;
+  text-transform:uppercase;
+  color: rgba(255,255,255,0.4);
+  margin-bottom:6px;
+}
+.roadmap-item h4{
+  font-size:1.08rem;
+  font-weight:600;
+  margin:0 0 8px;
+}
+.roadmap-item p{
+  font-size:0.88rem;
+  color: rgba(255,255,255,0.6);
+  line-height:1.6;
+  margin:0;
+  max-width:560px;
+}
+
+/* ════════════════════════════════════════════════════
+   COMPONENT GRID
+═══════════════════════════════════════════════════════ */
+.comp-grid{
+  display:grid;
+  grid-template-columns:repeat(auto-fill, minmax(140px,1fr));
+  gap:12px;
+  margin-top:46px;
+}
+.comp-tile{
+  aspect-ratio:1/0.78;
+  background: rgba(255,255,255,0.035);
+  border:1px solid rgba(255,255,255,0.09);
+  border-radius:10px;
+  display:flex; align-items:center; justify-content:center;
+  font-size:0.74rem;
+  letter-spacing:0.02em;
+  color: rgba(255,255,255,0.62);
+  text-align:center;
+  padding:10px;
+  transition: border-color 0.3s ease, transform 0.35s cubic-bezier(0.34,1.4,0.64,1), color 0.3s ease, background 0.3s ease;
+}
+.comp-tile:hover{
+  border-color: rgba(6,182,212,0.5);
+  color:#fff;
+  background: rgba(6,182,212,0.06);
+  transform: translateY(-3px);
+}
+
+/* ════════════════════════════════════════════════════
+   GOVERNANCE FLOW (vertical mini flowchart)
+═══════════════════════════════════════════════════════ */
+.flow-vert{
+  display:flex; flex-direction:column; align-items:center;
+  margin-top:10px;
+}
+.flow-step{
+  width:100%; max-width:380px;
+  background: rgba(255,255,255,0.04);
+  border:1px solid rgba(255,255,255,0.12);
+  border-radius:10px;
+  padding:14px 20px;
+  text-align:center;
+  font-size:0.86rem;
+  font-weight:500;
+  color: rgba(255,255,255,0.85);
+  transition: border-color 0.3s ease, background 0.3s ease;
+}
+.flow-step:hover{ border-color: var(--cyan); background: rgba(6,182,212,0.07); }
+.flow-arrow{
+  font-size:1.1rem;
+  color: rgba(255,255,255,0.3);
+  margin:6px 0;
+}
+
+/* ════════════════════════════════════════════════════
+   PRODUCT SCREENS PLACEHOLDER GRID
+═══════════════════════════════════════════════════════ */
+.screens-grid{
+  display:grid;
+  grid-template-columns:repeat(3, 1fr);
+  gap:18px;
+  margin-top:46px;
+}
+@media (max-width:760px){ .screens-grid{ grid-template-columns:1fr 1fr; } }
+.screen-placeholder{
+  aspect-ratio:9/16;
+  background:
+    linear-gradient(160deg, rgba(37,99,235,0.10), rgba(6,182,212,0.06));
+  border:1px dashed rgba(255,255,255,0.18);
+  border-radius:14px;
+  display:flex; flex-direction:column; align-items:center; justify-content:center;
+  gap:10px;
+  color: rgba(255,255,255,0.4);
+  font-size:0.74rem;
+  letter-spacing:0.04em;
+  text-align:center;
+  padding:18px;
+  transition: border-color 0.3s ease, color 0.3s ease;
+}
+.screen-placeholder:hover{ border-color: rgba(6,182,212,0.45); color: rgba(255,255,255,0.65); }
+.screen-placeholder .icon{ font-size:1.6rem; opacity:0.6; }
+
+/* ════════════════════════════════════════════════════
+   FINAL CTA — matches site's CONTACT card pattern
+═══════════════════════════════════════════════════════ */
+.cta-block{
+  padding:140px 0 160px;
+  position:relative;
+  overflow:hidden;
+}
+.cta-block .container{ position:relative; z-index:3; text-align:right; }
+.cta-block h2{
+  font-size:clamp(1.6rem, 4vw, 2.2rem);
+  font-weight:400;
+  margin:0 0 10px;
+  opacity:0.55;
+  letter-spacing:0.02em;
+}
+.cta-block .cta-link{
+  position:relative;
+  display:inline-block;
+  font-size:clamp(2rem, 6vw, 3.4rem);
+  font-weight:700;
+  transition: letter-spacing 0.5s cubic-bezier(0.16,1,0.3,1);
+}
+.cta-block .cta-link::after{
+  content:''; position:absolute; bottom:-6px; left:50%;
+  width:0; height:2px; background: rgba(255,255,255,0.5);
+  transform:translateX(-50%);
+  transition:width 0.5s cubic-bezier(0.16,1,0.3,1);
+}
+.cta-block .cta-link:hover{ letter-spacing:0.04em; }
+.cta-block .cta-link:hover::after{ width:100%; }
+.cta-block .arr{
+  display:inline-block;
+  transition: transform 0.45s cubic-bezier(0.16,1,0.3,1);
+}
+.cta-block .cta-link:hover .arr{ transform: translateX(8px); }
+.cta-glow{
+  position:absolute; width:700px; height:700px; border-radius:50%;
+  background: radial-gradient(circle, rgba(255,255,255,0.06) 0%, rgba(255,255,255,0.02) 40%, transparent 70%);
+  pointer-events:none; transform:translate(-50%,-50%); opacity:0;
+  z-index:2; mix-blend-mode:overlay; transition:opacity 0.5s ease;
+}
+
+/* ════════════════════════════════════════════════════
+   FOOTER
+═══════════════════════════════════════════════════════ */
+footer{
+  padding:36px 0 50px;
+  text-align:center;
+  border-top:1px solid rgba(255,255,255,0.06);
+}
+footer p{ font-size:0.8rem; color: rgba(255,255,255,0.4); margin:0; }
+footer a{ color: rgba(255,255,255,0.65); }
+footer a:hover{ color:#fff; }
+
+/* ════════════════════════════════════════════════════
+   RESPONSIVE
+═══════════════════════════════════════════════════════ */
+@media (max-width:680px){
+  .navbar{ padding:18px 20px; }
+  section.block{ padding:70px 0; }
+  .diagram-card{ padding:24px; }
+  .kpi-strip{ grid-template-columns:repeat(2,1fr); }
+  .screens-grid{ grid-template-columns:1fr 1fr; }
+}
+
+</style>
+</head>
+<body>
+
+<!-- ═══════════ NAVBAR ═══════════ -->
+<nav class="navbar" id="bmdxNav">
+  <a href="index.html" class="logo">BMDX</a>
+  <a href="works.html" class="back-link">Back to Works</a>
+</nav>
+
+<!-- ═══════════ HERO ═══════════ -->
+<header class="hero">
+  <div class="container">
+    <div class="eyebrow">Case Study — Design Systems &amp; Strategy</div>
+    <h1>Building a unified architecture<br>for <em>15+</em> enterprise banking products.</h1>
+    <p class="sub">How a fragmented suite of independent banking products at Tosan was brought together under one Atomic Design System — spanning eight teams, three hundred Figma files, and a process built to outlast any single release.</p>
+    <div class="meta-row">
+      <div class="meta-item"><div class="label">Role</div><div class="value">Lead Product Designer</div></div>
+      <div class="meta-item"><div class="label">Timeline</div><div class="value">2021 – 2024</div></div>
+      <div class="meta-item"><div class="label">Domain</div><div class="value">FinTech / Enterprise Banking</div></div>
+      <div class="meta-item"><div class="label">Scope</div><div class="value">15+ Products · 8 Teams</div></div>
+    </div>
+  </div>
+</header>
+
+<!-- ═══════════ 01 — EXECUTIVE SUMMARY + HERO DIAGRAM ═══════════ -->
+<section class="block no-border" id="summary">
+  <div class="container">
+    <div class="kicker">01 — Executive Summary</div>
+    <h2>One core system, fifteen products, eight teams.</h2>
+    <p class="lead">Tosan is a leading provider of electronic banking infrastructure in Iran, managing an ecosystem of more than fifteen banking products across eight independent teams. Before this initiative, each team operated in its own silo — leading to fragmented user experiences, mounting technical debt, and slow, inconsistent delivery. I was tasked with architecting and leading a scalable Atomic Design System to unify the product suite, close the gap between design and code, and bring one coherent visual language to the entire platform.</p>
+
+    <!-- DIAGRAM 1: Hero Ecosystem Overview -->
+    <div class="diagram-card fade-up" id="diagram-hero">
+      <div id="svg-hero-mount"></div>
+      <div class="diagram-caption"><b>Tosan Atomic Core</b> became the shared foundation for multiple enterprise banking products and teams — the hub that fifteen distinct product surfaces now draw from.</div>
+    </div>
+  </div>
+</section>
+
+<!-- ═══════════ KPI STRIP ═══════════ -->
+<section class="block" id="kpi-top">
+  <div class="container">
+    <div class="kicker">Impact at a Glance</div>
+    <h2>Measurable change across the product suite.</h2>
+    <div class="kpi-strip fade-up">
+      <div class="kpi-cell"><div class="num">40%</div><div class="desc">Reduction in design redundancy</div></div>
+      <div class="kpi-cell"><div class="num">25%</div><div class="desc">Faster delivery cycles</div></div>
+      <div class="kpi-cell"><div class="num">150+</div><div class="desc">Standardized components</div></div>
+      <div class="kpi-cell"><div class="num">15+</div><div class="desc">Products aligned</div></div>
+      <div class="kpi-cell"><div class="num">8</div><div class="desc">Teams onboarded</div></div>
+    </div>
+  </div>
+</section>
+
+<!-- ═══════════ 02 — THE CHALLENGE ═══════════ -->
+<section class="block" id="challenge">
+  <div class="container">
+    <div class="kicker">02 — The Challenge</div>
+    <h2>Fifteen products, fifteen different ways of solving the same problem.</h2>
+    <p class="lead">The lack of a shared design language showed up everywhere: over 150 UI variations existed for the same functional components — buttons, inputs, modals — across the product suite. Designers and developers were reinventing the wheel for every new feature, doubling time-to-market. Updating a single brand asset required manual changes across fifteen separate codebases. Users felt the difference too, encountering different interaction patterns every time they moved between Tosan products.</p>
+
+    <!-- DIAGRAM 2: Before / After -->
+    <div class="diagram-card fade-up" id="diagram-before-after">
+      <div id="svg-before-after-mount"></div>
+      <div class="diagram-caption">From fragmented product decisions to a unified system of reusable patterns — <b>before</b>, four teams solved the same interface problem four different ways; <b>after</b>, every team draws from one shared source.</div>
+    </div>
+  </div>
+</section>
+
+<!-- ═══════════ 03 — ROLE & STRATEGY ═══════════ -->
+<section class="block" id="strategy">
+  <div class="container">
+    <div class="kicker">03 — My Role &amp; Strategy</div>
+    <h2>Owning the system end to end.</h2>
+    <p class="lead">As Lead Product Designer, I owned the full strategy behind the Design System — from the initial audit through to the governance model that keeps it alive today.</p>
+
+    <ol class="numbered-list fade-up">
+      <li><strong>Audit &amp; Research</strong>Evaluated 300+ Figma files across 15 products to identify commonalities, conflicts, and redundant patterns.</li>
+      <li><strong>Architecture</strong>Designed a three-layer Atomic Core System: Base Tokens → Core Components → Patterns.</li>
+      <li><strong>Standardization</strong>Defined specifications for 150+ interactive components used across the entire suite.</li>
+      <li><strong>Governance</strong>Established a Contribution Model so teams could propose and update components without breaking the core.</li>
+      <li><strong>Collaboration</strong>Acted as the bridge between 8 product teams, PMs, and frontend engineers throughout the rollout.</li>
+    </ol>
+  </div>
+</section>
+
+<!-- ═══════════ 04 — ARCHITECTURE DIAGRAM ═══════════ -->
+<section class="block" id="architecture">
+  <div class="container">
+    <div class="kicker">04 — System Architecture</div>
+    <h2>A layered approach, not just a UI kit.</h2>
+    <p class="lead">The system was built as a modular, four-layer architecture — moving from foundational design tokens up through core components, product patterns, and finally the real product experiences that ship to users. This structure is what separates a true design platform from a static component library.</p>
+
+    <!-- DIAGRAM 3: Atomic Architecture -->
+    <div class="diagram-card fade-up" id="diagram-architecture">
+      <div id="svg-architecture-mount"></div>
+      <div class="diagram-caption">The system was structured in layers to support scale, consistency, and product-specific flexibility — from <b>foundational tokens</b> to <b>enterprise product patterns</b>.</div>
+    </div>
+
+    <div class="pull-quote fade-up">
+      <p>"In those environments, design has to do more than create polished screens. It has to create clarity."</p>
+      <div class="attribution">— Mobin M. Bahrami, Lead Product Designer</div>
+    </div>
+  </div>
+</section>
+
+<!-- ═══════════ 05 — PROCESS: AUDIT TO GOVERNANCE ═══════════ -->
+<section class="block" id="process">
+  <div class="container">
+    <div class="kicker">05 — The Process</div>
+    <h2>From audit to governance.</h2>
+    <p class="lead">A deep audit of existing products — categorizing components by usage frequency and complexity — revealed that 60% of design time was spent on repetitive UI tasks that could be standardized or automated entirely. That insight shaped everything that followed.</p>
+
+    <div class="roadmap fade-up">
+      <div class="roadmap-item">
+        <div class="phase-label">Phase A</div>
+        <h4>The UI Audit</h4>
+        <p>Categorized components across every product by usage frequency and complexity, surfacing where the real redundancy lived.</p>
+      </div>
+      <div class="roadmap-item">
+        <div class="phase-label">Phase B</div>
+        <h4>System Architecture — The Atomic Approach</h4>
+        <p>Built design tokens for color, typography, spacing, and elevation; core components that are flexible, accessible, and state-aware; and standardized complex patterns like multi-step transaction verification and multi-factor authentication.</p>
+      </div>
+      <div class="roadmap-item">
+        <div class="phase-label">Phase C</div>
+        <h4>Documentation &amp; Hand-off</h4>
+        <p>A documentation portal covering usage guidelines, interaction specs, motion behaviors, code parity details, and accessibility standards for enterprise banking.</p>
+      </div>
+    </div>
+  </div>
+</section>
+
+<!-- ═══════════ COMPONENT INVENTORY ═══════════ -->
+<section class="block" id="components">
+  <div class="container">
+    <div class="kicker">Component Inventory</div>
+    <h2>A shared library teams stopped rebuilding from scratch.</h2>
+    <p class="lead">A shared component inventory helped teams stop rebuilding the same interface patterns — every button, input, and table now traces back to one governed source.</p>
+
+    <div class="comp-grid fade-up">
+      <div class="comp-tile">Buttons</div>
+      <div class="comp-tile">Inputs</div>
+      <div class="comp-tile">Dropdowns</div>
+      <div class="comp-tile">Alerts</div>
+      <div class="comp-tile">Tables</div>
+      <div class="comp-tile">Filters</div>
+      <div class="comp-tile">Cards</div>
+      <div class="comp-tile">Forms</div>
+      <div class="comp-tile">Steppers</div>
+      <div class="comp-tile">Tabs</div>
+      <div class="comp-tile">Pagination</div>
+      <div class="comp-tile">Empty States</div>
+    </div>
+  </div>
+</section>
+
+<!-- ═══════════ TOKEN SYSTEM ═══════════ -->
+<section class="block" id="tokens">
+  <div class="container">
+    <div class="kicker">Design Tokens</div>
+    <h2>A shared language between design and development.</h2>
+    <p class="lead">Tokens created a shared language between design and development — a single source of truth for color, type, spacing, and elevation that both Figma and code could read from.</p>
+
+    <div class="diagram-card fade-up" id="diagram-tokens">
+      <div id="svg-tokens-mount"></div>
+    </div>
+  </div>
+</section>
+
+<!-- ═══════════ 06 — KEY CHALLENGES & SOLUTIONS ═══════════ -->
+<section class="block" id="challenges-solutions">
+  <div class="container">
+    <div class="kicker">06 — Key Challenges &amp; Solutions</div>
+    <h2>Resistance and technical diversity, addressed directly.</h2>
+
+    <div class="two-col fade-up">
+      <div>
+        <div class="cs-pair">
+          <span class="tag challenge">Challenge</span>
+          <p>Resistance from established teams who feared losing creative freedom.</p>
+          <span class="tag solution">Solution</span>
+          <p>Conducted weekly System Syncs and demonstrated how the system frees up their time for high-level UX problem solving rather than pixel-pushing.</p>
+        </div>
+      </div>
+      <div>
+        <div class="cs-pair">
+          <span class="tag challenge">Challenge</span>
+          <p>Technical diversity across React, Angular, and legacy frameworks.</p>
+          <span class="tag solution">Solution</span>
+          <p>Focused on framework-agnostic design tokens and clear CSS/HTML specs to ensure visual parity regardless of stack.</p>
+        </div>
+      </div>
+    </div>
+  </div>
+</section>
+
+<!-- ═══════════ GOVERNANCE MODEL ═══════════ -->
+<section class="block" id="governance">
+  <div class="container">
+    <div class="kicker">Governance Model</div>
+    <h2>A process, not just a Figma file.</h2>
+    <p class="lead">A contribution process ensured that the system could evolve without becoming fragmented again — every new component request follows the same path from need to adoption.</p>
+
+    <div class="diagram-card fade-up" id="diagram-governance">
+      <div class="flow-vert">
+        <div class="flow-step">Team Need</div>
+        <div class="flow-arrow">↓</div>
+        <div class="flow-step">Component Request</div>
+        <div class="flow-arrow">↓</div>
+        <div class="flow-step">Design Review</div>
+        <div class="flow-arrow">↓</div>
+        <div class="flow-step">Engineering Review</div>
+        <div class="flow-arrow">↓</div>
+        <div class="flow-step">Documentation</div>
+        <div class="flow-arrow">↓</div>
+        <div class="flow-step">Release Version</div>
+        <div class="flow-arrow">↓</div>
+        <div class="flow-step" style="border-color: var(--cyan); background: rgba(6,182,212,0.08);">Adoption by Teams</div>
+      </div>
+      <div class="diagram-caption">A governance process ensured the system could evolve <b>without</b> becoming fragmented again.</div>
+    </div>
+  </div>
+</section>
+
+<!-- ═══════════ DESIGN-TO-DEV WORKFLOW ═══════════ -->
+<section class="block" id="workflow">
+  <div class="container">
+    <div class="kicker">Design-to-Development Workflow</div>
+    <h2>Systematic hand-off, not a one-time export.</h2>
+    <p class="lead">The design-to-development workflow reduced hand-off ambiguity and improved implementation consistency — every component travels the same path from Figma to production.</p>
+
+    <div class="diagram-card fade-up" id="diagram-workflow">
+      <div id="svg-workflow-mount"></div>
+    </div>
+  </div>
+</section>
+
+<!-- ═══════════ ROADMAP / MIGRATION ═══════════ -->
+<section class="block" id="roadmap-section">
+  <div class="container">
+    <div class="kicker">Migration Roadmap</div>
+    <h2>A gradual rollout, built to avoid disruption.</h2>
+    <p class="lead">Gradual adoption reduced resistance and allowed teams to migrate without disrupting product delivery — the system earned trust phase by phase, not by mandate.</p>
+
+    <div class="roadmap fade-up">
+      <div class="roadmap-item"><div class="phase-label">Phase 1</div><h4>Audit &amp; Prioritization</h4><p>Mapped existing components and ranked them by impact and redundancy.</p></div>
+      <div class="roadmap-item"><div class="phase-label">Phase 2</div><h4>Tokens &amp; Core Components</h4><p>Established the foundational layer that every later layer would depend on.</p></div>
+      <div class="roadmap-item"><div class="phase-label">Phase 3</div><h4>High-Impact Product Patterns</h4><p>Standardized the flows used most often across the suite, like authentication and transactions.</p></div>
+      <div class="roadmap-item"><div class="phase-label">Phase 4</div><h4>Pilot with 2 Teams</h4><p>Tested adoption end-to-end with two teams before wider rollout.</p></div>
+      <div class="roadmap-item"><div class="phase-label">Phase 5</div><h4>Rollout to 8 Teams</h4><p>Expanded adoption across the full organization with hands-on support.</p></div>
+      <div class="roadmap-item"><div class="phase-label">Phase 6</div><h4>Governance &amp; Continuous Improvement</h4><p>Shifted from rollout to long-term maintenance through the contribution model.</p></div>
+    </div>
+  </div>
+</section>
+
+<!-- ═══════════ EXAMPLE PRODUCT SCREENS ═══════════ -->
+<section class="block" id="screens">
+  <div class="container">
+    <div class="kicker">Applied to Product</div>
+    <h2>The system in production, not just in Figma.</h2>
+    <p class="lead">Diagrams explain the thinking — but the system only proves itself once it's running across real banking surfaces. Due to confidentiality, these are reconstructed layouts rather than live product screens.</p>
+
+    <div class="screens-grid fade-up">
+      <div class="screen-placeholder"><div class="icon">▢</div>Dashboard</div>
+      <div class="screen-placeholder"><div class="icon">▢</div>Transaction Confirmation</div>
+      <div class="screen-placeholder"><div class="icon">▢</div>Authentication Flow</div>
+      <div class="screen-placeholder"><div class="icon">▢</div>Data Table</div>
+      <div class="screen-placeholder"><div class="icon">▢</div>Form Flow</div>
+      <div class="screen-placeholder"><div class="icon">▢</div>Error State</div>
+    </div>
+  </div>
+</section>
+
+<!-- ═══════════ FINAL KPI REPEAT ═══════════ -->
+<section class="block" id="kpi-bottom">
+  <div class="container">
+    <div class="kicker">Impact, Revisited</div>
+    <h2>The system created measurable operational impact across product teams.</h2>
+    <div class="kpi-strip fade-up">
+      <div class="kpi-cell"><div class="num">40%</div><div class="desc">Reduction in design redundancy</div></div>
+      <div class="kpi-cell"><div class="num">25%</div><div class="desc">Increase in delivery speed</div></div>
+      <div class="kpi-cell"><div class="num">30%</div><div class="desc">UX consistency improvement</div></div>
+      <div class="kpi-cell"><div class="num">150+</div><div class="desc">Standardized components</div></div>
+    </div>
+  </div>
+</section>
+
+<!-- ═══════════ 07 — CONCLUSION ═══════════ -->
+<section class="block" id="conclusion">
+  <div class="container">
+    <div class="kicker">07 — Conclusion &amp; Lessons Learned</div>
+    <h2>A design system is 20% design and 80% people and process.</h2>
+    <p class="lead">This project taught me that success wasn't just about the Figma library — it was about building a culture of collaboration across eight different teams. It reinforced the importance of DesignOps in large-scale enterprise environments, and how a well-structured system can become a genuine competitive advantage.</p>
+
+    <div class="pull-quote fade-up">
+      <p>"A well-structured system can be a significant competitive advantage."</p>
+      <div class="attribution">— Mobin M. Bahrami</div>
+    </div>
+  </div>
+</section>
+
+<!-- ═══════════ CTA ═══════════ -->
+<section class="cta-block" id="cta">
+  <div class="container">
+    <h2>see more of my</h2>
+    <a href="works.html" class="cta-link">WORK <span class="arr">→</span></a>
+  </div>
+</section>
+
+<footer>
+  <p>An Elegant Case Study by <a href="index.html">BMDX</a> © — Mobin M. Bahrami</p>
+</footer>
+
+<!-- ════════════════════════════════════════════════════
+     SCRIPTS
+═══════════════════════════════════════════════════════ -->
+<script>
+(function(){
+
+  /* navbar glass on scroll */
+  var nav = document.getElementById('bmdxNav');
+  function updateNav(){
+    if (window.scrollY > 30) nav.classList.add('bmdx-scrolled');
+    else nav.classList.remove('bmdx-scrolled');
+  }
+  window.addEventListener('scroll', updateNav, {passive:true});
+  updateNav();
+
+  /* scroll-reveal via IntersectionObserver */
+  var revealEls = document.querySelectorAll('.block, .fade-up, .roadmap-item');
+  var io = new IntersectionObserver(function(entries){
+    entries.forEach(function(en){
+      if (en.isIntersecting){
+        en.target.classList.add('bmdx-visible');
+      }
+    });
+  }, { threshold: 0.18, rootMargin: '0px 0px -40px 0px' });
+  revealEls.forEach(function(el){ io.observe(el); });
+
+  /* drag-to-scroll like the rest of the site */
+  if (!(("ontouchstart" in window) || navigator.maxTouchPoints>0)) {
+    var isDown=false, startY=0, lastY=0, velocity=0, raf=null;
+    var friction=0.94, minVelocity=0.08, threshold=6;
+    function maxScroll(){ return document.documentElement.scrollHeight - window.innerHeight; }
+    function clamp(v,min,max){ return Math.max(min,Math.min(max,v)); }
+    function stopMomentum(){ if(raf){ cancelAnimationFrame(raf); raf=null; } }
+    function momentum(){
+      stopMomentum();
+      function frame(){
+        if(isDown) return;
+        velocity*=friction;
+        if(Math.abs(velocity)<minVelocity){ velocity=0; return; }
+        var next=clamp(window.scrollY-velocity,0,maxScroll());
+        window.scrollTo(0,next);
+        raf=requestAnimationFrame(frame);
+      }
+      raf=requestAnimationFrame(frame);
+    }
+    document.addEventListener("mousedown",function(e){
+      if(e.button!==0) return;
+      if(e.target.closest("a,button,input,textarea,select,iframe,video")) return;
+      isDown=true; startY=e.clientY; lastY=e.clientY; velocity=0;
+      stopMomentum();
+      document.body.classList.add("dragging");
+    },{passive:true});
+    document.addEventListener("mousemove",function(e){
+      if(!isDown) return;
+      var dy=e.clientY-lastY;
+      lastY=e.clientY; velocity=dy;
+      var next=clamp(window.scrollY-dy,0,maxScroll());
+      window.scrollTo(0,next);
+    },{passive:true});
+    function release(){
+      if(!isDown) return;
+      isDown=false;
+      document.body.classList.remove("dragging");
+      momentum();
+    }
+    document.addEventListener("mouseup",release,{passive:true});
+    document.addEventListener("mouseleave",release,{passive:true});
+  }
+
+  /* CTA glow */
+  var ctaSec = document.getElementById('cta');
+  if (ctaSec){
+    var glow=document.createElement('div'); glow.className='cta-glow';
+    ctaSec.style.position='relative'; ctaSec.style.overflow='hidden';
+    ctaSec.appendChild(glow);
+    ctaSec.addEventListener('mousemove',function(e){
+      var r=ctaSec.getBoundingClientRect();
+      glow.style.left=(e.clientX-r.left)+'px'; glow.style.top=(e.clientY-r.top)+'px'; glow.style.opacity='1';
+    });
+    ctaSec.addEventListener('mouseleave',function(){ glow.style.opacity='0'; });
+  }
+
+})();
+</script>
+
+<script src="tosan-diagrams.js"></script>
+
+</body>
+</html>
