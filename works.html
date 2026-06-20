@@ -147,6 +147,43 @@ color:#000;
             <i class="mbri-down mbr-iconfont"></i>
         </a>
     </div>
+
+</section>
+
+<section class="mbr-section info4 cid-bmdxTosan mbr-parallax-background" id="info4-tosan">
+
+    
+
+    <div class="mbr-overlay" style="opacity: 0.2; background-color: rgb(0, 0, 0);">
+    </div>
+    <div class="container">
+        <div class="justify-content-center row">
+            <div class="media-container-column title col-12 col-md-10">
+                <h2 class="align-right mbr-bold mbr-white pb-3 mbr-fonts-style display-2"><div>TOSAN</div></h2>
+                <h3 class="mbr-section-subtitle align-right mbr-light mbr-white pb-3 mbr-fonts-style display-5">2021 – 2024 &nbsp;/&nbsp; Unified Atomic Design System for 15+ enterprise banking products</h3>
+                <p class="mbr-text align-right mbr-white mbr-fonts-style display-7"><strong>Design Systems</strong>&nbsp; ◦ &nbsp;<strong>Design Strategy</strong>&nbsp; ◦ &nbsp;<strong>DesignOps</strong><br></p>
+                <div class="mbr-section-btn align-right py-4"><a class="btn btn-white-outline display-5" href="tosan.html">Case Study →</a></div>
+            </div>
+        </div>
+    </div>
+</section>
+
+<section class="mbr-section info4 cid-bmdxZaban mbr-parallax-background" id="info4-zaban">
+
+    
+
+    <div class="mbr-overlay" style="opacity: 0.2; background-color: rgb(0, 0, 0);">
+    </div>
+    <div class="container">
+        <div class="justify-content-center row">
+            <div class="media-container-column title col-12 col-md-10">
+                <h2 class="align-right mbr-bold mbr-white pb-3 mbr-fonts-style display-2"><div>ZABANSHENAS</div></h2>
+                <h3 class="mbr-section-subtitle align-right mbr-light mbr-white pb-3 mbr-fonts-style display-5">2020 – 2022 &nbsp;/&nbsp; Language-learning ecosystem redesign for 1M+ learners</h3>
+                <p class="mbr-text align-right mbr-white mbr-fonts-style display-7"><strong>UX Strategy</strong>&nbsp; ◦ &nbsp;<strong>Growth Design</strong>&nbsp; ◦ &nbsp;<strong>Gamification</strong><br></p>
+                <div class="mbr-section-btn align-right py-4"><a class="btn btn-white-outline display-5" href="zabanshenas.html">Case Study →</a></div>
+            </div>
+        </div>
+    </div>
 </section>
 
 <section class="mbr-section info4 cid-rFFiGmYGKA mbr-parallax-background" id="info4-nt">
@@ -851,16 +888,7 @@ document.addEventListener('dragstart', function(e) {
   opacity: 0.7;
 }
 #menu1-70 .nav-link.bmdx-has-link:hover { letter-spacing: 0.14em; opacity: 1 !important; }
-#menu1-70 .nav-link.bmdx-has-link::after {
-  content: '';
-  position: absolute;
-  bottom: 0; left: 50%;
-  width: 0; height: 1px;
-  background: rgba(255,255,255,0.5);
-  transform: translateX(-50%);
-  transition: width 0.4s cubic-bezier(0.16,1,0.3,1);
-}
-#menu1-70 .nav-link.bmdx-has-link:hover::after { width: 100%; }
+/* nav underline removed per design */
 #menu1-70 .nav-link.bmdx-empty-link { pointer-events: none; opacity: 0 !important; }
 #menu1-70 .navbar-logo a {
   display: inline-block;
@@ -930,11 +958,11 @@ section.mbr-section.info4:not(#info4-8g)::before {
 }
 
 /* BG zoom */
-section.mbr-section.info4.mbr-parallax-background:not(#info4-8g) {
+section.mbr-section.info4.mbr-parallax-background:not(#info4-8g):not(#info4-tosan):not(#info4-zaban) {
   transition: background-size 1.4s cubic-bezier(0.22,1,0.36,1);
 }
 @media (hover: hover) {
-  section.mbr-section.info4.mbr-parallax-background:not(#info4-8g):hover {
+  section.mbr-section.info4.mbr-parallax-background:not(#info4-8g):not(#info4-tosan):not(#info4-zaban):hover {
     background-size: 107% auto !important;
   }
 }
@@ -1086,6 +1114,86 @@ section.mbr-section.info4:not(#info4-8g) .btn.btn-white-outline:hover .bmdx-btn-
 }
 
 /* ╔══════════════════════════════════════════════════════╗
+   ║  TOSAN CARD — gradient background, matches case study hero ║
+   ╚══════════════════════════════════════════════════════╝ */
+#info4-tosan {
+  background: #000;
+  isolation: isolate;
+}
+#info4-tosan .bmdx-orb-wrap {
+  position: absolute; inset: 0; pointer-events: none; z-index: 1; overflow: hidden;
+}
+#info4-tosan .bmdx-orb-1 {
+  position: absolute; width: 70%; height: 140%;
+  top: -20%; left: -10%;
+  border-radius: 50%;
+  background: radial-gradient(circle, rgba(37,99,235,0.28) 0%, transparent 65%);
+  animation: bmdx-drift-1 12s ease-in-out infinite;
+  transition: opacity 0.6s ease, transform 0.8s cubic-bezier(0.22,1,0.36,1);
+}
+#info4-tosan .bmdx-orb-2 {
+  position: absolute; width: 60%; height: 120%;
+  top: 10%; right: -15%;
+  border-radius: 50%;
+  background: radial-gradient(circle, rgba(6,182,212,0.20) 0%, transparent 65%);
+  animation: bmdx-drift-2 15s ease-in-out infinite;
+  transition: opacity 0.6s ease, transform 0.8s cubic-bezier(0.22,1,0.36,1);
+}
+#info4-tosan:hover .bmdx-orb-1 {
+  opacity: 1.4;
+  transform: scale(1.15) translate(4%, -5%);
+}
+#info4-tosan:hover .bmdx-orb-2 {
+  opacity: 1.4;
+  transform: scale(1.12) translate(-5%, 4%);
+}
+
+/* ZabanShenas card — animated warm orbs */
+#info4-zaban {
+  background: #000;
+  isolation: isolate;
+}
+#info4-zaban .bmdx-orb-wrap {
+  position: absolute; inset: 0; pointer-events: none; z-index: 1; overflow: hidden;
+}
+#info4-zaban .bmdx-orb-1 {
+  position: absolute; width: 65%; height: 130%;
+  top: -15%; left: -8%;
+  border-radius: 50%;
+  background: radial-gradient(circle, rgba(255,107,91,0.24) 0%, transparent 65%);
+  animation: bmdx-drift-2 14s ease-in-out infinite;
+  transition: opacity 0.6s ease, transform 0.8s cubic-bezier(0.22,1,0.36,1);
+}
+#info4-zaban .bmdx-orb-2 {
+  position: absolute; width: 55%; height: 110%;
+  bottom: -10%; right: -10%;
+  border-radius: 50%;
+  background: radial-gradient(circle, rgba(61,220,151,0.18) 0%, transparent 65%);
+  animation: bmdx-drift-1 17s ease-in-out infinite;
+  transition: opacity 0.6s ease, transform 0.8s cubic-bezier(0.22,1,0.36,1);
+}
+#info4-zaban .bmdx-orb-3 {
+  position: absolute; width: 40%; height: 80%;
+  top: -5%; right: 25%;
+  border-radius: 50%;
+  background: radial-gradient(circle, rgba(124,108,246,0.14) 0%, transparent 65%);
+  animation: bmdx-drift-3 19s ease-in-out infinite;
+  transition: opacity 0.6s ease, transform 0.8s cubic-bezier(0.22,1,0.36,1);
+}
+#info4-zaban:hover .bmdx-orb-1 {
+  opacity: 1.5;
+  transform: scale(1.18) translate(5%, -6%);
+}
+#info4-zaban:hover .bmdx-orb-2 {
+  opacity: 1.5;
+  transform: scale(1.14) translate(-4%, 5%);
+}
+#info4-zaban:hover .bmdx-orb-3 {
+  opacity: 1.6;
+  transform: scale(1.10);
+}
+
+/* ╔══════════════════════════════════════════════════════╗
    ║  ABOUT CARD                                          ║
    ╚══════════════════════════════════════════════════════╝ */
 #info4-8g { position: relative; overflow: hidden; }
@@ -1121,12 +1229,12 @@ html { background: #000 !important; }
   pointer-events: none;
 }
 #bmdx-w-inner {
-  display: flex; flex-direction: column; align-items: center; gap: 6px;
+  display: flex; flex-direction: column; align-items: center; gap: 4px;
   background: rgba(255,255,255,0.04);
   border: 1px solid rgba(255,255,255,0.10);
-  border-radius: 40px; padding: 14px 10px;
+  border-radius: 40px; padding: 10px 10px;
   backdrop-filter: blur(12px); -webkit-backdrop-filter: blur(12px);
-  box-shadow: 0 4px 32px rgba(0,0,0,0.45);
+  box-shadow: 0 2px 16px rgba(0,0,0,0.30);
   pointer-events: all; opacity: 0; transform: translateY(6px);
   transition: opacity 0.45s ease, transform 0.45s ease;
 }
@@ -1231,6 +1339,8 @@ document.querySelectorAll('#menu1-70 .nav-link').forEach(function(a){
 
 var navSections = [
   { id: 'header2-z',  label: 'TOP'   },
+  { id: 'info4-tosan',label: '2021'  },
+  { id: 'info4-zaban',label: '2020'  },
   { id: 'info4-nt',   label: '2019'  },
   { id: 'info4-7p',   label: '2018'  },
   { id: 'info4-7r',   label: '2017'  },
@@ -1282,13 +1392,13 @@ navSections.forEach(function(sec, i){
 function showNav(){
   wNav.classList.add('bmdx-visible');
   clearTimeout(wTimer);
-  wTimer = setTimeout(function(){ wNav.classList.remove('bmdx-visible'); }, 1400);
+  wTimer = setTimeout(function(){ wNav.classList.remove('bmdx-visible'); }, 700);
 }
 wNav.addEventListener('mouseenter', function(){
   clearTimeout(wTimer); wNav.classList.add('bmdx-visible');
 });
 wNav.addEventListener('mouseleave', function(){
-  wTimer = setTimeout(function(){ wNav.classList.remove('bmdx-visible'); }, 800);
+  wTimer = setTimeout(function(){ wNav.classList.remove('bmdx-visible'); }, 400);
 });
 wTopBtn.addEventListener('click', function(){ window.scrollTo({top:0,behavior:'smooth'}); });
 
@@ -1385,9 +1495,101 @@ if(aboutSec){
   aboutSec.addEventListener('mouseleave',function(){ glow.style.opacity='0'; });
 }
 
+/* ── Inject animated orbs into Tosan + Zaban cards ── */
+(function(){
+  var orbCards = [
+    { id:'info4-tosan', orbs:['bmdx-orb-1','bmdx-orb-2'] },
+    { id:'info4-zaban', orbs:['bmdx-orb-1','bmdx-orb-2','bmdx-orb-3'] }
+  ];
+  orbCards.forEach(function(c){
+    var sec = document.getElementById(c.id);
+    if (!sec) return;
+    var wrap = document.createElement('div');
+    wrap.className = 'bmdx-orb-wrap';
+    c.orbs.forEach(function(cls){
+      var orb = document.createElement('div');
+      orb.className = cls;
+      wrap.appendChild(orb);
+    });
+    sec.insertBefore(wrap, sec.firstChild);
+  });
+})();
+
+/* ── Cursor glow that follows mouse across the whole page ── */
+(function(){
+  if (window.matchMedia('(hover: none)').matches) return;
+  var cursorGlow = document.createElement('div');
+  cursorGlow.id = 'bmdx-cursor-glow';
+  document.body.appendChild(cursorGlow);
+  var mouseX = 0, mouseY = 0;
+  var glowX = 0, glowY = 0;
+  var rafId = null;
+  var visible = false;
+  var hideTimer = null;
+
+  document.addEventListener('mousemove', function(e){
+    mouseX = e.clientX;
+    mouseY = e.clientY;
+    if (!visible){
+      visible = true;
+      cursorGlow.style.opacity = '1';
+    }
+    clearTimeout(hideTimer);
+    hideTimer = setTimeout(function(){ cursorGlow.style.opacity='0'; visible=false; }, 2000);
+    if (!rafId) rafId = requestAnimationFrame(animateGlow);
+  }, {passive:true});
+
+  document.addEventListener('mouseleave', function(){
+    cursorGlow.style.opacity = '0';
+    visible = false;
+  });
+
+  function animateGlow(){
+    glowX += (mouseX - glowX) * 0.085;
+    glowY += (mouseY - glowY) * 0.085;
+    cursorGlow.style.left = glowX + 'px';
+    cursorGlow.style.top  = glowY + 'px';
+    rafId = requestAnimationFrame(animateGlow);
+  }
+})();
+
 })();
 </script>
 <!-- ═══════════════════════════════════════════════════════════════
+/* ── ORB DRIFT KEYFRAMES ─────────────────────────────── */
+@keyframes bmdx-drift-1 {
+  0%   { transform: translate(0,   0  ) scale(1);    }
+  33%  { transform: translate(5%,  -8%) scale(1.06); }
+  66%  { transform: translate(-4%, 6% ) scale(0.97); }
+  100% { transform: translate(0,   0  ) scale(1);    }
+}
+@keyframes bmdx-drift-2 {
+  0%   { transform: translate(0,   0  ) scale(1);    }
+  33%  { transform: translate(-6%, 5% ) scale(1.04); }
+  66%  { transform: translate(5%,  -7%) scale(0.98); }
+  100% { transform: translate(0,   0  ) scale(1);    }
+}
+@keyframes bmdx-drift-3 {
+  0%   { transform: translate(0,   0  ) scale(1);    }
+  33%  { transform: translate(3%,  8% ) scale(1.08); }
+  66%  { transform: translate(-7%, -4%) scale(0.95); }
+  100% { transform: translate(0,   0  ) scale(1);    }
+}
+
+/* ── CURSOR GLOW ─────────────────────────────────────── */
+#bmdx-cursor-glow {
+  position: fixed;
+  width: 320px; height: 320px;
+  border-radius: 50%;
+  background: radial-gradient(circle, rgba(255,255,255,0.07) 0%, transparent 65%);
+  pointer-events: none;
+  z-index: 9990;
+  transform: translate(-50%, -50%);
+  transition: opacity 0.5s ease;
+  opacity: 0;
+  mix-blend-mode: screen;
+}
+
      END BMDX WORKS ENHANCEMENTS v10
 ═══════════════════════════════════════════════════════════════ -->
 
