@@ -1,700 +1,822 @@
 <!DOCTYPE html>
-<html  >
+<html lang="en">
 <head>
-  <meta charset="UTF-8">
-  <meta http-equiv="X-UA-Compatible" content="IE=edge">
-  <meta name="generator" content="Mobirise v4.11.6, mobirise.com">
-  <meta name="twitter:card" content="summary_large_image"/>
-<meta name="twitter:image:src" content="assets/images/gajino-meta.jpg"/>
-<meta property="og:image" content="assets/images/gajino-meta.jpg"/>
-<meta name="twitter:title" content="GAJINO  —  BMDX"/>
+<meta charset="UTF-8">
 <meta name="viewport" content="width=device-width, initial-scale=1, minimum-scale=1">
-  <link rel="shortcut icon" href="assets/images/android-chrome-512x512.png" type="image/x-icon">
-  <meta name="description" content="Gajino is a mobile application for Gaj international publications.">
-  
-  <title>GAJINO  —  BMDX</title>
-  <link rel="stylesheet" href="assets/web/assets/mobirise-icons-bold/mobirise-icons-bold.css">
-  <link rel="stylesheet" href="assets/web/assets/mobirise-icons/mobirise-icons.css">
-  <link rel="stylesheet" href="assets/bootstrap/css/bootstrap.min.css">
-  <link rel="stylesheet" href="assets/bootstrap/css/bootstrap-grid.min.css">
-  <link rel="stylesheet" href="assets/bootstrap/css/bootstrap-reboot.min.css">
-  <link rel="stylesheet" href="assets/socicon/css/styles.css">
-  <link rel="stylesheet" href="assets/animatecss/animate.min.css">
-  <link rel="stylesheet" href="assets/tether/tether.min.css">
-  <link rel="stylesheet" href="assets/dropdown/css/style.css">
-  <link rel="stylesheet" href="assets/theme/css/style.css">
-  <link rel="preload" as="style" href="assets/mobirise/css/mbr-additional.css"><link rel="stylesheet" href="assets/mobirise/css/mbr-additional.css" type="text/css">
-  
-  
+<title>Gajino — Case Study — BMDX</title>
+<meta name="description" content="Case Study: Redesigning the digital learning ecosystem for 1M+ K-12 students — from feature-first directory to the My Desk personal workspace.">
+
 <style>
+
+/* ════════════════════════════════════════════════════
+   ROOT / RESET
+═══════════════════════════════════════════════════════ */
+:root{
+  --sun:#FFC93C;
+  --sky:#4FB6E8;
+  --grass:#6FCF7C;
+  --berry:#F2618C;
+  --ink:#0A0A0F;
+  --card-bg: rgba(255,255,255,0.035);
+  --card-border: rgba(255,255,255,0.10);
+}
+
+*{ box-sizing:border-box; }
 html,body{
-  cursor: grab;
+  margin:0; padding:0;
+  background:#000;
+  color:#fff;
+  font-family:'Helvetica Neue', Helvetica, Arial, sans-serif;
+  -webkit-font-smoothing:antialiased;
+  scroll-behavior:smooth;
+  cursor:grab;
+}
+body.dragging, body.dragging *{ cursor:grabbing !important; user-select:none; -webkit-user-select:none; }
+img{ -webkit-user-drag:none; user-select:none; max-width:100%; display:block; }
+a{ color:#fff; text-decoration:none; }
+strong{ font-weight:600; }
+::selection{ background: rgba(255,201,60,0.35); }
+
+.container{ max-width:1140px; margin:0 auto; padding:0 24px; }
+
+/* ════════════════════════════════════════════════════
+   NAVBAR
+═══════════════════════════════════════════════════════ */
+.navbar{
+  position:fixed; top:0; left:0; right:0; z-index:1000;
+  display:flex; align-items:center; justify-content:space-between;
+  padding:22px 36px;
+  background:transparent;
+  transition: background 0.5s ease, backdrop-filter 0.5s ease, border-color 0.5s ease;
+  border-bottom:1px solid transparent;
+}
+.navbar.bmdx-scrolled{
+  background: rgba(0,0,0,0.5);
+  backdrop-filter: blur(26px) saturate(180%);
+  -webkit-backdrop-filter: blur(26px) saturate(180%);
+  border-bottom:1px solid rgba(255,255,255,0.08);
+}
+.navbar .logo{
+  font-size:0.95rem; font-weight:700; letter-spacing:0.12em; opacity:0.92;
+  transition: opacity 0.3s ease, transform 0.4s cubic-bezier(0.16,1,0.3,1);
+}
+.navbar .logo:hover{ opacity:0.65; transform: scale(1.03); }
+.navbar .back-link{
+  position:relative; font-size:0.72rem; font-weight:600;
+  letter-spacing:0.14em; text-transform:uppercase; opacity:0.7;
+  transition: letter-spacing 0.4s cubic-bezier(0.16,1,0.3,1), opacity 0.3s ease;
+}
+.navbar .back-link::before{ content:'← '; }
+.navbar .back-link:hover{ opacity:1; letter-spacing:0.2em; }
+
+/* ════════════════════════════════════════════════════
+   HERO — bright playful gradient
+═══════════════════════════════════════════════════════ */
+.hero{
+  min-height:92vh;
+  display:flex; flex-direction:column; justify-content:center;
+  position:relative; padding:140px 0 80px;
+  background:
+    radial-gradient(ellipse 75% 55% at 20% 10%, rgba(255,201,60,0.16), transparent 60%),
+    radial-gradient(ellipse 70% 55% at 90% 80%, rgba(79,182,232,0.16), transparent 60%),
+    radial-gradient(ellipse 50% 40% at 60% 100%, rgba(111,207,124,0.10), transparent 60%),
+    #000;
+  overflow:hidden;
+}
+.hero .eyebrow{
+  font-size:0.78rem; letter-spacing:0.22em; text-transform:uppercase;
+  color: var(--sun);
+  opacity:0; transform: translateY(14px);
+  animation: bmdx-rise 0.9s 0.05s cubic-bezier(0.22,1,0.36,1) forwards;
+  margin-bottom:22px;
+}
+.hero h1{
+  font-size:clamp(2.4rem, 6vw, 4.6rem); font-weight:700; line-height:1.08;
+  letter-spacing:-0.01em; margin:0 0 26px; max-width:900px;
+  opacity:0; transform: translateY(20px);
+  animation: bmdx-rise 1s 0.15s cubic-bezier(0.22,1,0.36,1) forwards;
+}
+.hero h1 em{ font-style:normal; color: rgba(255,255,255,0.45); font-weight:400; }
+.hero .sub{
+  font-size:1.05rem; line-height:1.7; color: rgba(255,255,255,0.62);
+  max-width:620px;
+  opacity:0; transform: translateY(18px);
+  animation: bmdx-rise 1s 0.28s cubic-bezier(0.22,1,0.36,1) forwards;
+}
+.hero .meta-row{
+  display:flex; flex-wrap:wrap; gap:34px; margin-top:48px;
+  opacity:0; transform: translateY(16px);
+  animation: bmdx-rise 1s 0.4s cubic-bezier(0.22,1,0.36,1) forwards;
+}
+.hero .meta-item .label{
+  font-size:0.66rem; letter-spacing:0.14em; text-transform:uppercase;
+  color: rgba(255,255,255,0.4); margin-bottom:6px;
+}
+.hero .meta-item .value{ font-size:0.92rem; font-weight:500; color:#fff; }
+
+@keyframes bmdx-rise{ to{ opacity:1; transform:translateY(0); } }
+
+/* ════════════════════════════════════════════════════
+   SECTION SCAFFOLDING
+═══════════════════════════════════════════════════════ */
+section.block{ padding:100px 0; position:relative; border-top:1px solid rgba(255,255,255,0.06); }
+section.block.no-border{ border-top:none; }
+.block .kicker{
+  font-size:0.7rem; letter-spacing:0.2em; text-transform:uppercase;
+  color: var(--sun); margin-bottom:18px;
+  opacity:0; transform: translateY(10px);
+  transition: opacity 0.7s ease, transform 0.7s cubic-bezier(0.22,1,0.36,1);
+}
+.block h2{
+  font-size:clamp(1.7rem, 3.4vw, 2.5rem); font-weight:700; line-height:1.25;
+  max-width:760px; margin:0 0 28px;
+  opacity:0; transform: translateY(14px);
+  transition: opacity 0.8s 0.05s ease, transform 0.8s 0.05s cubic-bezier(0.22,1,0.36,1);
+}
+.block .lead{
+  font-size:1.02rem; line-height:1.8; color: rgba(255,255,255,0.68);
+  max-width:700px;
+  opacity:0; transform: translateY(14px);
+  transition: opacity 0.8s 0.1s ease, transform 0.8s 0.1s cubic-bezier(0.22,1,0.36,1);
+}
+.block.bmdx-visible .kicker, .block.bmdx-visible h2, .block.bmdx-visible .lead{ opacity:1; transform:translateY(0); }
+
+.fade-up{ opacity:0; transform: translateY(22px); transition: opacity 0.8s ease, transform 0.8s cubic-bezier(0.22,1,0.36,1); }
+.fade-up.bmdx-visible{ opacity:1; transform:translateY(0); }
+
+/* ════════════════════════════════════════════════════
+   PULL QUOTE
+═══════════════════════════════════════════════════════ */
+.pull-quote{
+  max-width:780px; margin:46px auto 0; padding:38px 0 38px 32px;
+  border-left:2px solid rgba(255,201,60,0.55); position:relative;
+}
+.pull-quote p{ font-size:1.35rem; line-height:1.55; font-weight:500; color:#fff; margin:0; }
+.pull-quote .attribution{
+  margin-top:14px; font-size:0.78rem; letter-spacing:0.08em;
+  text-transform:uppercase; color: rgba(255,255,255,0.42);
 }
 
-body.dragging,
-body.dragging *{
-  cursor: grabbing !important;
+/* ════════════════════════════════════════════════════
+   KPI STRIP
+═══════════════════════════════════════════════════════ */
+.kpi-strip{
+  display:grid; grid-template-columns:repeat(auto-fit, minmax(150px,1fr));
+  gap:1px; background: rgba(255,255,255,0.08);
+  border:1px solid rgba(255,255,255,0.08); border-radius:14px;
+  overflow:hidden; margin-top:50px;
+}
+.kpi-cell{ background:#000; padding:34px 26px; text-align:left; position:relative; overflow:hidden; }
+.kpi-cell .num{
+  font-size:clamp(1.8rem,3vw,2.4rem); font-weight:700;
+  background: linear-gradient(120deg, #ffffff, var(--sun));
+  -webkit-background-clip:text; background-clip:text; color:transparent;
+  display:inline-block;
+}
+.kpi-cell .desc{ margin-top:8px; font-size:0.78rem; color: rgba(255,255,255,0.55); line-height:1.4; }
+.kpi-cell::after{
+  content:''; position:absolute; inset:0;
+  background: radial-gradient(circle at 30% 20%, rgba(255,201,60,0.10), transparent 60%);
+  opacity:0; transition:opacity 0.4s ease;
+}
+.kpi-cell:hover::after{ opacity:1; }
+
+/* ════════════════════════════════════════════════════
+   DIAGRAM CARD WRAPPER
+═══════════════════════════════════════════════════════ */
+.diagram-card{
+  background: var(--card-bg); border:1px solid var(--card-border);
+  border-radius:18px; padding:42px; margin-top:46px;
+  backdrop-filter: blur(8px); -webkit-backdrop-filter: blur(8px);
+  position:relative; overflow:hidden;
+  transition: border-color 0.4s ease;
+}
+.diagram-card:hover{ border-color: rgba(255,255,255,0.18); }
+.diagram-card svg{ width:100%; height:auto; display:block; }
+.diagram-caption{
+  margin-top:24px; font-size:0.86rem; color: rgba(255,255,255,0.5);
+  line-height:1.6; padding-top:18px; border-top:1px solid rgba(255,255,255,0.07);
+}
+.diagram-caption b{ color: rgba(255,255,255,0.78); font-weight:600; }
+
+/* ════════════════════════════════════════════════════
+   TWO COLUMN / FRAGMENTED FLOW
+═══════════════════════════════════════════════════════ */
+.two-col{ display:grid; grid-template-columns:1fr 1fr; gap:60px; align-items:start; }
+@media (max-width:860px){ .two-col{ grid-template-columns:1fr; gap:40px; } }
+
+.fragment-flow{
+  display:flex; flex-wrap:wrap; gap:14px; margin-top:46px; align-items:center;
+}
+.fragment-chip{
+  padding:14px 22px; border-radius:12px;
+  background: rgba(255,255,255,0.03); border:1px solid rgba(255,255,255,0.12);
+  font-size:0.86rem; color: rgba(255,255,255,0.75);
+  transition: border-color 0.3s ease, transform 0.3s ease;
+}
+.fragment-chip:hover{ border-color: rgba(242,97,140,0.5); transform: translateY(-2px); }
+.fragment-arrow{ color: rgba(255,255,255,0.25); font-size:1.1rem; }
+.fragment-note{
+  width:100%; margin-top:6px;
+  font-size:0.76rem; color: rgba(242,97,140,0.75); letter-spacing:0.02em;
 }
 
-body.dragging{
-  user-select:none;
-  -webkit-user-select:none;
+/* ════════════════════════════════════════════════════
+   RESEARCH PHOTO-STYLE PLACEHOLDER
+═══════════════════════════════════════════════════════ */
+.research-grid{
+  display:grid; grid-template-columns:1.3fr 1fr; gap:24px; margin-top:46px;
 }
-img {
-  -webkit-user-drag: none;
-  -webkit-user-select: none;
-  user-select: none;
+@media (max-width:860px){ .research-grid{ grid-template-columns:1fr; } }
+.research-photo{
+  aspect-ratio:4/3;
+  border:1px dashed rgba(255,255,255,0.18); border-radius:16px;
+  background:
+    radial-gradient(circle at 30% 30%, rgba(255,201,60,0.10), transparent 60%),
+    radial-gradient(circle at 75% 70%, rgba(79,182,232,0.08), transparent 60%);
+  display:flex; flex-direction:column; align-items:center; justify-content:center;
+  gap:12px; color: rgba(255,255,255,0.42); text-align:center; padding:24px;
+  transition: border-color 0.3s ease, color 0.3s ease;
+}
+.research-photo:hover{ border-color: rgba(255,201,60,0.4); color: rgba(255,255,255,0.68); }
+.research-photo .icon{ font-size:2rem; opacity:0.65; }
+.research-photo .cap{ font-size:0.8rem; letter-spacing:0.02em; }
+
+.research-facts{ display:flex; flex-direction:column; gap:14px; }
+.fact-row{
+  display:flex; align-items:center; gap:14px;
+  background: rgba(255,255,255,0.03); border:1px solid rgba(255,255,255,0.09);
+  border-radius:12px; padding:16px 18px;
+  transition: border-color 0.3s ease;
+}
+.fact-row:hover{ border-color: rgba(255,201,60,0.4); }
+.fact-row .fact-icon{ font-size:1.3rem; flex-shrink:0; }
+.fact-row .fact-text{ font-size:0.86rem; color: rgba(255,255,255,0.75); line-height:1.5; }
+.fact-row .fact-text b{ color:#fff; }
+
+/* ════════════════════════════════════════════════════
+   BEHAVIORAL INSIGHTS — two age columns
+═══════════════════════════════════════════════════════ */
+.age-compare{ display:grid; grid-template-columns:1fr 1fr; gap:24px; margin-top:46px; }
+@media (max-width:760px){ .age-compare{ grid-template-columns:1fr; } }
+.age-col{ border-radius:16px; padding:28px; border:1px solid rgba(255,255,255,0.1); }
+.age-col.young{ background: rgba(255,201,60,0.05); border-color: rgba(255,201,60,0.3); }
+.age-col.teen{ background: rgba(79,182,232,0.05); border-color: rgba(79,182,232,0.3); }
+.age-col .age-label{
+  font-size:0.68rem; letter-spacing:0.14em; text-transform:uppercase;
+  margin-bottom:6px; font-weight:600;
+}
+.age-col.young .age-label{ color: var(--sun); }
+.age-col.teen .age-label{ color: var(--sky); }
+.age-col .age-title{ font-size:1.15rem; font-weight:700; margin-bottom:18px; }
+.age-trait{
+  display:flex; align-items:flex-start; gap:10px;
+  padding:9px 0; font-size:0.86rem; color: rgba(255,255,255,0.72);
+  border-bottom:1px solid rgba(255,255,255,0.06);
+}
+.age-trait:last-child{ border-bottom:none; }
+.age-trait .bullet{ flex-shrink:0; margin-top:5px; width:5px; height:5px; border-radius:50%; }
+.age-col.young .bullet{ background: var(--sun); }
+.age-col.teen .bullet{ background: var(--sky); }
+
+/* ════════════════════════════════════════════════════
+   PERSONA CARDS
+═══════════════════════════════════════════════════════ */
+.persona-grid{ display:grid; grid-template-columns:1fr 1fr; gap:24px; margin-top:46px; }
+@media (max-width:760px){ .persona-grid{ grid-template-columns:1fr; } }
+.persona-card{
+  border-radius:18px; padding:30px;
+  background: rgba(255,255,255,0.03); border:1px solid rgba(255,255,255,0.1);
+  transition: border-color 0.35s ease, transform 0.4s cubic-bezier(0.22,1,0.36,1);
+}
+.persona-card:hover{ transform: translateY(-4px); }
+.persona-card.mani:hover{ border-color: rgba(255,201,60,0.45); }
+.persona-card.sara:hover{ border-color: rgba(79,182,232,0.45); }
+.persona-card .p-header{ display:flex; align-items:center; gap:14px; margin-bottom:18px; }
+.persona-card .p-avatar{
+  width:52px; height:52px; border-radius:50%;
+  display:flex; align-items:center; justify-content:center; font-size:1.5rem;
+}
+.persona-card.mani .p-avatar{ background: rgba(255,201,60,0.16); }
+.persona-card.sara .p-avatar{ background: rgba(79,182,232,0.16); }
+.persona-card h4{ font-size:1.1rem; font-weight:700; margin:0; }
+.persona-card .p-meta{ font-size:0.74rem; color: rgba(255,255,255,0.42); }
+.persona-block{ margin-bottom:14px; }
+.persona-block .pb-label{
+  font-size:0.64rem; letter-spacing:0.1em; text-transform:uppercase;
+  color: rgba(255,255,255,0.4); margin-bottom:6px;
+}
+.persona-block .pb-text{ font-size:0.86rem; color: rgba(255,255,255,0.75); line-height:1.55; }
+
+/* ════════════════════════════════════════════════════
+   DESK METAPHOR DIAGRAM
+═══════════════════════════════════════════════════════ */
+.desk-flow{
+  display:flex; align-items:center; justify-content:center;
+  flex-wrap:wrap; gap:0; margin-top:10px;
+}
+.desk-node{
+  display:flex; flex-direction:column; align-items:center; gap:10px;
+  padding:18px 20px; text-align:center;
+}
+.desk-node .d-icon{
+  width:58px; height:58px; border-radius:16px;
+  background: rgba(255,255,255,0.04); border:1.5px solid rgba(255,255,255,0.14);
+  display:flex; align-items:center; justify-content:center; font-size:1.5rem;
+  transition: transform 0.4s cubic-bezier(0.34,1.5,0.64,1), border-color 0.3s ease, background 0.3s ease;
+}
+.desk-node:hover .d-icon{ transform: scale(1.1) rotate(-3deg); border-color: var(--sun); background: rgba(255,201,60,0.08); }
+.desk-node .d-label{ font-size:0.78rem; color: rgba(255,255,255,0.7); font-weight:500; }
+.desk-node.center .d-icon{ width:74px; height:74px; background: rgba(255,201,60,0.10); border-color: rgba(255,201,60,0.5); font-size:1.9rem; }
+.desk-node.center .d-label{ color:#fff; font-weight:700; }
+.desk-sep{ color: rgba(255,255,255,0.2); font-size:1.2rem; padding:0 6px; }
+
+/* ════════════════════════════════════════════════════
+   LEARNING FLOW — vertical
+═══════════════════════════════════════════════════════ */
+.flow-vert{ display:flex; flex-direction:column; align-items:center; margin-top:10px; }
+.flow-step{
+  width:100%; max-width:420px;
+  background: rgba(255,255,255,0.04); border:1px solid rgba(255,255,255,0.12);
+  border-radius:10px; padding:14px 20px; text-align:center;
+  font-size:0.86rem; font-weight:500; color: rgba(255,255,255,0.85);
+  transition: border-color 0.3s ease, background 0.3s ease;
+}
+.flow-step:hover{ border-color: var(--sun); background: rgba(255,201,60,0.07); }
+.flow-step.final{ border-color: var(--sun); background: rgba(255,201,60,0.08); }
+.flow-arrow{ font-size:1.1rem; color: rgba(255,255,255,0.25); margin:6px 0; }
+
+/* ════════════════════════════════════════════════════
+   GALLERY GRID
+═══════════════════════════════════════════════════════ */
+.screens-grid{ display:grid; grid-template-columns:repeat(3,1fr); gap:16px; margin-top:46px; }
+@media (max-width:860px){ .screens-grid{ grid-template-columns:repeat(2,1fr); } }
+.screen-placeholder{
+  aspect-ratio:9/16;
+  border:1px dashed rgba(255,255,255,0.18); border-radius:14px;
+  display:flex; flex-direction:column; align-items:center; justify-content:center;
+  gap:10px; color: rgba(255,255,255,0.4); font-size:0.72rem; letter-spacing:0.03em;
+  text-align:center; padding:16px;
+  transition: border-color 0.3s ease, color 0.3s ease;
+}
+.screen-placeholder:hover{ border-color: rgba(255,201,60,0.45); color: rgba(255,255,255,0.65); }
+.screen-placeholder .icon{ font-size:1.5rem; opacity:0.6; }
+.screen-placeholder.s1{ background: radial-gradient(circle at 50% 30%, rgba(255,201,60,0.10), transparent 65%); }
+.screen-placeholder.s2{ background: radial-gradient(circle at 50% 30%, rgba(79,182,232,0.10), transparent 65%); }
+.screen-placeholder.s3{ background: radial-gradient(circle at 50% 30%, rgba(111,207,124,0.10), transparent 65%); }
+.screen-placeholder.s4{ background: radial-gradient(circle at 50% 30%, rgba(242,97,140,0.10), transparent 65%); }
+.screen-placeholder.s5{ background: radial-gradient(circle at 50% 30%, rgba(255,201,60,0.08), transparent 65%); }
+.screen-placeholder.s6{ background: radial-gradient(circle at 50% 30%, rgba(79,182,232,0.08), transparent 65%); }
+
+/* ════════════════════════════════════════════════════
+   MOTIVATION SYSTEM
+═══════════════════════════════════════════════════════ */
+.motivation-row{ display:flex; gap:18px; margin-top:46px; flex-wrap:wrap; justify-content:center; }
+.motivation-chip{
+  display:flex; flex-direction:column; align-items:center; gap:10px;
+  padding:24px 30px; border-radius:16px;
+  background: rgba(255,255,255,0.03); border:1px solid rgba(255,255,255,0.1);
+  min-width:130px;
+  transition: transform 0.4s cubic-bezier(0.34,1.5,0.64,1), border-color 0.3s ease;
+}
+.motivation-chip:hover{ transform: translateY(-5px); border-color: var(--sun); }
+.motivation-chip .m-icon{ font-size:1.8rem; }
+.motivation-chip .m-label{ font-size:0.82rem; color: rgba(255,255,255,0.75); font-weight:500; }
+
+/* ════════════════════════════════════════════════════
+   PARENT ECOSYSTEM — small flow
+═══════════════════════════════════════════════════════ */
+.parent-flow{ display:flex; align-items:center; justify-content:center; gap:0; margin-top:40px; flex-wrap:wrap; }
+.parent-node{
+  padding:16px 24px; border-radius:12px;
+  background: rgba(255,255,255,0.03); border:1px solid rgba(255,255,255,0.12);
+  font-size:0.86rem; color: rgba(255,255,255,0.78); text-align:center;
+  transition: border-color 0.3s ease;
+}
+.parent-node:hover{ border-color: rgba(242,97,140,0.5); }
+.parent-arrow{ color: rgba(255,255,255,0.25); font-size:1.1rem; padding:0 14px; }
+
+/* ════════════════════════════════════════════════════
+   CTA
+═══════════════════════════════════════════════════════ */
+.cta-block{ padding:140px 0 160px; position:relative; overflow:hidden; }
+.cta-block .container{ position:relative; z-index:3; text-align:right; }
+.cta-block h2{ font-size:clamp(1.6rem, 4vw, 2.2rem); font-weight:400; margin:0 0 10px; opacity:0.55; letter-spacing:0.02em; }
+.cta-block .cta-link{
+  position:relative; display:inline-block;
+  font-size:clamp(2rem, 6vw, 3.4rem); font-weight:700;
+  transition: letter-spacing 0.5s cubic-bezier(0.16,1,0.3,1);
+}
+.cta-block .cta-link::after{
+  content:''; position:absolute; bottom:-6px; left:50%;
+  width:0; height:2px; background: rgba(255,255,255,0.5);
+  transform:translateX(-50%); transition:width 0.5s cubic-bezier(0.16,1,0.3,1);
+}
+.cta-block .cta-link:hover{ letter-spacing:0.04em; }
+.cta-block .cta-link:hover::after{ width:100%; }
+.cta-block .arr{ display:inline-block; transition: transform 0.45s cubic-bezier(0.16,1,0.3,1); }
+.cta-block .cta-link:hover .arr{ transform: translateX(8px); }
+.cta-glow{
+  position:absolute; width:700px; height:700px; border-radius:50%;
+  background: radial-gradient(circle, rgba(255,201,60,0.08) 0%, rgba(255,255,255,0.02) 40%, transparent 70%);
+  pointer-events:none; transform:translate(-50%,-50%); opacity:0;
+  z-index:2; mix-blend-mode:overlay; transition:opacity 0.5s ease;
 }
 
+footer{ padding:36px 0 50px; text-align:center; border-top:1px solid rgba(255,255,255,0.06); }
+footer p{ font-size:0.8rem; color: rgba(255,255,255,0.4); margin:0; }
+footer a{ color: rgba(255,255,255,0.65); }
+footer a:hover{ color:#fff; }
 
-body{
-background:#000;
-color:#000;
+@media (max-width:680px){
+  .navbar{ padding:18px 20px; }
+  section.block{ padding:70px 0; }
+  .diagram-card{ padding:24px; }
+  .kpi-strip{ grid-template-columns:repeat(2,1fr); }
+  .screens-grid{ grid-template-columns:1fr 1fr; }
 }
-
-
 
 </style>
-
-  
 </head>
 <body>
 
-<!-- Analytics -->
-<!-- Global site tag (gtag.js) - Google Analytics -->
-<script async src="https://www.googletagmanager.com/gtag/js?id=UA-120217875-1"></script>
-<script>
-  window.dataLayer = window.dataLayer || [];
-  function gtag(){dataLayer.push(arguments);}
-  gtag('js', new Date());
+<nav class="navbar" id="bmdxNav">
+  <a href="index.html" class="logo">BMDX</a>
+  <a href="works.html" class="back-link">Back to Works</a>
+</nav>
 
-  gtag('config', 'UA-120217875-1');
-</script>
+<!-- ═══════════ HERO ═══════════ -->
+<header class="hero">
+  <div class="container">
+    <div class="eyebrow">Case Study — User Research &amp; Product Design</div>
+    <h1>Zero users. One product.<br><em>Two</em> very different students to design for.</h1>
+    <p class="sub">A product built from zero — no users, no blueprint — that grew to one million students. How Gajino moved from a feature-first content directory to a personal study workspace, built on direct research with the students who actually use it, for ages seven through eighteen.</p>
+    <div class="meta-row">
+      <div class="meta-item"><div class="label">Role</div><div class="value">Director of Product Design</div></div>
+      <div class="meta-item"><div class="label">Timeline</div><div class="value">2018 – 2020</div></div>
+      <div class="meta-item"><div class="label">Audience</div><div class="value">K-12 Students &amp; Parents</div></div>
+      <div class="meta-item"><div class="label">Platform</div><div class="value">Android · iOS</div></div>
+    </div>
+  </div>
+</header>
 
+<!-- ═══════════ 01 — THE CHALLENGE ═══════════ -->
+<section class="block no-border" id="challenge">
+  <div class="container">
+    <div class="kicker">01 — The Challenge</div>
+    <h2>A directory of files, not a study space.</h2>
+    <p class="lead">Gaj is Iran's leading educational publisher. Decades of physical exam books and classroom-based tests formed the backbone of their brand — and the challenge was to bring all of it into a single, scalable digital product. That meant absorbing an existing library of physical content, a set of smaller standalone digital tools, and two very different user types into one coherent experience. No existing users, no inherited patterns to lean on. Gajino was built from the ground up — and the original product suffered from a feature-first rather than user-first architecture. Students across twelve grades were forced into a single, complex navigation structure. The app felt like a file directory, not a personalized place to learn, and young users found it intimidating to navigate.</p>
 
+    <div class="diagram-card fade-up" id="diagram-hero">
+      <div id="svg-hero-mount"></div>
+      <div class="diagram-caption">A playful learning environment designed for students preparing for school exams and national tests — not a dry LMS, but a desk students actually want to sit down at.</div>
+    </div>
+  </div>
+</section>
 
+<!-- ═══════════ KPI STRIP TOP ═══════════ -->
+<section class="block" id="kpi-top">
+  <div class="container">
+    <div class="kicker">Impact at a Glance</div>
+    <h2>From zero users at launch to one million — what changed once the desk replaced the directory.</h2>
+    <div class="kpi-strip fade-up">
+      <div class="kpi-cell"><div class="num">1M+</div><div class="desc">Students using the platform</div></div>
+      <div class="kpi-cell"><div class="num">+25%</div><div class="desc">Usability test success rate</div></div>
+      <div class="kpi-cell"><div class="num">+18%</div><div class="desc">Discovery-to-study task success</div></div>
+      <div class="kpi-cell"><div class="num">-40%</div><div class="desc">Steps to start a lesson</div></div>
+    </div>
+  </div>
+</section>
 
-<!-- Hotjar Tracking Code for www.brmx.info -->
-<script>
-    (function(h,o,t,j,a,r){
-        h.hj=h.hj||function(){(h.hj.q=h.hj.q||[]).push(arguments)};
-        h._hjSettings={hjid:912347,hjsv:6};
-        a=o.getElementsByTagName('head')[0];
-        r=o.createElement('script');r.async=1;
-        r.src=t+h._hjSettings.hjid+j+h._hjSettings.hjsv;
-        a.appendChild(r);
-    })(window,document,'https://static.hotjar.com/c/hotjar-','.js?sv=');
-</script>
-<!-- /Analytics -->
+<!-- ═══════════ 02 — THE PROBLEM LANDSCAPE ═══════════ -->
+<section class="block" id="problem">
+  <div class="container">
+    <div class="kicker">02 — How Students Actually Studied</div>
+    <h2>Books, classes, tests, and notes — scattered across separate tools.</h2>
+    <p class="lead">Gaj's physical exam books had structured how Iranian students studied for years. The task wasn't just to digitise a content library — it was to take that familiar structure, merge it with existing smaller digital tools, and make it feel natural to open on a phone rather than a desk. Before any redesign began, the team mapped how students actually studied. The components of learning existed, but in the digital space they were disconnected from one another, each living in its own silo.</p>
 
+    <div class="fragment-flow fade-up">
+      <div class="fragment-chip">Books</div>
+      <div class="fragment-arrow">→</div>
+      <div class="fragment-chip">Video Classes</div>
+      <div class="fragment-arrow">→</div>
+      <div class="fragment-chip">Tests</div>
+      <div class="fragment-arrow">→</div>
+      <div class="fragment-chip">Notes</div>
+      <div class="fragment-arrow">→</div>
+      <div class="fragment-chip">Results</div>
+      <div class="fragment-note">↳ each step lived on a different screen, with no shared thread connecting them</div>
+    </div>
+  </div>
+</section>
 
-  <section class="menu cid-r5mVcveZz0" once="menu" id="menu1-8h">
+<!-- ═══════════ 03 — USER RESEARCH WITH STUDENTS ═══════════ -->
+<section class="block" id="research">
+  <div class="container">
+    <div class="kicker">03 — User Research with Students</div>
+    <h2>Testing moved from office rooms to bookstores and study halls.</h2>
+    <p class="lead">Early prototypes were tested directly with students to observe their real behavior and learning habits — not in a sterile lab, but in the places they actually studied, where natural behavior could surface.</p>
 
-    
+    <div class="research-grid fade-up">
+      <div class="research-photo">
+        <div class="icon">◐</div>
+        <div class="cap">Prototype usability testing<br>with students, ages 7–18</div>
+      </div>
+      <div class="research-facts">
+        <div class="fact-row"><span class="fact-icon">📍</span><span class="fact-text">Sessions held in <b>bookstores and study halls</b>, not office labs</span></div>
+        <div class="fact-row"><span class="fact-icon">🎯</span><span class="fact-text">Two age cohorts tested separately: <b>7–11</b> and <b>11–18</b></span></div>
+        <div class="fact-row"><span class="fact-icon">📓</span><span class="fact-text">Behavior logged through observation notes and on-device recordings</span></div>
+        <div class="fact-row"><span class="fact-icon">🗣️</span><span class="fact-text">Think-aloud protocol used to surface real, unprompted reactions</span></div>
+      </div>
+    </div>
+  </div>
+</section>
 
-    <nav class="navbar navbar-expand beta-menu navbar-dropdown align-items-center navbar-fixed-top collapsed bg-color transparent">
-        <button class="navbar-toggler navbar-toggler-right" type="button" data-toggle="collapse" data-target="#navbarSupportedContent" aria-controls="navbarSupportedContent" aria-expanded="false" aria-label="Toggle navigation">
-            <div class="hamburger">
-                <span></span>
-                <span></span>
-                <span></span>
-                <span></span>
-            </div>
-        </button>
-        <div class="menu-logo">
-            <div class="navbar-brand">
-                <span class="navbar-logo">
-                    <a href="index">
-                         <img src="assets/images/final2.gif" alt="" title="" style="height: 4rem;">
-                    </a>
-                </span>
-                
-            </div>
+<!-- ═══════════ 04 — BEHAVIORAL INSIGHTS ═══════════ -->
+<section class="block" id="insights">
+  <div class="container">
+    <div class="kicker">04 — The Age Gap</div>
+    <h2>Two students, two completely different ways of discovering content.</h2>
+    <p class="lead">The research surfaced a key discovery: primary-school students discover content visually — they don't read labels, they recognize icons and colors, and need constant feedback loops to stay engaged. High-school students discover content functionally — under real academic pressure, they need a deep-work environment with minimal distraction.</p>
+
+    <div class="age-compare fade-up">
+      <div class="age-col young">
+        <div class="age-label">Ages 7–11</div>
+        <div class="age-title">Discovery is Visual</div>
+        <div class="age-trait"><span class="bullet"></span>Fast, icon-driven navigation over text labels</div>
+        <div class="age-trait"><span class="bullet"></span>Short attention span — needs immediate, visible reward</div>
+        <div class="age-trait"><span class="bullet"></span>Bright, high-contrast visuals strongly preferred</div>
+        <div class="age-trait"><span class="bullet"></span>Constant "fun" feedback loops keep engagement alive</div>
+      </div>
+      <div class="age-col teen">
+        <div class="age-label">Ages 12–18</div>
+        <div class="age-title">Discovery is Functional</div>
+        <div class="age-trait"><span class="bullet"></span>More structured, content-focused navigation</div>
+        <div class="age-trait"><span class="bullet"></span>Low tolerance for childish visuals or feature noise</div>
+        <div class="age-trait"><span class="bullet"></span>Under real pressure — wants minimal distraction</div>
+        <div class="age-trait"><span class="bullet"></span>Usage patterns closer to adult productivity tools</div>
+      </div>
+    </div>
+
+    <div class="pull-quote fade-up">
+      <p>"Success comes from creating an interface that feels like a toy for a 7-year-old and a professional tool for a 17-year-old — within the same brand."</p>
+      <div class="attribution">— Mobin M. Bahrami, Director of Product Design</div>
+    </div>
+  </div>
+</section>
+
+<!-- ═══════════ PERSONAS ═══════════ -->
+<section class="block" id="personas">
+  <div class="container">
+    <div class="kicker">Persona Cards</div>
+    <h2>Designing for Mani and Sara, at the same time.</h2>
+    <p class="lead">Two personas anchored every decision that followed — not as abstractions, but as a constant check against two real, conflicting sets of needs.</p>
+
+    <div class="persona-grid fade-up">
+      <div class="persona-card mani">
+        <div class="p-header">
+          <div class="p-avatar">🧒</div>
+          <div><h4>Mani</h4><div class="p-meta">Age 9 · 3rd Grade · The Visual Learner</div></div>
         </div>
-        <div class="collapse navbar-collapse" id="navbarSupportedContent">
-            <ul class="navbar-nav nav-dropdown nav-right" data-app-modern-menu="true"><li class="nav-item"><a class="nav-link link text-white display-4" href="index" aria-expanded="false">HOME</a></li><li class="nav-item"><a class="nav-link link text-white display-4" href="index" aria-expanded="false"></a></li><li class="nav-item"><a class="nav-link link text-white display-4" href="works" aria-expanded="false">WORKS</a></li><li class="nav-item"><a class="nav-link link text-white display-4" href="works" aria-expanded="false"></a></li><li class="nav-item">
-                    <a class="nav-link link text-white display-4" href="about">ABOUT</a>
-                </li><li class="nav-item"><a class="nav-link link text-white display-4" href="about"></a></li><li class="nav-item"><a class="nav-link link text-white display-4" href="contact">CONTACT</a></li><li class="nav-item"><a class="nav-link link text-white display-4" href="contact"></a></li></ul>
-            
+        <div class="persona-block"><div class="pb-label">Motivation</div><div class="pb-text">Collect stars, earn points, and see colorful characters along the way.</div></div>
+        <div class="persona-block"><div class="pb-label">Pain Points</div><div class="pb-text">Too much text on screen; gets lost in deep menus.</div></div>
+        <div class="persona-block"><div class="pb-label">Design Response</div><div class="pb-text">Gamified onboarding, avatar-based profile, high-contrast visual cues.</div></div>
+      </div>
+      <div class="persona-card sara">
+        <div class="p-header">
+          <div class="p-avatar">🎓</div>
+          <div><h4>Sara</h4><div class="p-meta">Age 17 · 11th Grade · The Goal-Seeker</div></div>
         </div>
-    </nav>
+        <div class="persona-block"><div class="pb-label">Motivation</div><div class="pb-text">Mastering specific subjects ahead of the national exam (Konkur).</div></div>
+        <div class="persona-block"><div class="pb-label">Pain Points</div><div class="pb-text">Childish design, feature noise, and slow navigation.</div></div>
+        <div class="persona-block"><div class="pb-label">Design Response</div><div class="pb-text">Minimalist "My Desk" view, dark mode, detailed performance analytics, quick access to practice tests.</div></div>
+      </div>
+    </div>
+  </div>
 </section>
 
-<section class="engine"><a href="https://mobirise.info/o">portfolio website templates</a></section><section class="cid-r5mVcw9BBF mbr-fullscreen mbr-parallax-background" id="header2-8i">
+<!-- ═══════════ 05 — MENTAL MODEL: STUDY DESK ═══════════ -->
+<section class="block" id="mental-model">
+  <div class="container">
+    <div class="kicker">05 — The "Desk" Epiphany</div>
+    <h2>Students don't organize their study life in folders. They have a desk.</h2>
+    <p class="lead">Through behavioral studies, the team realized students don't think in folders or categories — they think in terms of an active desk, where the books and notes they're currently using sit within reach. That desk became the entire interface's central design metaphor.</p>
 
-    
-
-    
-
-    <div class="container align-center">
-        <div class="row justify-content-md-center">
-            <div class="mbr-white col-md-10">
-                <h1 class="mbr-section-title mbr-bold pb-3 mbr-fonts-style display-1">GAJINO</h1>
-                
-                
-                
-            </div>
-        </div>
+    <div class="diagram-card fade-up">
+      <div class="desk-flow">
+        <div class="desk-node center"><div class="d-icon">🗂️</div><div class="d-label">Desk</div></div>
+        <div class="desk-sep">→</div>
+        <div class="desk-node"><div class="d-icon">📚</div><div class="d-label">Books</div></div>
+        <div class="desk-sep">→</div>
+        <div class="desk-node"><div class="d-icon">🎬</div><div class="d-label">Lessons</div></div>
+        <div class="desk-sep">→</div>
+        <div class="desk-node"><div class="d-icon">✏️</div><div class="d-label">Exercises</div></div>
+        <div class="desk-sep">→</div>
+        <div class="desk-node"><div class="d-icon">📝</div><div class="d-label">Tests</div></div>
+        <div class="desk-sep">→</div>
+        <div class="desk-node"><div class="d-icon">📊</div><div class="d-label">Results</div></div>
+      </div>
+      <div class="diagram-caption">The interface was inspired by the familiar mental model of a student's physical study desk — the same place they already know how to organize.</div>
     </div>
-    <div class="mbr-arrow hidden-sm-down" aria-hidden="true">
-        <a href="#next">
-            <i class="mbri-down mbr-iconfont"></i>
-        </a>
-    </div>
+  </div>
 </section>
 
-<section class="header9 cid-r7Imot8AGw" id="header9-g3">
+<!-- ═══════════ 06 — THE SOLUTION: MY DESK ECOSYSTEM ═══════════ -->
+<section class="block" id="solution">
+  <div class="container">
+    <div class="kicker">06 — The Solution</div>
+    <h2>From content library to personal workspace.</h2>
+    <p class="lead">The entire UX pivoted from a content library to a personal workspace. Onboarding now starts with an avatar choice that sets the app's tone for that age group. The Digital Desk became a customizable home screen where students pin their active courses — cutting the steps to start a lesson by 40%. Every book on the desk integrates its textbook, tutoring videos, and self-assessment quizzes into one continuous flow, with bite-sized, progress-driven quizzes that turn into instant infographics.</p>
 
-    
-
-    
-
-    <div class="container">
-        <div class="media-container-column mbr-white col-md-8">
-            
-            <h3 class="mbr-section-subtitle align-left mbr-light pb-3 mbr-fonts-style display-5"><div><span style="font-size: 1.2rem;">—&nbsp;</span><br></div><div><div><span style="font-style: normal;">Project Owners:</span></div><div><span style="font-style: normal;"><strong><span style="font-size: 1.2rem;">Gaj International Publications</span></strong></span></div><div><span style="font-style: normal;"><strong>Gaj Innovation Center</strong></span></div><div><br></div></div><div><div><br></div><div>—</div><div><span style="font-style: normal; font-size: 1.2rem;">My Solution:
-</span></div><div><strong>UX Design Direction</strong></div></div><div><div><strong>User Test</strong></div></div><div><div><strong>Concept Logos<br></strong><br></div><br><div><br>—<br><div><span style="font-style: normal;">Descriptions:</span></div></div></div></h3>
-            <p class="mbr-text align-left pb-3 mbr-fonts-style display-7"><br><strong>About Gajino:</strong><strong><br></strong><br>Gajino is a mobile application for biggest educational international publications in Iran.<br>The persona of this service are students (kids and teenagers).<br><br>My role in this project was the design lead, I create a design team with UX assistant (intern) and UI/UX designer. We made two different designs:<br>1st design: developed by the product team before our start (design team).<br>2nd version: after our results from researches, accessibility roles for this special persona and results from the same type of user tests like usability. from our results; navigation (user journey), mental model, UI and design strategy basically changed on this version.<br>Also, I working personally on logo sign of this service.<br><br></p>
-            <div class="mbr-section-btn align-left"><a class="btn btn-md btn-white-outline display-5" href="https://play.google.com/store/apps/details?id=ir.gaj.gajino&hl=en" target="_blank"><span class="mbri-play mbr-iconfont mbr-iconfont-btn" style="color: rgb(204, 204, 204);"></span>Android App</a>
-                <a class="btn btn-md btn-white-outline display-5" href="app.gajino.com" target="_blank"><span class="mbrib-apple mbr-iconfont mbr-iconfont-btn" style="color: rgb(204, 204, 204);"></span>Web App  (PWA)</a>
-                <a class="btn btn-md btn-white-outline display-5" href="gajino.com" target="_blank"><span class="mbri-globe-2 mbr-iconfont mbr-iconfont-btn" style="color: rgb(204, 204, 204);"></span>Website</a></div>
-        </div>
+    <div class="diagram-card fade-up">
+      <div class="flow-vert">
+        <div class="flow-step">Choose Subject</div>
+        <div class="flow-arrow">↓</div>
+        <div class="flow-step">Study Lesson</div>
+        <div class="flow-arrow">↓</div>
+        <div class="flow-step">Watch Video</div>
+        <div class="flow-arrow">↓</div>
+        <div class="flow-step">Take Practice Test</div>
+        <div class="flow-arrow">↓</div>
+        <div class="flow-step final">Review Results</div>
+      </div>
+      <div class="diagram-caption">The learning flow was simplified to reduce cognitive load — one continuous path, instead of five disconnected destinations.</div>
     </div>
-
-    
+  </div>
 </section>
 
-<section class="mbr-section content4 cid-r98AgSXZzZ" id="content4-kq">
+<!-- ═══════════ GALLERY ═══════════ -->
+<section class="block" id="gallery">
+  <div class="container">
+    <div class="kicker">Core Screens</div>
+    <h2>The Desk, in the student's hands.</h2>
+    <p class="lead">Diagrams explain the strategy — these are the surfaces a student actually opens every day. Due to confidentiality, these are reconstructed layouts rather than live product screens.</p>
 
-    
-
-    <div class="container">
-        <div class="media-container-row">
-            <div class="title col-12 col-md-8">
-                <h2 class="align-center pb-3 mbr-fonts-style display-2">—<br>User Test</h2>
-                <h3 class="mbr-section-subtitle align-center mbr-light mbr-fonts-style display-5">Descriptions will be added in the future.</h3>
-                
-            </div>
-        </div>
+    <div class="screens-grid fade-up">
+      <div class="screen-placeholder s1"><div class="icon">🗂️</div>Home Desk</div>
+      <div class="screen-placeholder s2"><div class="icon">📚</div>Subject Cards</div>
+      <div class="screen-placeholder s3"><div class="icon">📖</div>Lesson Page</div>
+      <div class="screen-placeholder s4"><div class="icon">▷</div>Video Player</div>
+      <div class="screen-placeholder s5"><div class="icon">📝</div>Test Interface</div>
+      <div class="screen-placeholder s6"><div class="icon">📊</div>Result &amp; Report Card</div>
     </div>
+  </div>
 </section>
 
-<section class="cid-r90Igd2val" id="image4-il">
-    <!-- Block parameters controls (Blue "Gear" panel) -->
-    
-    <!-- End block parameters -->
-    <div class="container images-container container-fluid">
-            <div class="media-container-row" style="width: 100%;">
-                <div class="img-item item1" style="width: 115%;">
-                    <img src="assets/images/img-25.jpg" alt="MOBIN BAHRAMI - USER TEST — BMDX" title="">
-                    
-                </div>
-                <div class="img-item">
-                    <img src="assets/images/img-40.jpg" alt="MOBIN BAHRAMI - USER TEST — BMDX" title="">
-                    
-                </div>
-            </div>
+<!-- ═══════════ MOTIVATION SYSTEM ═══════════ -->
+<section class="block" id="motivation">
+  <div class="container">
+    <div class="kicker">Progress &amp; Motivation</div>
+    <h2>A visible reason to come back tomorrow.</h2>
+    <p class="lead">Progress indicators and rewards helped maintain student motivation — small, frequent signals of advancement that made the desk feel alive between study sessions.</p>
+
+    <div class="motivation-row fade-up">
+      <div class="motivation-chip"><div class="m-icon">⭐</div><div class="m-label">Stars</div></div>
+      <div class="motivation-chip"><div class="m-icon">🏅</div><div class="m-label">Points</div></div>
+      <div class="motivation-chip"><div class="m-icon">📈</div><div class="m-label">Rankings</div></div>
+      <div class="motivation-chip"><div class="m-icon">◐</div><div class="m-label">Progress Bars</div></div>
     </div>
+  </div>
 </section>
 
-<section class="mbr-section content4 cid-r98A3m2ZD2" id="content4-kp">
+<!-- ═══════════ PARENT ECOSYSTEM ═══════════ -->
+<section class="block" id="parents">
+  <div class="container">
+    <div class="kicker">Parent Awareness</div>
+    <h2>Built for the student, trusted by the parent.</h2>
+    <p class="lead">Gajino wasn't designed for students alone — parents needed visibility into how their child was actually progressing, without becoming a layer of surveillance the student resented.</p>
 
-    
-
-    <div class="container">
-        <div class="media-container-row">
-            <div class="title col-12 col-md-8">
-                <h2 class="align-center pb-3 mbr-fonts-style display-2">—<br>Logo Ideas</h2>
-                
-                
-            </div>
-        </div>
+    <div class="diagram-card fade-up">
+      <div class="parent-flow">
+        <div class="parent-node">Student Activity</div>
+        <div class="parent-arrow">→</div>
+        <div class="parent-node">Progress Tracking</div>
+        <div class="parent-arrow">→</div>
+        <div class="parent-node">Parent Notification</div>
+      </div>
     </div>
+  </div>
 </section>
 
-<section class="cid-r916xQI67n" id="image3-iw">
+<!-- ═══════════ FINAL IMPACT ═══════════ -->
+<section class="block" id="results">
+  <div class="container">
+    <div class="kicker">07 — Measured Impact</div>
+    <h2>From feature directory to market-leading study space.</h2>
+    <p class="lead">The redesign led to measurable improvements in both usability and engagement. Starting from zero users, the product grew to over one million — helping solidify Gajino's position as the most user-centric educational product in the Iranian market, and proving that a scalable design system could hold two radically different personas within a single, coherent product.</p>
 
-    
-
-    <figure class="mbr-figure container">
-            <div class="image-block" style="width: 83%;">
-                <img src="assets/images/3-1.png" width="1400" alt="BMDX" title="">
-                
-            </div>
-    </figure>
+    <div class="kpi-strip fade-up">
+      <div class="kpi-cell"><div class="num">+25%</div><div class="desc">Usability test success rate</div></div>
+      <div class="kpi-cell"><div class="num">+18%</div><div class="desc">Task success rate (discovery-to-study)</div></div>
+      <div class="kpi-cell"><div class="num">-40%</div><div class="desc">Steps to start a lesson</div></div>
+      <div class="kpi-cell"><div class="num">1M+</div><div class="desc">Students reached nationwide</div></div>
+    </div>
+  </div>
 </section>
 
-<section class="cid-r90Di9WYor" id="image4-ij">
-    <!-- Block parameters controls (Blue "Gear" panel) -->
-    
-    <!-- End block parameters -->
-    <div class="container images-container container-fluid">
-            <div class="media-container-row" style="width: 100%;">
-                <div class="img-item item1" style="width: 91%;">
-                    <img src="assets/images/signage-1.jpg" alt="BMDX" title="">
-                    <div class="img-caption">
-                        <p class="mbr-fonts-style align-center mbr-black display-7">
-                            Signage - Preview</p>
-                    </div>
-                </div>
-                <div class="img-item">
-                    <img src="assets/images/modern-digital-signage-mockup-2-anthony-boyd-graphics-1.jpg" alt="BMDX" title="">
-                    <div class="img-caption">
-                        <p class="mbr-fonts-style align-center mbr-black display-7">Typeface Style - Preview</p>
-                    </div>
-                </div>
-            </div>
+<!-- ═══════════ CONCLUSION ═══════════ -->
+<section class="block" id="conclusion">
+  <div class="container">
+    <div class="kicker">Conclusion</div>
+    <h2>A toy for a 7-year-old. A tool for a 17-year-old. One brand.</h2>
+    <p class="lead">Designing for education means balancing two masters at once: the student, who is the user, and the parent, who is the customer. Gajino started with no users, no inherited product, and no template for holding two radically different personas inside one brand. The fact that it grew to one million students isn't just a business number — it's evidence that those two needs aren't in conflict. They just require an interface honest enough to change shape depending on who's sitting down at the desk.</p>
+
+    <div class="pull-quote fade-up">
+      <p>"Gajino became one of the most recognized digital learning products for Iranian students."</p>
+      <div class="attribution">— Mobin M. Bahrami</div>
     </div>
+  </div>
 </section>
 
-<section class="cid-r90DgZ42bo" id="image4-ii">
-    <!-- Block parameters controls (Blue "Gear" panel) -->
-    
-    <!-- End block parameters -->
-    <div class="container images-container container-fluid">
-            <div class="media-container-row" style="width: 100%;">
-                <div class="img-item item1" style="width: 115%;">
-                    <img src="assets/images/billboard-mockup.jpg" alt="BMDX" title="">
-                    <div class="img-caption">
-                        <p class="mbr-fonts-style align-center mbr-black display-7">Billboard - Preview 1</p>
-                    </div>
-                </div>
-                <div class="img-item">
-                    <img src="assets/images/billboard-mockup2.jpg" alt="BMDX" title="">
-                    <div class="img-caption">
-                        <p class="mbr-fonts-style align-center mbr-black display-7">Billboard - Preview 2</p>
-                    </div>
-                </div>
-            </div>
-    </div>
+<!-- ═══════════ CTA ═══════════ -->
+<section class="cta-block" id="cta">
+  <div class="container">
+    <h2>see more of my</h2>
+    <a href="works.html" class="cta-link">WORK <span class="arr">→</span></a>
+  </div>
 </section>
 
-<section class="cid-r90HUc6bty" id="image4-ik">
-    <!-- Block parameters controls (Blue "Gear" panel) -->
-    
-    <!-- End block parameters -->
-    <div class="container images-container container-fluid">
-            <div class="media-container-row" style="width: 100%;">
-                <div class="img-item item1" style="width: 91%;">
-                    <img src="assets/images/wall2.jpg" alt="BMDX" title="">
-                    <div class="img-caption">
-                        <p class="mbr-fonts-style align-center mbr-black display-7">
-                            Interior Decoration - Preview</p>
-                    </div>
-                </div>
-                <div class="img-item">
-                    <img src="assets/images/preview-6.jpg" alt="BMDX" title="">
-                    <div class="img-caption">
-                        <p class="mbr-fonts-style align-center mbr-black display-7">
-                            Website - Preview</p>
-                    </div>
-                </div>
-            </div>
-    </div>
-</section>
-
-<section class="cid-r913YucxQP" id="image4-in">
-    <!-- Block parameters controls (Blue "Gear" panel) -->
-    
-    <!-- End block parameters -->
-    <div class="container images-container container-fluid">
-            <div class="media-container-row" style="width: 100%;">
-                <div class="img-item item1" style="width: 115%;">
-                    <img src="assets/images/4.png" alt="BMDX" title="">
-                    
-                </div>
-                <div class="img-item">
-                    <img src="assets/images/5.png" alt="BMDX" title="">
-                    
-                </div>
-            </div>
-    </div>
-</section>
-
-<section class="cid-r914bICQft" id="image4-io">
-    <!-- Block parameters controls (Blue "Gear" panel) -->
-    
-    <!-- End block parameters -->
-    <div class="container images-container container-fluid">
-            <div class="media-container-row" style="width: 100%;">
-                <div class="img-item item1" style="width: 91%;">
-                    <img src="assets/images/6.png" alt="BMDX" title="">
-                    
-                </div>
-                <div class="img-item">
-                    <img src="assets/images/7-1.png" alt="BMDX" title="">
-                    
-                </div>
-            </div>
-    </div>
-</section>
-
-<section class="cid-r914cEjaqE" id="image4-ip">
-    <!-- Block parameters controls (Blue "Gear" panel) -->
-    
-    <!-- End block parameters -->
-    <div class="container images-container container-fluid">
-            <div class="media-container-row" style="width: 100%;">
-                <div class="img-item item1" style="width: 115%;">
-                    <img src="assets/images/8.png" alt="BMDX" title="">
-                    
-                </div>
-                <div class="img-item">
-                    <img src="assets/images/9.png" alt="BMDX" title="">
-                    
-                </div>
-            </div>
-    </div>
-</section>
-
-<section class="cid-r914r7usFw" id="image4-iq">
-    <!-- Block parameters controls (Blue "Gear" panel) -->
-    
-    <!-- End block parameters -->
-    <div class="container images-container container-fluid">
-            <div class="media-container-row" style="width: 100%;">
-                <div class="img-item item1" style="width: 91%;">
-                    <img src="assets/images/10.png" alt="BMDX" title="">
-                    
-                </div>
-                <div class="img-item">
-                    <img src="assets/images/11.png" alt="BMDX" title="">
-                    
-                </div>
-            </div>
-    </div>
-</section>
-
-<section class="cid-r914ZeP6Iq" id="image4-iv">
-    <!-- Block parameters controls (Blue "Gear" panel) -->
-    
-    <!-- End block parameters -->
-    <div class="container images-container container-fluid">
-            <div class="media-container-row" style="width: 100%;">
-                <div class="img-item item1" style="width: 115%;">
-                    <img src="assets/images/4.png" alt="BMDX" title="">
-                    
-                </div>
-                <div class="img-item">
-                    <img src="assets/images/5.png" alt="BMDX" title="">
-                    
-                </div>
-            </div>
-    </div>
-</section>
-
-<section class="cid-r914rFe3ZF" id="image4-ir">
-    <!-- Block parameters controls (Blue "Gear" panel) -->
-    
-    <!-- End block parameters -->
-    <div class="container images-container container-fluid">
-            <div class="media-container-row" style="width: 100%;">
-                <div class="img-item item1" style="width: 115%;">
-                    <img src="assets/images/12.png" alt="BMDX" title="">
-                    
-                </div>
-                <div class="img-item">
-                    <img src="assets/images/13.png" alt="BMDX" title="">
-                    
-                </div>
-            </div>
-    </div>
-</section>
-
-<section class="cid-r914scKiDB" id="image4-is">
-    <!-- Block parameters controls (Blue "Gear" panel) -->
-    
-    <!-- End block parameters -->
-    <div class="container images-container container-fluid">
-            <div class="media-container-row" style="width: 100%;">
-                <div class="img-item item1" style="width: 91%;">
-                    <img src="assets/images/15.png" alt="BMDX" title="">
-                    
-                </div>
-                <div class="img-item">
-                    <img src="assets/images/16.png" alt="BMDX" title="">
-                    
-                </div>
-            </div>
-    </div>
-</section>
-
-<section class="cid-r914sFjVHL" id="image4-it">
-    <!-- Block parameters controls (Blue "Gear" panel) -->
-    
-    <!-- End block parameters -->
-    <div class="container images-container container-fluid">
-            <div class="media-container-row" style="width: 100%;">
-                <div class="img-item item1" style="width: 115%;">
-                    <img src="assets/images/17.png" alt="BMDX" title="">
-                    
-                </div>
-                <div class="img-item">
-                    <img src="assets/images/18.png" alt="BMDX" title="">
-                    
-                </div>
-            </div>
-    </div>
-</section>
-
-<section class="cid-r914YGA8ab" id="image4-iu">
-    <!-- Block parameters controls (Blue "Gear" panel) -->
-    
-    <!-- End block parameters -->
-    <div class="container images-container container-fluid">
-            <div class="media-container-row" style="width: 100%;">
-                <div class="img-item item1" style="width: 91%;">
-                    <img src="assets/images/22.png" alt="BMDX" title="">
-                    
-                </div>
-                <div class="img-item">
-                    <img src="assets/images/23.png" alt="BMDX" title="">
-                    
-                </div>
-            </div>
-    </div>
-</section>
-
-<section class="mbr-section content4 cid-r98wf85ytH" id="content4-k2">
-
-    
-
-    <div class="container">
-        <div class="media-container-row">
-            <div class="title col-12 col-md-8">
-                <h2 class="align-center pb-3 mbr-fonts-style display-2"><br>Thanks for scrolling!<br>—
-<br><br></h2>
-                
-                
-            </div>
-        </div>
-    </div>
-</section>
-
-<section class="mbr-section info4 cid-r5mVcAEcCd mbr-parallax-background" id="info4-8n">
-
-    
-
-    <div class="mbr-overlay" style="opacity: 0.3; background-color: rgb(0, 0, 0);">
-    </div>
-    <div class="container">
-        <div class="justify-content-center row">
-            <div class="media-container-column title col-12 col-md-10">
-                <h2 class="align-right mbr-bold mbr-white pb-3 mbr-fonts-style display-7"><span style="font-weight: normal;">n &nbsp;e &nbsp;x &nbsp;t &nbsp; &nbsp; w &nbsp;o &nbsp;r &nbsp;k</span></h2>
-                
-                <p class="mbr-text align-right mbr-white mbr-fonts-style display-2"><strong><a href="iseema" class="text-white"><b>ISEEMA&nbsp;&nbsp;</b></a><a href="iseema" class="text-white">→</a></strong></p>
-                
-            </div>
-        </div>
-    </div>
-</section>
-
-<section class="mbr-section info4 cid-r5n6FJcVUV" id="info4-d5">
-
-    
-
-    
-    <div class="container">
-        <div class="justify-content-center row">
-            <div class="media-container-column title col-12 col-md-10">
-                <h2 class="align-right mbr-bold mbr-white pb-3 mbr-fonts-style display-7"><a href="works#info4-7p" class="text-white"><strong>← &nbsp;BACK TO WORKS</strong></a></h2>
-                
-                
-                
-            </div>
-        </div>
-    </div>
-</section>
-
-
-
-
-<section once="" class="cid-r5mVwjy2Fs mbr-reveal" id="footer7-94">
-    <div class="container">
-        <div class="media-container-row align-center mbr-white">
-            
-            
-            
-            <div class="row row-copirayt">
-                <p class="mbr-text mb-0 mbr-fonts-style mbr-white align-center display-7"><a href="https://linkedin.com/in/bmdx" target="_blank" class="text-info">Linkedin</a>&nbsp; ◦ &nbsp;<a href="https://dribbble.com/bmdx" target="_blank" class="text-info">Dribbble</a>&nbsp; ◦ &nbsp;<a href="https://bmdx.medium.com" target="_blank" class="text-info">Medium</a> &nbsp;◦ &nbsp;<a href="policy" class="text-info">Policy</a>&nbsp;&nbsp;◦ &nbsp;<a href="credits" class="text-info">Credits</a><br>An Elegant Product by <a href="index" class="text-info">BMDX</a> ©<br><br>
-                </p>
-            </div>
-        </div>
-    </div>
-</section>
-
-
-
-
-  <script src="assets/web/assets/jquery/jquery.min.js"></script>
-  <script src="assets/popper/popper.min.js"></script>
-  <script src="assets/bootstrap/js/bootstrap.min.js"></script>
-  <script src="assets/smoothscroll/smooth-scroll.js"></script>
-
-  <script src="assets/touchswipe/jquery.touch-swipe.min.js"></script>
-  <script src="assets/viewportchecker/jquery.viewportchecker.js"></script>
-  <script src="assets/parallax/jarallax.min.js"></script>
-  <script src="assets/tether/tether.min.js"></script>
-  <script src="assets/dropdown/js/nav-dropdown.js"></script>
-  <script src="assets/dropdown/js/navbar-dropdown.js"></script>
-  <script src="assets/theme/js/script.js"></script>
-  
-  
-<!-- Google Tag Manager (noscript) -->
-<noscript><iframe src="https://www.googletagmanager.com/ns.html?id=GTM-T7TR7GC"
-height="0" width="0" style="display:none;visibility:hidden"></iframe></noscript>
-<!-- End Google Tag Manager (noscript) -->
-
-
+<footer>
+  <p>An Elegant Case Study by <a href="index.html">BMDX</a> © — Mobin M. Bahrami</p>
+</footer>
 
 <script>
 (function(){
 
-/* اگر دستگاه تاچ داشت کلاً اجرا نشود */
-if(("ontouchstart" in window) || navigator.maxTouchPoints>0){
-  return
-}
-
-let isDown=false
-let moved=false
-
-let startY=0
-let lastY=0
-let velocity=0
-
-let raf=null
-
-const friction=0.94
-const minVelocity=0.08
-const threshold=6
-
-function maxScroll(){
-  return document.documentElement.scrollHeight - window.innerHeight
-}
-
-function clamp(v,min,max){
-  return Math.max(min,Math.min(max,v))
-}
-
-function stopMomentum(){
-  if(raf){
-    cancelAnimationFrame(raf)
-    raf=null
+  var nav = document.getElementById('bmdxNav');
+  function updateNav(){
+    if (window.scrollY > 30) nav.classList.add('bmdx-scrolled');
+    else nav.classList.remove('bmdx-scrolled');
   }
-}
+  window.addEventListener('scroll', updateNav, {passive:true});
+  updateNav();
 
-function momentum(){
+  var revealEls = document.querySelectorAll('.block, .fade-up');
+  var io = new IntersectionObserver(function(entries){
+    entries.forEach(function(en){
+      if (en.isIntersecting) en.target.classList.add('bmdx-visible');
+    });
+  }, { threshold: 0.18, rootMargin: '0px 0px -40px 0px' });
+  revealEls.forEach(function(el){ io.observe(el); });
 
-  stopMomentum()
-
-  function frame(){
-
-    if(isDown) return
-
-    velocity*=friction
-
-    if(Math.abs(velocity)<minVelocity){
-      velocity=0
-      return
+  if (!(("ontouchstart" in window) || navigator.maxTouchPoints>0)) {
+    var isDown=false, startY=0, lastY=0, velocity=0, raf=null;
+    var friction=0.94, minVelocity=0.08;
+    function maxScroll(){ return document.documentElement.scrollHeight - window.innerHeight; }
+    function clamp(v,min,max){ return Math.max(min,Math.min(max,v)); }
+    function stopMomentum(){ if(raf){ cancelAnimationFrame(raf); raf=null; } }
+    function momentum(){
+      stopMomentum();
+      function frame(){
+        if(isDown) return;
+        velocity*=friction;
+        if(Math.abs(velocity)<minVelocity){ velocity=0; return; }
+        var next=clamp(window.scrollY-velocity,0,maxScroll());
+        window.scrollTo(0,next);
+        raf=requestAnimationFrame(frame);
+      }
+      raf=requestAnimationFrame(frame);
     }
-
-    const next=clamp(
-      window.scrollY-velocity,
-      0,
-      maxScroll()
-    )
-
-    window.scrollTo(0,next)
-
-    raf=requestAnimationFrame(frame)
+    document.addEventListener("mousedown",function(e){
+      if(e.button!==0) return;
+      if(e.target.closest("a,button,input,textarea,select,iframe,video")) return;
+      isDown=true; startY=e.clientY; lastY=e.clientY; velocity=0;
+      stopMomentum();
+      document.body.classList.add("dragging");
+    },{passive:true});
+    document.addEventListener("mousemove",function(e){
+      if(!isDown) return;
+      var dy=e.clientY-lastY;
+      lastY=e.clientY; velocity=dy;
+      var next=clamp(window.scrollY-dy,0,maxScroll());
+      window.scrollTo(0,next);
+    },{passive:true});
+    function release(){
+      if(!isDown) return;
+      isDown=false;
+      document.body.classList.remove("dragging");
+      momentum();
+    }
+    document.addEventListener("mouseup",release,{passive:true});
+    document.addEventListener("mouseleave",release,{passive:true});
   }
 
-  raf=requestAnimationFrame(frame)
-}
-
-document.addEventListener("mousedown",e=>{
-
-  if(e.button!==0) return
-  if(e.target.closest("input,textarea,select,iframe,video")) return
-
-  isDown=true
-  moved=false
-
-  startY=e.clientY
-  lastY=e.clientY
-  velocity=0
-
-  stopMomentum()
-
-  document.body.classList.add("dragging")
-
-},{passive:true})
-
-document.addEventListener("mousemove",e=>{
-
-  if(!isDown) return
-
-  const dy=e.clientY-lastY
-
-  if(Math.abs(e.clientY-startY)>threshold){
-    moved=true
+  var ctaSec = document.getElementById('cta');
+  if (ctaSec){
+    var glow=document.createElement('div'); glow.className='cta-glow';
+    ctaSec.style.position='relative'; ctaSec.style.overflow='hidden';
+    ctaSec.appendChild(glow);
+    ctaSec.addEventListener('mousemove',function(e){
+      var r=ctaSec.getBoundingClientRect();
+      glow.style.left=(e.clientX-r.left)+'px'; glow.style.top=(e.clientY-r.top)+'px'; glow.style.opacity='1';
+    });
+    ctaSec.addEventListener('mouseleave',function(){ glow.style.opacity='0'; });
   }
-
-  lastY=e.clientY
-  velocity=dy
-
-  const next=clamp(
-    window.scrollY-dy,
-    0,
-    maxScroll()
-  )
-
-  window.scrollTo(0,next)
-
-},{passive:true})
-
-document.addEventListener("mouseup",release,{passive:true})
-document.addEventListener("mouseleave",release,{passive:true})
-
-function release(){
-
-  if(!isDown) return
-
-  isDown=false
-  document.body.classList.remove("dragging")
-
-  momentum()
-}
-
-document.addEventListener("click",function(e){
-  if(moved){
-    e.preventDefault()
-    e.stopPropagation()
-  }
-},true)
 
 })();
 </script>
 
-
-<script>
-document.querySelectorAll('img').forEach(img => {
-  img.setAttribute('draggable', 'false');
-});
-
-document.addEventListener('dragstart', function(e) {
-  if (e.target.closest('img')) {
-    e.preventDefault();
-  }
-});
-</script>
-
-
-
-
-
-
-
+<script src="gajino-diagrams.js"></script>
 
 </body>
 </html>
