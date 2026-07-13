@@ -40,21 +40,6 @@
   @media (hover:hover){
     html, body, a, button{ cursor:none !important; }
   }
-  .cursor-fx{
-    position:fixed;
-    top:0; left:0;
-    width:130px; height:130px;
-    border-radius:50%;
-    pointer-events:none;
-    z-index:9997;
-    transform:translate(-50%,-50%);
-    background:#fff;
-    filter:blur(22px);
-    mix-blend-mode:difference;
-    opacity:0;
-    transition:opacity .5s ease;
-  }
-  .cursor-fx.show{ opacity:0.5; }
   .cursor-ring{
     position:fixed;
     top:0; left:0;
@@ -96,7 +81,7 @@
   }
   .cursor-dot.show{ opacity:1; }
   .cursor-dot.hide{ opacity:0; }
-  @media (hover:none){ .cursor-dot, .cursor-ring, .cursor-fx{ display:none; } }
+  @media (hover:none){ .cursor-dot, .cursor-ring{ display:none; } }
 
   /* ───────── Shared underline-bar link (grows in from left, exits to the right) ───────── */
   .bar-link{ position:relative; display:inline-block; padding-bottom:6px; }
@@ -154,15 +139,27 @@
   .brand-inner{
     display:block;
     animation:brandFloat 6s ease-in-out infinite;
-    transition:transform .5s cubic-bezier(.16,1,.3,1), letter-spacing .4s ease;
+    transition:transform .5s cubic-bezier(.16,1,.3,1);
   }
   #top-nav .brand:hover .brand-inner{
     animation-play-state:paused;
     transform:scale(1.06);
-    letter-spacing:0.005em;
   }
-  .brand-inner .line1{ display:block; }
-  .brand-inner .line2{ display:block; color:var(--white); }
+  .brand-inner .slot{
+    display:block;
+    height:1.1em;
+    overflow:hidden;
+  }
+  .brand-inner .slot-track{
+    display:block;
+    transition:transform .5s cubic-bezier(.16,1,.3,1);
+  }
+  .brand-inner .slot-track span{
+    display:block;
+    line-height:1.1;
+  }
+  .brand-inner .slot.slot-2 .slot-track span{ color:var(--white); }
+  #top-nav .brand:hover .slot-track{ transform:translateY(-50%); }
   @keyframes brandFloat{
     0%, 100%{ transform:translateY(0); }
     50%{ transform:translateY(-4px); }
@@ -174,6 +171,8 @@
     font-family:'Poppins', sans-serif;
     font-weight:700;
     font-size:16px;
+    text-transform:uppercase;
+    letter-spacing:0.02em;
     color:var(--muted);
     padding:9px 16px;
     border-radius:20px;
@@ -277,7 +276,7 @@
 
   /* ───────── About ───────── */
   #about{ padding:150px 0; border-top:1px solid var(--line); }
-  .about-grid{ display:grid; grid-template-columns:1fr 1.15fr; gap:70px; }
+  .about-grid{ display:flex; flex-direction:column; gap:36px; max-width:760px; }
   .about-lead{
     font-family:'Poppins', sans-serif;
     font-weight:600;
@@ -466,23 +465,6 @@
   }
   .copy-hint.show{ opacity:1; height:auto; }
 
-  .social-row{
-    position:relative; z-index:2;
-    display:flex; gap:26px; margin-top:60px;
-    padding-top:34px;
-    border-top:1px solid var(--line);
-  }
-  .social-row a{
-    font-family:'Poppins', sans-serif;
-    font-size:11px;
-    font-weight:600;
-    letter-spacing:0.1em;
-    text-transform:uppercase;
-    color:var(--muted);
-    transition:color .3s ease;
-  }
-  .social-row a:hover{ color:#fff; }
-
   /* ───────── Bottom-left: LinkedIn only, filled rectangle, icon fades to white ───────── */
   #bottom-linkedin{
     position:fixed;
@@ -501,18 +483,12 @@
   #bottom-linkedin svg{ width:22px; height:22px; fill:rgba(255,255,255,0.5); transition:fill .3s ease; }
   #bottom-linkedin:hover svg{ fill:#fff; }
 
-  /* ───────── Local time widget (fixed, bottom-right, no background) ───────── */
-  #time-widget{
-    position:fixed;
-    right:40px; bottom:30px;
-    z-index:400;
+  /* ───────── Local time — original widget style, now in-flow at page end ───────── */
+  #page-footer-clock{
+    padding:0 0 90px;
     text-align:right;
-    opacity:0;
-    transform:translateY(10px);
-    transition:opacity .5s ease, transform .5s ease;
   }
-  #time-widget.show{ opacity:1; transform:translateY(0); }
-  #time-widget .tw-label{
+  #page-footer-clock .tw-label{
     font-family:'Poppins', sans-serif;
     font-size:11px;
     font-weight:600;
@@ -521,10 +497,10 @@
     color:var(--muted);
     margin:0 0 6px 0;
   }
-  #time-widget .tw-clock{
+  #page-footer-clock .tw-clock{
     display:flex; align-items:baseline; gap:8px; justify-content:flex-end;
   }
-  #time-widget .tw-time{
+  #page-footer-clock .tw-time{
     font-family:'Poppins', sans-serif;
     font-weight:700;
     font-size:42px;
@@ -532,17 +508,15 @@
     color:#fff;
     font-variant-numeric:tabular-nums;
   }
-  #time-widget .tw-ampm{
+  #page-footer-clock .tw-ampm{
     font-family:'Poppins', sans-serif;
     font-weight:600;
     font-size:14px;
     color:var(--muted);
   }
 
-
   /* ───────── Responsive ───────── */
   @media (max-width: 900px){
-    .about-grid{ grid-template-columns:1fr; gap:36px; }
     .contact-grid{ grid-template-columns:1fr; gap:30px; }
     .work-info{ flex-direction:column; align-items:flex-start; gap:16px; }
     .work-copy{ max-width:100%; }
@@ -552,12 +526,12 @@
     #top-nav{ padding:20px 20px; }
     #top-nav .brand{ font-size:18px; }
     .menu a{ padding:8px 10px; font-size:14px; }
-    #time-widget{ right:16px; bottom:16px; }
-    #time-widget .tw-time{ font-size:32px; }
     #bottom-linkedin{ left:16px; bottom:16px; width:42px; height:42px; }
     .work-arrow{ display:none; }
     #about, #work, #contact{ padding-top:90px; padding-bottom:90px; }
     #start{ padding-top:110px; }
+    #page-footer-clock{ padding-bottom:70px; }
+    #page-footer-clock .tw-time{ font-size:32px; }
   }
 </style>
 </head>
@@ -567,13 +541,17 @@
 <div class="hero-darken" id="hero-darken"></div>
 <div class="hero-grain"></div>
 
-<div class="cursor-fx" id="cursor-fx"></div>
 <div class="cursor-ring" id="cursor-ring"><span id="cursor-label"></span></div>
 <div class="cursor-dot" id="cursor-dot"></div>
 
 <!-- Top nav -->
 <nav id="top-nav">
-  <a href="#start" class="brand"><span class="brand-inner"><span class="line1">Mobin</span><span class="line2">Bahrami</span></span></a>
+  <a href="#start" class="brand">
+    <span class="brand-inner">
+      <span class="slot slot-1"><span class="slot-track"><span>Mobin</span><span>Bahrami</span></span></span>
+      <span class="slot slot-2"><span class="slot-track"><span>Bahrami</span><span>Mobin</span></span></span>
+    </span>
+  </a>
   <div class="menu">
     <a href="#about">About</a>
     <a href="#work">Work</a>
@@ -604,13 +582,13 @@
     <div class="about-grid">
       <div class="reveal">
         <p class="eyebrow">About me</p>
-        <p class="about-lead">I'm a <b>product designer</b> with 10+ years of experience across fintech, edtech, and consumer products, with a strong focus on <b>Design Systems</b> and <b>Product Strategy</b>.</p>
+        <p class="about-lead">I'm a <b>Product Designer</b> with 10+ years of experience across fintech, edtech, and consumer products, with a strong focus on <b>Design Systems</b> and <b>Product Strategy</b>.</p>
         <p class="about-lead">I enjoy building thoughtful, end‑to‑end product experiences <b>for web and mobile</b> at scale.</p>
       </div>
       <div class="reveal about-body">
         <p>Throughout my career, I've had the privilege of leading design at Tosan, Fanap, Gaj, and ZabanShenas — shaping enterprise banking platforms, mobile payment products, and education apps.</p>
         <p>Along the way I founded the Atomic Core Design System, adopted across 15+ products and 8 teams, and shipped experiences used by more than a million people across banking, payments, and learning.</p>
-        <p>Beyond product design, I follow how AI is reshaping banking UX, and enjoy exploring generative and digital art in my own time.</p>
+        <p>Beyond Product Design, I follow how AI is reshaping banking UX, and enjoy exploring generative and digital art in my own time.</p>
         <a class="cv-btn bar-link" href="assets/Mobin_M_Bahrami_Resume.pdf" target="_blank" rel="noopener">Download CV</a>
       </div>
     </div>
@@ -712,15 +690,19 @@
         </span>
       </div>
     </div>
-    <div class="social-row reveal">
-      <a href="https://linkedin.com/in/bmdx" target="_blank" rel="noopener">Linkedin</a>
-      <a href="https://bmdx.medium.com" target="_blank" rel="noopener">Medium</a>
-      <a href="https://x.com/lbmdx" target="_blank" rel="noopener">X</a>
-      <a href="https://dribbble.com/bmdx" target="_blank" rel="noopener">Dribbble</a>
-    </div>
   </div>
 </section>
 
+<!-- Footer clock — in-flow at the very end of the page -->
+<div id="page-footer-clock" class="reveal">
+  <div class="wrap">
+    <p class="tw-label">Local time</p>
+    <div class="tw-clock">
+      <span class="tw-time" id="tw-time">--:--</span>
+      <span class="tw-ampm" id="tw-ampm"></span>
+    </div>
+  </div>
+</div>
 
 <!-- Fixed bottom-left: LinkedIn only, hollow square -->
 <a id="bottom-linkedin" href="https://linkedin.com/in/bmdx" target="_blank" rel="noopener" aria-label="LinkedIn">
@@ -731,26 +713,15 @@
   </svg>
 </a>
 
-<!-- Fixed bottom-right local time -->
-<div id="time-widget">
-  <p class="tw-label">Local time</p>
-  <div class="tw-clock">
-    <span class="tw-time" id="tw-time">--:--</span>
-    <span class="tw-ampm" id="tw-ampm"></span>
-  </div>
-</div>
-
 <script>
 (function(){
 
-  /* ── top nav + bottom brand + time widget fade in ── */
+  /* ── top nav + bottom brand fade in ── */
   var topNav = document.getElementById('top-nav');
   var bottomLinkedin = document.getElementById('bottom-linkedin');
-  var timeWidget = document.getElementById('time-widget');
   setTimeout(function(){
     topNav.classList.add('show');
     bottomLinkedin.classList.add('show');
-    timeWidget.classList.add('show');
   }, 200);
 
   /* ── live Tehran clock ── */
@@ -776,17 +747,15 @@
   updateClock();
   setInterval(updateClock, 1000);
 
-  /* ── custom cursor: dot (fast) + ring (medium lag) + glow (slow lag) ── */
+  /* ── custom cursor: dot (fast) + ring (medium lag) ── */
   var cDot = document.getElementById('cursor-dot');
   var cRing = document.getElementById('cursor-ring');
-  var cFx = document.getElementById('cursor-fx');
   var cLabel = document.getElementById('cursor-label');
   var hasHover = window.matchMedia('(hover: hover)').matches;
   if (hasHover){
     var tx = window.innerWidth / 2, ty = window.innerHeight / 2;
     var dx = tx, dy = ty;   // dot position
     var rx = tx, ry = ty;   // ring position
-    var gx = tx, gy = ty;   // glow position
     var started = false;
 
     window.addEventListener('mousemove', function(e){
@@ -795,17 +764,14 @@
         started = true;
         cDot.classList.add('show');
         cRing.classList.add('show');
-        cFx.classList.add('show');
       }
     });
 
     (function tick(){
       dx += (tx - dx) * 0.45; dy += (ty - dy) * 0.45;
       rx += (tx - rx) * 0.16; ry += (ty - ry) * 0.16;
-      gx += (tx - gx) * 0.07; gy += (ty - gy) * 0.07;
       cDot.style.transform  = 'translate(' + dx + 'px,' + dy + 'px) translate(-50%,-50%)';
       cRing.style.transform = 'translate(' + rx + 'px,' + ry + 'px) translate(-50%,-50%)';
-      cFx.style.transform = 'translate(' + gx + 'px,' + gy + 'px) translate(-50%,-50%)';
       requestAnimationFrame(tick);
     })();
 
@@ -829,7 +795,6 @@
   } else {
     cDot.style.display = 'none';
     cRing.style.display = 'none';
-    cFx.style.display = 'none';
   }
 
   /* ── work card tilt (extra dimension on hover) ── */
@@ -865,6 +830,7 @@
     var isDown = false, dragged = false, startY = 0, startScroll = 0;
     window.addEventListener('mousedown', function(e){
       if (e.button !== 0) return;
+      if (e.target && e.target.closest && e.target.closest('#contact-canvas')) return;
       isDown = true; dragged = false;
       startY = e.clientY;
       startScroll = window.scrollY;
