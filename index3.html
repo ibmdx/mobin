@@ -4,9 +4,9 @@
 <meta charset="UTF-8">
 <meta name="viewport" content="width=device-width, initial-scale=1, minimum-scale=1">
 <title>Mobin M. Bahrami • Product Designer</title>
-<meta name="description" content="Mobin M. Bahrami — Senior Product Designer with 10+ years experience across fintech, edtech, and consumer products.">
+<meta name="description" content="Mobin M. Bahrami — Product Designer with 10+ years experience across fintech, edtech, and consumer products.">
 <meta property="og:title" content="Mobin M. Bahrami • Product Designer">
-<meta property="og:description" content="Senior Product Designer — 10+ years — Tehran / Remote.">
+<meta property="og:description" content="Product Designer — 10+ years — Tehran / Remote.">
 <meta name="twitter:card" content="summary_large_image">
 <meta name="twitter:title" content="Mobin M. Bahrami • Product Designer">
 <link rel="preconnect" href="https://fonts.googleapis.com">
@@ -43,12 +43,12 @@
   .cursor-glow{
     position:fixed;
     top:0; left:0;
-    width:420px; height:420px;
+    width:320px; height:320px;
     border-radius:50%;
     pointer-events:none;
     z-index:9997;
     transform:translate(-50%,-50%);
-    background:radial-gradient(circle, rgba(255,255,255,0.10) 0%, rgba(255,255,255,0.04) 35%, transparent 70%);
+    background:radial-gradient(circle, rgba(255,255,255,0.045) 0%, rgba(255,255,255,0.015) 40%, transparent 70%);
     mix-blend-mode:screen;
     opacity:0;
     transition:opacity .5s ease;
@@ -97,7 +97,7 @@
   .cursor-dot.hide{ opacity:0; }
   @media (hover:none){ .cursor-dot, .cursor-ring, .cursor-glow{ display:none; } }
 
-  /* ───────── Shared underline-bar link (underline only on hover) ───────── */
+  /* ───────── Shared underline-bar link (grows in from left, exits to the right) ───────── */
   .bar-link{ position:relative; display:inline-block; padding-bottom:6px; }
   .bar-link::before{
     content:'';
@@ -105,10 +105,10 @@
     height:2px;
     background:#fff;
     transform:scaleX(0);
-    transform-origin:left;
-    transition:transform .45s cubic-bezier(.16,1,.3,1);
+    transform-origin:right;
+    transition:transform .7s cubic-bezier(.22,1,.36,1);
   }
-  .bar-link:hover::before{ transform:scaleX(1); }
+  .bar-link:hover::before{ transform:scaleX(1); transform-origin:left; }
 
   .wrap{
     max-width:1240px;
@@ -171,8 +171,8 @@
   .menu a{
     position:relative;
     font-family:'Poppins', sans-serif;
-    font-weight:500;
-    font-size:13px;
+    font-weight:700;
+    font-size:16px;
     color:var(--muted);
     padding:9px 16px;
     border-radius:20px;
@@ -186,10 +186,10 @@
     height:1px;
     background:var(--white);
     transform:scaleX(0);
-    transform-origin:left;
-    transition:transform .4s cubic-bezier(.16,1,.3,1);
+    transform-origin:right;
+    transition:transform .7s cubic-bezier(.22,1,.36,1);
   }
-  .menu a:hover::after{ transform:scaleX(1); }
+  .menu a:hover::after{ transform:scaleX(1); transform-origin:left; }
 
 
   /* ───────── Hero ───────── */
@@ -559,7 +559,7 @@
     .wrap{ padding:0 22px; }
     #top-nav{ padding:20px 20px; }
     #top-nav .brand{ font-size:18px; }
-    .menu a{ padding:8px 10px; font-size:12px; }
+    .menu a{ padding:8px 10px; font-size:14px; }
     #time-widget{ right:16px; bottom:16px; }
     #time-widget .tw-time{ font-size:32px; }
     #bottom-linkedin{ left:16px; bottom:16px; width:42px; height:42px; }
@@ -593,7 +593,7 @@
   <div class="hero-inner">
     <h1 class="hero-lines">
       <span>Hello! I'm</span>
-      <span>a senior product</span>
+      <span>a product</span>
       <span>designer with</span>
       <span>systems thinking</span>
       <span>and fintech</span>
@@ -611,7 +611,7 @@
     <div class="about-grid">
       <div class="reveal">
         <p class="eyebrow">About me</p>
-        <p class="about-lead">I'm a <b>senior product designer</b> with 10+ years of experience across fintech, edtech, and consumer products, with a strong focus on <b>Design Systems</b> and <b>Product Strategy</b>.</p>
+        <p class="about-lead">I'm a <b>product designer</b> with 10+ years of experience across fintech, edtech, and consumer products, with a strong focus on <b>Design Systems</b> and <b>Product Strategy</b>.</p>
         <p class="about-lead">I enjoy building thoughtful, end‑to‑end product experiences <b>for web and mobile</b> at scale.</p>
       </div>
       <div class="reveal about-body">
