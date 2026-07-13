@@ -36,50 +36,79 @@
   ::selection{background:var(--accent); color:#fff;}
   ::-webkit-scrollbar{width:0; height:0; display:none;}
 
-  /* ───────── Custom cursor (Anton-style follow circle) ───────── */
-  .cursor-dot{
+  /* ───────── Custom cursor: native cursor hidden, ring + dot + spotlight glow ───────── */
+  @media (hover:hover){
+    html, body, a, button{ cursor:none !important; }
+  }
+  .cursor-glow{
     position:fixed;
     top:0; left:0;
-    width:10px; height:10px;
+    width:420px; height:420px;
     border-radius:50%;
-    background:#fff;
+    pointer-events:none;
+    z-index:9997;
+    transform:translate(-50%,-50%);
+    background:radial-gradient(circle, rgba(255,255,255,0.10) 0%, rgba(255,255,255,0.04) 35%, transparent 70%);
+    mix-blend-mode:screen;
+    opacity:0;
+    transition:opacity .5s ease;
+  }
+  .cursor-glow.show{ opacity:1; }
+  .cursor-ring{
+    position:fixed;
+    top:0; left:0;
+    width:38px; height:38px;
+    border-radius:50%;
+    border:1.5px solid rgba(255,255,255,0.75);
     pointer-events:none;
     z-index:9999;
     transform:translate(-50%,-50%);
-    transition:width .35s cubic-bezier(.16,1,.3,1), height .35s cubic-bezier(.16,1,.3,1), background .35s ease;
-    mix-blend-mode:difference;
-  }
-  .cursor-dot span{
-    position:absolute; inset:0;
+    transition:width .35s cubic-bezier(.16,1,.3,1), height .35s cubic-bezier(.16,1,.3,1), border-color .35s ease, background .35s ease, opacity .35s ease;
+    opacity:0;
     display:flex; align-items:center; justify-content:center;
+  }
+  .cursor-ring.show{ opacity:1; }
+  .cursor-ring.link{ width:56px; height:56px; }
+  .cursor-ring.grow{ width:96px; height:96px; background:#fff; border-color:#fff; }
+  .cursor-ring span{
     font-family:'Poppins', sans-serif;
     font-weight:700;
-    font-size:10px;
+    font-size:11px;
     letter-spacing:0.04em;
     color:#0d0d0d;
     opacity:0;
     transition:opacity .25s ease;
     white-space:nowrap;
-    mix-blend-mode:normal;
   }
-  .cursor-dot.grow{ width:56px; height:56px; }
-  .cursor-dot.grow span{ opacity:1; }
-  .cursor-dot.link{ width:22px; height:22px; }
-  @media (hover:none){ .cursor-dot{ display:none; } }
+  .cursor-ring.grow span{ opacity:1; }
+  .cursor-dot{
+    position:fixed;
+    top:0; left:0;
+    width:6px; height:6px;
+    border-radius:50%;
+    background:#fff;
+    pointer-events:none;
+    z-index:9999;
+    transform:translate(-50%,-50%);
+    opacity:0;
+    transition:opacity .35s ease;
+  }
+  .cursor-dot.show{ opacity:1; }
+  .cursor-dot.hide{ opacity:0; }
+  @media (hover:none){ .cursor-dot, .cursor-ring, .cursor-glow{ display:none; } }
 
-  /* ───────── Shared underline-bar link (Anton-style hover swap) ───────── */
+  /* ───────── Shared underline-bar link (underline only on hover) ───────── */
   .bar-link{ position:relative; display:inline-block; padding-bottom:6px; }
   .bar-link::before{
     content:'';
     position:absolute; left:0; right:0; bottom:0;
     height:2px;
-    background:rgba(255,255,255,0.9);
+    background:#fff;
+    transform:scaleX(0);
     transform-origin:left;
-    transition:background .35s ease, transform .45s cubic-bezier(.16,1,.3,1);
+    transition:transform .45s cubic-bezier(.16,1,.3,1);
   }
-  .bar-link:hover::before{ background:#fff; transform:scaleX(1.02); height:2.5px; }
-  .bar-link:hover{ transform:translateX(3px); }
-  .bar-link{ transition:transform .3s cubic-bezier(.16,1,.3,1); }
+  .bar-link:hover::before{ transform:scaleX(1); }
 
   .wrap{
     max-width:1240px;
@@ -109,16 +138,34 @@
   #top-nav .brand{
     font-family:'Poppins', sans-serif;
     font-weight:700;
-    font-size:16px;
-    letter-spacing:-0.01em;
+    font-size:26px;
+    line-height:1.1;
+    letter-spacing:-0.02em;
+    text-align:left;
+    display:block;
     color:rgba(255,255,255,0.85);
     opacity:0;
     transform:translateY(-8px);
     transition:opacity .6s ease, transform .6s ease, color .3s ease;
   }
   #top-nav .brand:hover{ color:#fff; }
-  #top-nav .brand span{ color:var(--white); }
   #top-nav.show .brand{ opacity:1; transform:translateY(0); }
+  .brand-inner{
+    display:block;
+    animation:brandFloat 6s ease-in-out infinite;
+    transition:transform .5s cubic-bezier(.16,1,.3,1), letter-spacing .4s ease;
+  }
+  #top-nav .brand:hover .brand-inner{
+    animation-play-state:paused;
+    transform:scale(1.06);
+    letter-spacing:0.005em;
+  }
+  .brand-inner .line1{ display:block; }
+  .brand-inner .line2{ display:block; color:var(--white); }
+  @keyframes brandFloat{
+    0%, 100%{ transform:translateY(0); }
+    50%{ transform:translateY(-4px); }
+  }
 
   .menu{ display:flex; align-items:center; gap:6px; }
   .menu a{
@@ -160,9 +207,20 @@
   .hero-bg{
     position:absolute; inset:0;
     background:
-      radial-gradient(circle at 30% 20%, rgba(186,119,41,0.10), transparent 45%),
-      radial-gradient(circle at 75% 75%, rgba(255,255,255,0.05), transparent 50%),
-      linear-gradient(160deg, #111111 0%, #0a0a0a 60%, #000 100%);
+      radial-gradient(circle at 28% 18%, rgba(186,119,41,0.16), transparent 42%),
+      radial-gradient(circle at 78% 30%, rgba(255,255,255,0.06), transparent 45%),
+      radial-gradient(ellipse at 50% 90%, rgba(0,0,0,0.6), transparent 60%),
+      linear-gradient(160deg, #161412 0%, #0d0b0a 45%, #050505 80%, #000 100%);
+    transition:filter .25s ease-out;
+    will-change:filter;
+  }
+  .hero-darken{
+    position:absolute; inset:0;
+    background:#000;
+    opacity:0;
+    transition:opacity .25s ease-out;
+    pointer-events:none;
+    z-index:1;
   }
   .hero-grain{
     position:absolute; inset:0;
@@ -194,17 +252,6 @@
   .hero-lines span:nth-child(6){ animation-delay:.55s; }
   @keyframes lineUp{ to{ opacity:1; transform:translateY(0); } }
 
-  .hero-tag{
-    margin:34px 0 0;
-    font-family:'Poppins', sans-serif;
-    font-size:14px;
-    font-weight:500;
-    letter-spacing:0.04em;
-    color:var(--muted);
-    opacity:0;
-    animation:fadeIn 1s ease .8s forwards;
-  }
-  .hero-tag b{ color:var(--white); font-weight:600; }
   @keyframes fadeIn{ to{ opacity:1; } }
 
   .scroll-arrow{
@@ -244,32 +291,13 @@
     margin:0 0 18px 0;
   }
   .cv-btn{
-    display:inline-flex;
-    align-items:center;
-    gap:10px;
-    margin-top:20px;
-    padding:14px 26px;
-    border-radius:30px;
-    background:var(--white);
-    color:#0d0d0d;
+    display:inline-block;
+    margin-top:26px;
+    color:#fff;
     font-family:'Poppins', sans-serif;
-    font-weight:600;
-    font-size:14px;
-    position:relative;
-    overflow:hidden;
-    transition:transform .35s cubic-bezier(.16,1,.3,1);
+    font-weight:700;
+    font-size:16px;
   }
-  .cv-btn:hover{ transform:translateY(-2px) scale(1.03); }
-  .cv-btn:hover svg{ stroke:#0d0d0d; }
-  .cv-btn svg{ transition:stroke .3s ease; }
-  .cv-btn::before{
-    content:'';
-    position:absolute; top:0; left:-120%;
-    width:60%; height:100%;
-    background:linear-gradient(115deg, transparent, rgba(255,255,255,0.35), transparent);
-    transition:left .6s ease;
-  }
-  .cv-btn:hover::before{ left:140%; }
 
   /* ───────── Work ───────── */
   #work{ padding:60px 0 170px; }
@@ -354,7 +382,6 @@
     flex-shrink:0;
     transition:background .4s ease, transform .5s cubic-bezier(.16,1,.3,1), border-color .4s ease;
   }
-  .work-card:hover .work-title{ transform:translateX(10px); }
   .work-card:hover .work-name{ color:var(--white); }
   .work-card:hover .work-arrow{ background:#fff; border-color:#fff; transform:rotate(45deg) scale(1.06); }
   .work-arrow svg{ transition:stroke .3s ease; }
@@ -386,6 +413,8 @@
     aspect-ratio:1/1;
     opacity:0.55;
     pointer-events:none;
+    -webkit-mask-image:radial-gradient(circle at 50% 42%, black 45%, rgba(0,0,0,0.5) 65%, transparent 82%);
+    mask-image:radial-gradient(circle at 50% 42%, black 45%, rgba(0,0,0,0.5) 65%, transparent 82%);
   }
   .contact-grid{
     position:relative; z-index:2;
@@ -443,29 +472,32 @@
   }
   .social-row a{
     font-family:'Poppins', sans-serif;
-    font-size:13px; font-weight:500;
+    font-size:11px;
+    font-weight:600;
+    letter-spacing:0.1em;
+    text-transform:uppercase;
     color:var(--muted);
     transition:color .3s ease;
   }
-  .social-row a:hover{ color:var(--white); }
+  .social-row a:hover{ color:#fff; }
 
-  /* ───────── Bottom-left: LinkedIn only, hollow square ───────── */
+  /* ───────── Bottom-left: LinkedIn only, filled rectangle, icon fades to white ───────── */
   #bottom-linkedin{
     position:fixed;
     left:40px; bottom:34px;
     z-index:400;
     width:52px; height:52px;
     display:flex; align-items:center; justify-content:center;
-    border:1.5px solid rgba(255,255,255,0.35);
     border-radius:10px;
-    background:transparent;
+    background:rgba(255,255,255,0.08);
     opacity:0;
     transform:translateY(10px);
-    transition:opacity .5s ease, transform .5s ease, border-color .3s ease, background .3s ease;
+    transition:opacity .5s ease, transform .5s ease, background .3s ease;
   }
   #bottom-linkedin.show{ opacity:1; transform:translateY(0); }
-  #bottom-linkedin:hover{ border-color:#fff; background:rgba(255,255,255,0.06); }
-  #bottom-linkedin svg{ width:22px; height:22px; }
+  #bottom-linkedin:hover{ background:rgba(255,255,255,0.14); }
+  #bottom-linkedin svg{ width:22px; height:22px; fill:rgba(255,255,255,0.5); transition:fill .3s ease; }
+  #bottom-linkedin:hover svg{ fill:#fff; }
 
   /* ───────── Local time widget (fixed, bottom-right, no background) ───────── */
   #time-widget{
@@ -526,7 +558,7 @@
   @media (max-width: 640px){
     .wrap{ padding:0 22px; }
     #top-nav{ padding:20px 20px; }
-    #top-nav .brand{ font-size:13px; }
+    #top-nav .brand{ font-size:18px; }
     .menu a{ padding:8px 10px; font-size:12px; }
     #time-widget{ right:16px; bottom:16px; }
     #time-widget .tw-time{ font-size:32px; }
@@ -539,11 +571,13 @@
 </head>
 <body>
 
-<div class="cursor-dot" id="cursor-dot"><span id="cursor-label"></span></div>
+<div class="cursor-glow" id="cursor-glow"></div>
+<div class="cursor-ring" id="cursor-ring"><span id="cursor-label"></span></div>
+<div class="cursor-dot" id="cursor-dot"></div>
 
 <!-- Top nav -->
 <nav id="top-nav">
-  <a href="#start" class="brand">MOBIN <span>BAHRAMI</span></a>
+  <a href="#start" class="brand"><span class="brand-inner"><span class="line1">Mobin</span><span class="line2">Bahrami</span></span></a>
   <div class="menu">
     <a href="#about">About</a>
     <a href="#work">Work</a>
@@ -553,7 +587,8 @@
 
 <!-- Hero -->
 <section id="start">
-  <div class="hero-bg"></div>
+  <div class="hero-bg" id="hero-bg"></div>
+  <div class="hero-darken" id="hero-darken"></div>
   <div class="hero-grain"></div>
   <div class="hero-inner">
     <h1 class="hero-lines">
@@ -564,13 +599,6 @@
       <span>and fintech</span>
       <span class="muted">craft.</span>
     </h1>
-    <p class="hero-tag"><b>Senior Product Designer</b> · 10+ yrs · Tehran / Remote</p>
-    <p class="hero-tag" style="margin-top:10px; opacity:0; animation-delay:.95s;">
-      EX —
-      <a class="bar-link" href="tosan.html">Tosan</a> ◦
-      <a class="bar-link" href="zabanshenas.html">ZabanShenas</a> ◦
-      <a class="bar-link" href="gajino.html">Gajino</a>
-    </p>
   </div>
   <a href="#about" class="scroll-arrow" aria-label="Scroll down">
     <svg width="12" height="12" viewBox="0 0 10 10" fill="none"><path d="M2 3.5L5 6.5L8 3.5" stroke="rgba(255,255,255,0.8)" stroke-width="1.4" stroke-linecap="round" stroke-linejoin="round"/></svg>
@@ -590,10 +618,7 @@
         <p>Throughout my career, I've had the privilege of leading design at Tosan, Fanap, Gaj, and ZabanShenas — shaping enterprise banking platforms, mobile payment products, and education apps.</p>
         <p>Along the way I founded the Atomic Core Design System, adopted across 15+ products and 8 teams, and shipped experiences used by more than a million people across banking, payments, and learning.</p>
         <p>Beyond product design, I follow how AI is reshaping banking UX, and enjoy exploring generative and digital art in my own time.</p>
-        <a class="cv-btn" href="assets/Mobin_M_Bahrami_Resume.pdf" target="_blank" rel="noopener">
-          Download CV
-          <svg width="14" height="14" viewBox="0 0 24 24" fill="none" stroke="#0d0d0d" stroke-width="2"><path d="M12 3v12m0 0l-4-4m4 4l4-4M5 21h14" stroke-linecap="round" stroke-linejoin="round"/></svg>
-        </a>
+        <a class="cv-btn bar-link" href="assets/Mobin_M_Bahrami_Resume.pdf" target="_blank" rel="noopener">Download CV</a>
       </div>
     </div>
   </div>
@@ -661,7 +686,7 @@
   <div class="wrap">
     <p class="eyebrow reveal">Contact</p>
     <div class="contact-grid reveal">
-      <div class="contact-field">
+      <div class="contact-field reveal">
         <h6>Email</h6>
         <span class="val">
           <a class="val-text bar-link" href="mailto:bmdx.info@gmail.com">bmdx.info@gmail.com</a>
@@ -671,7 +696,7 @@
           <span class="copy-hint">Copied to clipboard</span>
         </span>
       </div>
-      <div class="contact-field">
+      <div class="contact-field reveal">
         <h6>Phone</h6>
         <span class="val">
           <a class="val-text bar-link" href="tel:+989373772203">+98 937 377 2203</a>
@@ -681,13 +706,13 @@
           <span class="copy-hint">Copied to clipboard</span>
         </span>
       </div>
-      <div class="contact-field">
+      <div class="contact-field reveal">
         <h6>LinkedIn</h6>
         <span class="val">
-          <a class="val-text bar-link" href="https://linkedin.com/in/bmdx" target="_blank" rel="noopener">linkedin.com/in/bmdx</a>
+          <a class="val-text bar-link" href="https://linkedin.com/in/bmdx" target="_blank" rel="noopener">Linkedin Profile Page</a>
         </span>
       </div>
-      <div class="contact-field">
+      <div class="contact-field reveal">
         <h6>Based in</h6>
         <span class="val">
           <span class="val-text">Tehran, Iran — Remote</span>
@@ -703,11 +728,15 @@
   </div>
 </section>
 
-<div id="foot-credit">An elegant product by <a href="index.html">BMDX</a> ©</div>
+<div id="foot-credit" class="reveal">An elegant product by <a href="index.html">BMDX</a> ©</div>
 
 <!-- Fixed bottom-left: LinkedIn only, hollow square -->
 <a id="bottom-linkedin" href="https://linkedin.com/in/bmdx" target="_blank" rel="noopener" aria-label="LinkedIn">
-  <svg viewBox="0 0 24 24" fill="none" stroke="#fff" stroke-width="1.6"><path d="M4 9h3v11H4zM5.5 3A1.75 1.75 0 1 1 5.5 6.5 1.75 1.75 0 0 1 5.5 3zM10.5 9h3v1.6c.6-1 1.9-1.9 3.6-1.9 3 0 4.4 1.8 4.4 5.2V20h-3v-5.6c0-1.7-.6-2.8-2.1-2.8-1.2 0-1.9.8-2.2 1.6-.1.3-.1.6-.1 1V20h-3z"/></svg>
+  <svg viewBox="0 0 24 24" xmlns="http://www.w3.org/2000/svg">
+    <rect x="3" y="9" width="4" height="12"/>
+    <circle cx="5" cy="4.5" r="2.3"/>
+    <path d="M10.5 9h3.8v1.9h.05c.53-1.03 1.83-2.15 3.77-2.15 4.03 0 4.78 2.65 4.78 6.1V21h-4v-5.7c0-1.36-.02-3.1-1.89-3.1-1.9 0-2.19 1.48-2.19 3v5.8h-4V9z"/>
+  </svg>
 </a>
 
 <!-- Fixed bottom-right local time -->
@@ -755,38 +784,60 @@
   updateClock();
   setInterval(updateClock, 1000);
 
-  /* ── custom cursor ── */
-  var cursor = document.getElementById('cursor-dot');
-  var cursorLabel = document.getElementById('cursor-label');
+  /* ── custom cursor: dot (fast) + ring (medium lag) + glow (slow lag) ── */
+  var cDot = document.getElementById('cursor-dot');
+  var cRing = document.getElementById('cursor-ring');
+  var cGlow = document.getElementById('cursor-glow');
+  var cLabel = document.getElementById('cursor-label');
   var hasHover = window.matchMedia('(hover: hover)').matches;
   if (hasHover){
-    var cx = window.innerWidth / 2, cy = window.innerHeight / 2;
-    var tx = cx, ty = cy;
-    window.addEventListener('mousemove', function(e){ tx = e.clientX; ty = e.clientY; });
+    var tx = window.innerWidth / 2, ty = window.innerHeight / 2;
+    var dx = tx, dy = ty;   // dot position
+    var rx = tx, ry = ty;   // ring position
+    var gx = tx, gy = ty;   // glow position
+    var started = false;
+
+    window.addEventListener('mousemove', function(e){
+      tx = e.clientX; ty = e.clientY;
+      if (!started){
+        started = true;
+        cDot.classList.add('show');
+        cRing.classList.add('show');
+        cGlow.classList.add('show');
+      }
+    });
+
     (function tick(){
-      cx += (tx - cx) * 0.18;
-      cy += (ty - cy) * 0.18;
-      cursor.style.transform = 'translate(' + cx + 'px,' + cy + 'px) translate(-50%,-50%)';
+      dx += (tx - dx) * 0.45; dy += (ty - dy) * 0.45;
+      rx += (tx - rx) * 0.16; ry += (ty - ry) * 0.16;
+      gx += (tx - gx) * 0.07; gy += (ty - gy) * 0.07;
+      cDot.style.transform  = 'translate(' + dx + 'px,' + dy + 'px) translate(-50%,-50%)';
+      cRing.style.transform = 'translate(' + rx + 'px,' + ry + 'px) translate(-50%,-50%)';
+      cGlow.style.transform = 'translate(' + gx + 'px,' + gy + 'px) translate(-50%,-50%)';
       requestAnimationFrame(tick);
     })();
 
     document.querySelectorAll('a, button').forEach(function(el){
       el.addEventListener('mouseenter', function(){
         var label = el.getAttribute('data-cursor');
+        cDot.classList.add('hide');
         if (label){
-          cursor.classList.add('grow');
-          cursorLabel.textContent = label;
+          cRing.classList.add('grow');
+          cLabel.textContent = label;
         } else {
-          cursor.classList.add('link');
+          cRing.classList.add('link');
         }
       });
       el.addEventListener('mouseleave', function(){
-        cursor.classList.remove('grow', 'link');
-        cursorLabel.textContent = '';
+        cDot.classList.remove('hide');
+        cRing.classList.remove('grow', 'link');
+        cLabel.textContent = '';
       });
     });
   } else {
-    cursor.style.display = 'none';
+    cDot.style.display = 'none';
+    cRing.style.display = 'none';
+    cGlow.style.display = 'none';
   }
 
   /* ── work card tilt (extra dimension on hover) ── */
@@ -802,6 +853,46 @@
       media.style.transform = '';
     });
   });
+
+  /* ── hero background: blur + darken smoothly as you scroll down ── */
+  var heroBg = document.getElementById('hero-bg');
+  var heroDarken = document.getElementById('hero-darken');
+  var heroEl = document.getElementById('start');
+  function updateHeroFx(){
+    var heroH = heroEl.offsetHeight || window.innerHeight;
+    var progress = Math.min(window.scrollY / (heroH * 0.85), 1);
+    heroBg.style.filter = 'blur(' + (progress * 16) + 'px)';
+    heroDarken.style.opacity = progress * 0.78;
+  }
+  updateHeroFx();
+  window.addEventListener('scroll', updateHeroFx, { passive: true });
+  window.addEventListener('resize', updateHeroFx);
+
+  /* ── drag-to-scroll (click and drag anywhere to scroll, wheel/touch untouched) ── */
+  (function(){
+    var isDown = false, dragged = false, startY = 0, startScroll = 0;
+    window.addEventListener('mousedown', function(e){
+      if (e.button !== 0) return;
+      isDown = true; dragged = false;
+      startY = e.clientY;
+      startScroll = window.scrollY;
+    });
+    window.addEventListener('mousemove', function(e){
+      if (!isDown) return;
+      var delta = e.clientY - startY;
+      if (Math.abs(delta) > 6) dragged = true;
+      if (dragged) window.scrollTo(0, startScroll - delta);
+    });
+    window.addEventListener('mouseup', function(){ isDown = false; });
+    window.addEventListener('mouseleave', function(){ isDown = false; });
+    document.addEventListener('click', function(e){
+      if (dragged){
+        e.preventDefault();
+        e.stopPropagation();
+      }
+      dragged = false;
+    }, true);
+  })();
 
   /* ── scroll reveal ── */
   var revealEls = document.querySelectorAll('.reveal');
@@ -824,7 +915,7 @@
     });
   };
 
-  /* ── contact canvas: rotating particle sphere ── */
+  /* ── contact canvas: rotating globe with a highlighted Tehran point ── */
   var canvas = document.getElementById('contact-canvas');
   var ctx = canvas.getContext('2d');
   var dpr = Math.min(window.devicePixelRatio || 1, 2);
@@ -838,8 +929,17 @@
       var y = 1 - (i / (N - 1)) * 2;
       var r = Math.sqrt(1 - y * y);
       var theta = i * 2.399963; // golden angle
-      pts.push({ x: Math.cos(theta) * r, y: y, z: Math.sin(theta) * r });
+      pts.push({ x: Math.cos(theta) * r, y: y, z: Math.sin(theta) * r, tehran: false });
     }
+    // Tehran ~ 35.7°N, 51.4°E — plotted on the globe as a brighter point
+    var lat = 35.7 * Math.PI / 180;
+    var lon = 51.4 * Math.PI / 180;
+    pts.push({
+      x: Math.cos(lat) * Math.cos(lon),
+      y: Math.sin(lat),
+      z: Math.cos(lat) * Math.sin(lon),
+      tehran: true
+    });
   }
   buildPoints();
 
@@ -864,12 +964,24 @@
       var x = p.x * cosA - p.z * sinA;
       var z = p.x * sinA + p.z * cosA;
       var scale = (z + 1.6) / 2.6;
-      return { sx: cx + x * radius, sy: cy + p.y * radius, s: scale };
+      return { sx: cx + x * radius, sy: cy + p.y * radius, s: scale, tehran: p.tehran };
     });
 
     proj.sort(function(a, b){ return a.s - b.s; });
 
     proj.forEach(function(p){
+      if (p.tehran){
+        var tSize = (1.6 + p.s * 2.4) * dpr;
+        ctx.beginPath();
+        ctx.arc(p.sx, p.sy, tSize * 2.4, 0, Math.PI * 2);
+        ctx.fillStyle = 'rgba(255,255,255,' + (0.12 + p.s * 0.16) + ')';
+        ctx.fill();
+        ctx.beginPath();
+        ctx.arc(p.sx, p.sy, tSize, 0, Math.PI * 2);
+        ctx.fillStyle = 'rgba(255,255,255,' + (0.75 + p.s * 0.25) + ')';
+        ctx.fill();
+        return;
+      }
       var size = p.s * 2.1 * dpr;
       var alpha = 0.15 + p.s * 0.55;
       ctx.beginPath();
