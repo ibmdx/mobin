@@ -40,20 +40,21 @@
   @media (hover:hover){
     html, body, a, button{ cursor:none !important; }
   }
-  .cursor-glow{
+  .cursor-fx{
     position:fixed;
     top:0; left:0;
-    width:320px; height:320px;
+    width:130px; height:130px;
     border-radius:50%;
     pointer-events:none;
     z-index:9997;
     transform:translate(-50%,-50%);
-    background:radial-gradient(circle, rgba(255,255,255,0.045) 0%, rgba(255,255,255,0.015) 40%, transparent 70%);
-    mix-blend-mode:screen;
+    background:#fff;
+    filter:blur(22px);
+    mix-blend-mode:difference;
     opacity:0;
     transition:opacity .5s ease;
   }
-  .cursor-glow.show{ opacity:1; }
+  .cursor-fx.show{ opacity:0.5; }
   .cursor-ring{
     position:fixed;
     top:0; left:0;
@@ -95,7 +96,7 @@
   }
   .cursor-dot.show{ opacity:1; }
   .cursor-dot.hide{ opacity:0; }
-  @media (hover:none){ .cursor-dot, .cursor-ring, .cursor-glow{ display:none; } }
+  @media (hover:none){ .cursor-dot, .cursor-ring, .cursor-fx{ display:none; } }
 
   /* ───────── Shared underline-bar link (grows in from left, exits to the right) ───────── */
   .bar-link{ position:relative; display:inline-block; padding-bottom:6px; }
@@ -202,10 +203,10 @@
     justify-content:center;
     text-align:center;
     padding:140px 24px 100px;
-    overflow:hidden;
   }
   .hero-bg{
-    position:absolute; inset:0;
+    position:fixed; inset:0;
+    z-index:-2;
     background:
       radial-gradient(circle at 28% 18%, rgba(186,119,41,0.16), transparent 42%),
       radial-gradient(circle at 78% 30%, rgba(255,255,255,0.06), transparent 45%),
@@ -215,17 +216,19 @@
     will-change:filter;
   }
   .hero-darken{
-    position:absolute; inset:0;
+    position:fixed; inset:0;
+    z-index:-1;
     background:#000;
     opacity:0;
     transition:opacity .25s ease-out;
     pointer-events:none;
-    z-index:1;
   }
   .hero-grain{
-    position:absolute; inset:0;
+    position:fixed; inset:0;
+    z-index:-1;
     opacity:.35;
     mix-blend-mode:overlay;
+    pointer-events:none;
     background-image:url("data:image/svg+xml;utf8,<svg xmlns='http://www.w3.org/2000/svg' width='120' height='120'><filter id='n'><feTurbulence type='fractalNoise' baseFrequency='0.9' numOctaves='2' stitchTiles='stitch'/></filter><rect width='100%25' height='100%25' filter='url(%23n)' opacity='0.5'/></svg>");
   }
   .hero-inner{ position:relative; z-index:2; }
@@ -401,7 +404,7 @@
   /* ───────── Contact ───────── */
   #contact{
     position:relative;
-    padding:150px 0 170px;
+    padding:150px 0 200px;
     border-top:1px solid var(--line);
     overflow:hidden;
   }
@@ -411,51 +414,50 @@
     transform:translate(-50%,-50%);
     width:min(760px, 90vw);
     aspect-ratio:1/1;
-    opacity:0.55;
+    opacity:0.6;
     pointer-events:none;
-    -webkit-mask-image:radial-gradient(circle at 50% 42%, black 45%, rgba(0,0,0,0.5) 65%, transparent 82%);
-    mask-image:radial-gradient(circle at 50% 42%, black 45%, rgba(0,0,0,0.5) 65%, transparent 82%);
   }
   .contact-grid{
     position:relative; z-index:2;
     display:grid;
-    grid-template-columns:repeat(2, 1fr);
-    row-gap:44px;
-    column-gap:60px;
+    grid-template-columns:1fr;
+    row-gap:38px;
     margin-top:10px;
   }
   .contact-field h6{
     font-family:'Poppins', sans-serif;
-    font-size:13px;
+    font-size:11px;
     font-weight:600;
+    letter-spacing:0.1em;
+    text-transform:uppercase;
     color:var(--muted);
-    margin:0 0 14px 0;
+    margin:0 0 10px 0;
   }
   .contact-field .val{
     display:flex;
     align-items:center;
     flex-wrap:wrap;
-    gap:12px;
+    gap:14px;
     font-family:'Poppins', sans-serif;
-    font-size:17px;
-    font-weight:500;
+    font-size:clamp(24px, 3.4vw, 42px);
+    font-weight:700;
+    letter-spacing:-0.02em;
     position:relative;
   }
-  .contact-field .val-text{ line-height:1.3; }
+  .contact-field .val-text{ line-height:1.2; }
   .copy-btn{
-    width:28px; height:28px;
-    border-radius:50%;
+    width:auto; height:auto;
     border:none;
+    background:none;
+    padding:0;
     display:inline-flex; align-items:center; justify-content:center;
     cursor:pointer;
     flex-shrink:0;
-    background:rgba(255,255,255,0.06);
-    transition:background .3s ease, transform .3s ease;
+    transition:transform .3s ease;
   }
-  .copy-btn:hover{ background:#fff; transform:scale(1.1); }
-  .copy-btn:hover svg{ stroke:#0d0d0d; }
-  .copy-btn svg{ transition:stroke .3s ease; }
-  .copy-btn svg{ width:12px; height:12px; }
+  .copy-btn:hover{ transform:scale(1.12); }
+  .copy-btn:hover svg{ stroke:#fff; }
+  .copy-btn svg{ width:22px; height:22px; stroke:var(--muted); transition:stroke .3s ease; }
   .copy-hint{
     flex-basis:100%;
     font-size:11px; color:var(--muted); white-space:nowrap;
@@ -537,16 +539,6 @@
     color:var(--muted);
   }
 
-  /* ───────── Footer credit (in-flow, small) ───────── */
-  #foot-credit{
-    text-align:center;
-    padding:34px 24px 120px;
-    font-family:'Poppins', sans-serif;
-    font-size:12px;
-    color:var(--muted-2);
-  }
-  #foot-credit a{ color:var(--muted); transition:color .3s ease; }
-  #foot-credit a:hover{ color:#fff; }
 
   /* ───────── Responsive ───────── */
   @media (max-width: 900px){
@@ -571,7 +563,11 @@
 </head>
 <body>
 
-<div class="cursor-glow" id="cursor-glow"></div>
+<div class="hero-bg" id="hero-bg"></div>
+<div class="hero-darken" id="hero-darken"></div>
+<div class="hero-grain"></div>
+
+<div class="cursor-fx" id="cursor-fx"></div>
 <div class="cursor-ring" id="cursor-ring"><span id="cursor-label"></span></div>
 <div class="cursor-dot" id="cursor-dot"></div>
 
@@ -587,9 +583,6 @@
 
 <!-- Hero -->
 <section id="start">
-  <div class="hero-bg" id="hero-bg"></div>
-  <div class="hero-darken" id="hero-darken"></div>
-  <div class="hero-grain"></div>
   <div class="hero-inner">
     <h1 class="hero-lines">
       <span>Hello! I'm</span>
@@ -728,7 +721,6 @@
   </div>
 </section>
 
-<div id="foot-credit" class="reveal">An elegant product by <a href="index.html">BMDX</a> ©</div>
 
 <!-- Fixed bottom-left: LinkedIn only, hollow square -->
 <a id="bottom-linkedin" href="https://linkedin.com/in/bmdx" target="_blank" rel="noopener" aria-label="LinkedIn">
@@ -787,7 +779,7 @@
   /* ── custom cursor: dot (fast) + ring (medium lag) + glow (slow lag) ── */
   var cDot = document.getElementById('cursor-dot');
   var cRing = document.getElementById('cursor-ring');
-  var cGlow = document.getElementById('cursor-glow');
+  var cFx = document.getElementById('cursor-fx');
   var cLabel = document.getElementById('cursor-label');
   var hasHover = window.matchMedia('(hover: hover)').matches;
   if (hasHover){
@@ -803,7 +795,7 @@
         started = true;
         cDot.classList.add('show');
         cRing.classList.add('show');
-        cGlow.classList.add('show');
+        cFx.classList.add('show');
       }
     });
 
@@ -813,7 +805,7 @@
       gx += (tx - gx) * 0.07; gy += (ty - gy) * 0.07;
       cDot.style.transform  = 'translate(' + dx + 'px,' + dy + 'px) translate(-50%,-50%)';
       cRing.style.transform = 'translate(' + rx + 'px,' + ry + 'px) translate(-50%,-50%)';
-      cGlow.style.transform = 'translate(' + gx + 'px,' + gy + 'px) translate(-50%,-50%)';
+      cFx.style.transform = 'translate(' + gx + 'px,' + gy + 'px) translate(-50%,-50%)';
       requestAnimationFrame(tick);
     })();
 
@@ -837,7 +829,7 @@
   } else {
     cDot.style.display = 'none';
     cRing.style.display = 'none';
-    cGlow.style.display = 'none';
+    cFx.style.display = 'none';
   }
 
   /* ── work card tilt (extra dimension on hover) ── */
