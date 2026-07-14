@@ -124,21 +124,21 @@
   #top-nav .brand{
     font-family:'Poppins', sans-serif;
     font-weight:700;
-    font-size:26px;
+    font-size:28px;
     line-height:1.1;
     letter-spacing:-0.02em;
     text-align:left;
     display:block;
-    color:rgba(255,255,255,0.85);
+    color:var(--muted);
     opacity:0;
     transform:translateY(-8px);
-    transition:opacity .6s ease, transform .6s ease, color .3s ease;
+    transition:opacity .6s ease, transform .6s ease, color .4s ease;
   }
   #top-nav .brand:hover{ color:#fff; }
   #top-nav.show .brand{ opacity:1; transform:translateY(0); }
   .brand-inner{
     display:block;
-    animation:brandFloat 6s ease-in-out infinite;
+    animation:brandFloat 9s ease-in-out infinite;
     transition:transform .5s cubic-bezier(.16,1,.3,1);
   }
   #top-nav .brand:hover .brand-inner{
@@ -158,14 +158,13 @@
     display:block;
     line-height:1.1;
   }
-  .brand-inner .slot.slot-2 .slot-track span{ color:var(--white); }
   #top-nav .brand:hover .slot-track{ transform:translateY(-50%); }
   @keyframes brandFloat{
     0%, 100%{ transform:translateY(0); }
     50%{ transform:translateY(-4px); }
   }
 
-  .menu{ display:flex; align-items:center; gap:6px; }
+  .menu{ display:flex; align-items:center; gap:26px; }
   .menu a{
     position:relative;
     font-family:'Poppins', sans-serif;
@@ -176,6 +175,7 @@
     color:var(--muted);
     padding:9px 16px;
     border-radius:20px;
+    mix-blend-mode:difference;
     transition:color .3s ease;
   }
   .menu a:hover{ color:var(--white); }
@@ -198,9 +198,7 @@
     min-height:100vh;
     display:flex;
     flex-direction:column;
-    align-items:center;
     justify-content:center;
-    text-align:center;
     padding:140px 24px 100px;
   }
   .hero-bg{
@@ -230,7 +228,14 @@
     pointer-events:none;
     background-image:url("data:image/svg+xml;utf8,<svg xmlns='http://www.w3.org/2000/svg' width='120' height='120'><filter id='n'><feTurbulence type='fractalNoise' baseFrequency='0.9' numOctaves='2' stitchTiles='stitch'/></filter><rect width='100%25' height='100%25' filter='url(%23n)' opacity='0.5'/></svg>");
   }
-  .hero-inner{ position:relative; z-index:2; }
+  .hero-inner{
+    position:relative; z-index:2;
+    max-width:1240px;
+    width:100%;
+    margin:0 auto;
+    padding:0 16px;
+    text-align:left;
+  }
   .hero-lines{
     font-family:'Poppins', sans-serif;
     font-weight:700;
@@ -275,7 +280,7 @@
   .reveal.in{ opacity:1; transform:translateY(0); }
 
   /* ───────── About ───────── */
-  #about{ padding:150px 0; border-top:1px solid var(--line); }
+  #about{ padding:150px 0; }
   .about-grid{ display:flex; flex-direction:column; gap:36px; max-width:760px; }
   .about-lead{
     font-family:'Poppins', sans-serif;
@@ -404,14 +409,13 @@
   #contact{
     position:relative;
     padding:150px 0 200px;
-    border-top:1px solid var(--line);
     overflow:hidden;
   }
   #contact-canvas{
     position:absolute;
-    top:50%; left:50%;
-    transform:translate(-50%,-50%);
-    width:min(760px, 90vw);
+    top:50%; right:-8%;
+    transform:translateY(-50%);
+    width:min(680px, 70vw);
     aspect-ratio:1/1;
     opacity:0.6;
     pointer-events:none;
@@ -420,9 +424,12 @@
     position:relative; z-index:2;
     display:grid;
     grid-template-columns:1fr;
-    row-gap:38px;
+    row-gap:0;
     margin-top:10px;
   }
+  .contact-field{ padding:19px 0; }
+  .contact-field:first-child{ padding-top:0; }
+  .contact-field + .contact-field{ border-top:1px solid var(--line); }
   .contact-field h6{
     font-family:'Poppins', sans-serif;
     font-size:11px;
@@ -449,21 +456,31 @@
     border:none;
     background:none;
     padding:0;
-    display:inline-flex; align-items:center; justify-content:center;
+    display:inline-flex; align-items:center; gap:9px;
     cursor:pointer;
     flex-shrink:0;
     transition:transform .3s ease;
   }
-  .copy-btn:hover{ transform:scale(1.12); }
-  .copy-btn:hover svg{ stroke:#fff; }
+  .copy-btn:hover{ transform:scale(1.05); }
   .copy-btn svg{ width:22px; height:22px; stroke:var(--muted); transition:stroke .3s ease; }
-  .copy-hint{
-    flex-basis:100%;
-    font-size:11px; color:var(--muted); white-space:nowrap;
-    opacity:0; height:0; overflow:hidden;
-    transition:opacity .3s ease;
+  .copy-btn:hover svg, .copy-btn.copied svg{ stroke:#fff; }
+  .copy-btn .icon-tick{ display:none; }
+  .copy-btn.copied .icon-copy{ display:none; }
+  .copy-btn.copied .icon-tick{ display:block; }
+  .copy-label{
+    font-family:'Poppins', sans-serif;
+    font-size:11px;
+    font-weight:700;
+    letter-spacing:0.08em;
+    color:var(--muted);
+    white-space:nowrap;
+    max-width:0;
+    overflow:hidden;
+    opacity:0;
+    transition:opacity .3s ease, max-width .3s ease, color .3s ease;
   }
-  .copy-hint.show{ opacity:1; height:auto; }
+  .copy-btn:hover .copy-label, .copy-btn.copied .copy-label{ opacity:1; max-width:160px; }
+  .copy-btn.copied .copy-label{ color:#fff; }
 
   /* ───────── Bottom-left: LinkedIn only, filled rectangle, icon fades to white ───────── */
   #bottom-linkedin{
@@ -485,25 +502,26 @@
 
   /* ───────── Local time — original widget style, now in-flow at page end ───────── */
   #page-footer-clock{
-    padding:0 0 90px;
-    text-align:right;
+    padding:0 0 28px; /* bottom offset lines up with #bottom-linkedin (bottom:34px) at the very end of scroll */
+    text-align:left;
   }
+  #page-footer-clock .wrap{ border-top:1px solid var(--line); padding-top:24px; }
   #page-footer-clock .tw-label{
     font-family:'Poppins', sans-serif;
     font-size:11px;
-    font-weight:600;
+    font-weight:700;
     letter-spacing:0.1em;
     text-transform:uppercase;
     color:var(--muted);
     margin:0 0 6px 0;
   }
   #page-footer-clock .tw-clock{
-    display:flex; align-items:baseline; gap:8px; justify-content:flex-end;
+    display:flex; align-items:flex-start; gap:8px; justify-content:flex-start;
   }
   #page-footer-clock .tw-time{
     font-family:'Poppins', sans-serif;
     font-weight:700;
-    font-size:42px;
+    font-size:64px;
     letter-spacing:-0.02em;
     color:#fff;
     font-variant-numeric:tabular-nums;
@@ -514,24 +532,34 @@
     font-size:14px;
     color:var(--muted);
   }
+  .tw-location-mobile{
+    display:none;
+    margin:10px 0 0;
+    font-family:'Poppins', sans-serif;
+    font-size:13px;
+    color:var(--muted);
+  }
 
   /* ───────── Responsive ───────── */
   @media (max-width: 900px){
     .contact-grid{ grid-template-columns:1fr; gap:30px; }
     .work-info{ flex-direction:column; align-items:flex-start; gap:16px; }
     .work-copy{ max-width:100%; }
+    /* first-pass mobile/tablet layout — will be refined further */
+    .menu{ display:none; }
+    #bottom-linkedin{ display:none; }
+    .based-in-field{ display:none; }
+    .tw-location-mobile{ display:block; }
   }
   @media (max-width: 640px){
     .wrap{ padding:0 22px; }
     #top-nav{ padding:20px 20px; }
     #top-nav .brand{ font-size:18px; }
-    .menu a{ padding:8px 10px; font-size:14px; }
-    #bottom-linkedin{ left:16px; bottom:16px; width:42px; height:42px; }
     .work-arrow{ display:none; }
     #about, #work, #contact{ padding-top:90px; padding-bottom:90px; }
     #start{ padding-top:110px; }
     #page-footer-clock{ padding-bottom:70px; }
-    #page-footer-clock .tw-time{ font-size:32px; }
+    #page-footer-clock .tw-time{ font-size:44px; }
   }
 </style>
 </head>
@@ -661,20 +689,22 @@
         <h6>Email</h6>
         <span class="val">
           <a class="val-text bar-link" href="mailto:bmdx.info@gmail.com">bmdx.info@gmail.com</a>
-          <button class="copy-btn" onclick="copyText('bmdx.info@gmail.com', this)" aria-label="Copy email">
-            <svg viewBox="0 0 24 24" fill="none" stroke="#fff" stroke-width="1.8"><rect x="9" y="9" width="11" height="11" rx="2"/><path d="M5 15V5a2 2 0 0 1 2-2h10"/></svg>
+          <button class="copy-btn" onclick="copyText('bmdx.info@gmail.com', this, 'COPY ADDRESS')" aria-label="Copy email">
+            <svg class="icon-copy" viewBox="0 0 24 24" fill="none" stroke="#fff" stroke-width="1.8"><rect x="9" y="9" width="11" height="11" rx="2"/><path d="M5 15V5a2 2 0 0 1 2-2h10"/></svg>
+            <svg class="icon-tick" viewBox="0 0 24 24" fill="none" stroke="#fff" stroke-width="2"><path d="M4 12l5 5L20 6" stroke-linecap="round" stroke-linejoin="round"/></svg>
+            <span class="copy-label">COPY ADDRESS</span>
           </button>
-          <span class="copy-hint">Copied to clipboard</span>
         </span>
       </div>
       <div class="contact-field reveal">
         <h6>Phone</h6>
         <span class="val">
           <a class="val-text bar-link" href="tel:+989373772203">+98 937 377 2203</a>
-          <button class="copy-btn" onclick="copyText('+989373772203', this)" aria-label="Copy phone">
-            <svg viewBox="0 0 24 24" fill="none" stroke="#fff" stroke-width="1.8"><rect x="9" y="9" width="11" height="11" rx="2"/><path d="M5 15V5a2 2 0 0 1 2-2h10"/></svg>
+          <button class="copy-btn" onclick="copyText('+989373772203', this, 'COPY NUMBER')" aria-label="Copy phone">
+            <svg class="icon-copy" viewBox="0 0 24 24" fill="none" stroke="#fff" stroke-width="1.8"><rect x="9" y="9" width="11" height="11" rx="2"/><path d="M5 15V5a2 2 0 0 1 2-2h10"/></svg>
+            <svg class="icon-tick" viewBox="0 0 24 24" fill="none" stroke="#fff" stroke-width="2"><path d="M4 12l5 5L20 6" stroke-linecap="round" stroke-linejoin="round"/></svg>
+            <span class="copy-label">COPY NUMBER</span>
           </button>
-          <span class="copy-hint">Copied to clipboard</span>
         </span>
       </div>
       <div class="contact-field reveal">
@@ -683,7 +713,7 @@
           <a class="val-text bar-link" href="https://linkedin.com/in/bmdx" target="_blank" rel="noopener">Linkedin Profile Page</a>
         </span>
       </div>
-      <div class="contact-field reveal">
+      <div class="contact-field reveal based-in-field">
         <h6>Based in</h6>
         <span class="val">
           <span class="val-text">Tehran, Iran — Remote</span>
@@ -701,6 +731,7 @@
       <span class="tw-time" id="tw-time">--:--</span>
       <span class="tw-ampm" id="tw-ampm"></span>
     </div>
+    <p class="tw-location-mobile">Tehran, Iran — Remote</p>
   </div>
 </div>
 
@@ -864,12 +895,17 @@
   }, { threshold: 0.15 });
   revealEls.forEach(function(el){ io.observe(el); });
 
-  /* ── copy email ── */
-  window.copyText = function(text, btn){
+  /* ── copy email / phone: show label inline, swap to tick, then revert ── */
+  window.copyText = function(text, btn, label){
     navigator.clipboard.writeText(text).then(function(){
-      var hint = btn.parentElement.querySelector('.copy-hint');
-      hint.classList.add('show');
-      setTimeout(function(){ hint.classList.remove('show'); }, 1400);
+      var labelEl = btn.querySelector('.copy-label');
+      labelEl.textContent = 'COPIED...';
+      btn.classList.add('copied');
+      clearTimeout(btn._copyTimeout);
+      btn._copyTimeout = setTimeout(function(){
+        labelEl.textContent = label;
+        btn.classList.remove('copied');
+      }, 1600);
     });
   };
 
